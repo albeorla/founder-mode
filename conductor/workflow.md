@@ -44,32 +44,37 @@ All tasks follow a strict lifecycle:
    - Add dated note explaining the change
    - Resume implementation
 
-8. **Commit Code Changes:**
-   - Stage all code changes related to the task.
-   - Propose a clear, concise commit message e.g, `feat(ui): Create basic HTML structure for calculator`.
-   - Perform the commit.
+8. **Create Feature Branch:**
+    - **Action:** Create a new branch for the task (e.g., `git checkout -b task/create-user-model`).
 
-9. **Attach Task Summary with Git Notes:**
-   - **Step 9.1: Get Commit Hash:** Obtain the hash of the *just-completed commit* (`git log -1 --format="%H"`).
-   - **Step 9.2: Draft Note Content:** Create a detailed summary for the completed task. This should include the task name, a summary of changes, a list of all created/modified files, and the core "why" for the change.
-   - **Step 9.3: Attach Note:** Use the `git notes` command to attach the summary to the commit.
-     ```bash
-     # The note content from the previous step is passed via the -m flag.
-     git notes add -m "<note content>" <commit_hash>
-     ```
+9. **Commit Code Changes:**
+    - Stage all code changes related to the task.
+    - Propose a clear, concise commit message e.g, `feat(ui): Create basic HTML structure for calculator`.
+    - Perform the commit.
 
-10. **Get and Record Task Commit SHA:**
-    - **Step 10.1: Update Plan:** Read `plan.md`, find the line for the completed task, update its status from `[~]` to `[x]`, and append the first 7 characters of the *just-completed commit's* commit hash.
-    - **Step 10.2: Write Plan:** Write the updated content back to `plan.md`.
+10. **Push and Create PR:**
+    - **Action:** Push the feature branch to the remote repository.
+    - **Action:** Create a Pull Request (PR) using the GitHub CLI: `gh pr create --title "<task name>" --body "<task summary>"`.
+    - **Action:** Monitor CI/CD checks on the PR.
+    - **CRITICAL:** All checks MUST pass before proceeding.
 
-11. **Commit Plan Update:**
-    - **Action:** Stage the modified `plan.md` file.
-    - **Action:** Commit this change with a descriptive message (e.g., `conductor(plan): Mark task 'Create user model' as complete`).
+11. **Manual Merge and Finalize:**
+    - **Note:** The user will manually review and merge the PR.
+    - **Action:** Once merged, switch back to `main` and pull the latest changes (`git checkout main && git pull`).
+    - **Action:** Delete the local feature branch (`git branch -d task/create-user-model`).
 
-12. **Verify CI Pipeline:**
-    - **Action:** Push the changes to the remote repository.
-    - **Action:** Check the CI/CD pipeline status (e.g., GitHub Actions) to ensure all checks pass.
-    - **CRITICAL:** If the pipeline fails, address the issues immediately. Do not proceed to the next task until the pipeline is green.
+12. **Attach Task Summary with Git Notes:**
+    - **Step 12.1: Get Commit Hash:** Obtain the hash of the *merge commit* on `main` (`git log -1 --format="%H"`).
+    - **Step 12.2: Draft Note Content:** Create a detailed summary for the completed task.
+    - **Step 12.3: Attach Note:** Use the `git notes` command to attach the summary to the merge commit.
+
+13. **Get and Record Task Commit SHA:**
+    - **Step 13.1: Update Plan:** Read `plan.md`, find the line for the completed task, update its status from `[~]` to `[x]`, and append the first 7 characters of the *merge commit's* hash.
+    - **Step 13.2: Write Plan:** Write the updated content back to `plan.md`.
+
+14. **Commit Plan Update:**
+    - **Action:** Stage the modified `plan.md` file on `main`.
+    - **Action:** Commit this change with a descriptive message.
 
 ### Phase Completion Verification and Checkpointing Protocol
 
