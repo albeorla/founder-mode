@@ -1,5 +1,6 @@
 from typing import Literal
 
+from langgraph.checkpoint.base import BaseCheckpointSaver
 from langgraph.graph import END, StateGraph
 from langgraph.graph.state import CompiledStateGraph
 
@@ -21,7 +22,7 @@ def should_continue(state: FounderState) -> Literal["researcher", "writer"]:
         return "writer"
 
 
-def create_workflow() -> CompiledStateGraph:
+def create_workflow(checkpointer: BaseCheckpointSaver | None = None) -> CompiledStateGraph:
     workflow = StateGraph(FounderState)
 
     # Add nodes
@@ -41,4 +42,4 @@ def create_workflow() -> CompiledStateGraph:
     # End after writer
     workflow.add_edge("writer", END)
 
-    return workflow.compile()
+    return workflow.compile(checkpointer=checkpointer, interrupt_before=["researcher"])
