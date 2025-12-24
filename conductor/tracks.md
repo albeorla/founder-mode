@@ -4,12 +4,7 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-## [~] Track: The Skeleton & State
-*Link: [./conductor/tracks/skeleton_state_20251223/](./conductor/tracks/skeleton_state_20251223/)*
-
----
-
-## [ ] Track: The Research Tools
+## [~] Track: The Research Tools
 *Link: [./conductor/tracks/research_tools/](./conductor/tracks/research_tools/)*
 
 ---
