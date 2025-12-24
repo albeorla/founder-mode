@@ -21,9 +21,9 @@ This plan outlines the transition to real agent logic, integrated memory, and a 
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Working Memory Integration' (Protocol in workflow.md)
 
 ## Phase 3: Logic Loops & Dynamic Fallback
-- [ ] **Task: Implement Planner Node**
-    - [ ] Write tests for Planner logic and fallback behavior.
-    - [ ] Implement `Planner` logic in `src/foundermode/graph/nodes/planner.py` with dynamic fallback to mock data.
+- [x] **Task: Implement Planner Node**
+    - [x] Write tests for Planner logic and fallback behavior.
+    - [x] Implement `Planner` logic in `src/foundermode/graph/nodes/planner.py` with dynamic fallback to mock data.
 - [ ] **Task: Implement Researcher Node**
     - [ ] Write tests for Researcher logic and fallback behavior.
     - [ ] Implement `Researcher` logic in `src/foundermode/graph/nodes/researcher.py` with dynamic fallback to mock data.

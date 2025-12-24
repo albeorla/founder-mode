@@ -5,15 +5,11 @@ from foundermode.domain.state import FounderState
 from foundermode.memory.vector_store import ChromaManager
 from foundermode.tools.search import TavilySearch
 
-# We can reuse the planner LLM or a new one for extraction.
-# For simplicity, we'll just wrap the search result in a single fact for now,
-# or split by newlines if the tool returns a list.
-# Tavily usually returns a string or a JSON. The tool wrapper returns a string.
-
 
 def researcher_node(state: FounderState) -> dict[str, Any]:
     """
     Executes the research step.
+    Supports dynamic fallback to mock data if search fails.
     """
     topic = state.get("research_topic") or state["research_question"]
 
@@ -23,23 +19,40 @@ def researcher_node(state: FounderState) -> dict[str, Any]:
 
     # Execute search
     try:
-        search_result = search_tool.invoke(topic)
+        search_results = search_tool.invoke(topic)
+        # If search_results is a string (error message or single result), wrap it
+        if isinstance(search_results, str):
+            search_results = [{"content": search_results, "url": "none", "title": "Search Result"}]
     except Exception as e:
-        search_result = f"Error searching for {topic}: {e}"
+        print(f"Researcher search failed, falling back to mock: {e}")
+        search_results = None
 
-    # Process result into a Fact
-    # In a production system, we would use an LLM to parse this into atomic facts.
-    # Here we treat the summary as one fact.
-    fact = ResearchFact(
-        content=str(search_result),
-        source="Tavily",
-        title=f"Search: {topic}",
-        relevance_score=1.0,  # Assume relevant if found
-    )
+    # Process result into Facts
+    facts: list[ResearchFact] = []
+
+    if search_results:
+        for r in search_results:
+            facts.append(
+                ResearchFact(
+                    content=r.get("content", ""),
+                    source=r.get("url", "none"),
+                    title=r.get("title", f"Search: {topic}"),
+                    relevance_score=r.get("score", 1.0),
+                )
+            )
+    else:
+        # Mock Fallback Logic
+        facts.append(
+            ResearchFact(
+                content=f"Mock Fact: {topic} is a high-growth sector with significant potential.",
+                source="Mock Data",
+                title=f"Mock Search: {topic}",
+                relevance_score=0.5,
+            )
+        )
 
     # Store in memory
-    memory.add_facts([fact])
+    memory.add_facts(facts)
 
     # Update state
-    # We return the NEW fact to be added to the list (reducer handles append)
-    return {"research_facts": [fact], "next_step": "planner"}
+    return {"research_facts": facts, "next_step": "planner"}
