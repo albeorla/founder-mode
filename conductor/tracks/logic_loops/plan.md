@@ -1,6 +1,6 @@
 # Plan: The Logic Loops (LangGraph)
 
-## Phase 1: State & Skeleton
+## Phase 1: State & Skeleton [checkpoint: 0c85105]
 - [x] Task: Define Agent State dad361c
     - Update `src/foundermode/domain/state.py` with the full `FounderState` definition including `ResearchFact` lists and `InvestmentMemo`.
 - [x] Task: Create Graph Skeleton 98009f4
