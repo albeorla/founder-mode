@@ -11,7 +11,7 @@
 - [x] Task: Implement Web Scraper f403004
     - Create `src/foundermode/tools/scrape.py`.
     - Build an async scraper using `httpx` and `BeautifulSoup`.
-- [ ] Task: Verify Scraper
+- [x] Task: Verify Scraper 9dfedcd
     - Write `tests/test_scraper.py` with mocks for HTTP requests.
 
 ## Phase 3: Integration & Logic
