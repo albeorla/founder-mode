@@ -4,7 +4,7 @@
 - [x] Task: Project Structure & Dependencies 8130fea
     - Create folders: `src/foundermode/{domain,graph,memory,tools,api}`.
     - Add dependencies: `langgraph`, `langchain-core`, `typer`, `langsmith`.
-- [ ] Task: Define Domain Models
+- [x] Task: Define Domain Models 7aafca8
     - Implement `src/foundermode/domain/schema.py` with Pydantic models.
 - [ ] Task: Define Graph State
     - Implement `src/foundermode/domain/state.py` with `GraphState`.
