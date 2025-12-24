@@ -4,12 +4,7 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-## [~] Track: DevOps: Docker & CI/CD
-*Link: [./conductor/tracks/devops_docker_20251223/](./conductor/tracks/devops_docker_20251223/)*
-
----
-
-## [ ] Track: The Vector Brain (Memory)
+## [~] Track: The Vector Brain (Memory)
 *Link: [./conductor/tracks/vector_brain/](./conductor/tracks/vector_brain/)*
 
 ---
