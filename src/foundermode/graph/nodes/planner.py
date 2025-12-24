@@ -7,6 +7,7 @@ from langchain_openai import ChatOpenAI
 
 class PlannerOutput(TypedDict):
     action: Literal["research", "write"]
+    research_topic: str | None
     reason: str
 
 
@@ -24,8 +25,8 @@ planner_prompt = ChatPromptTemplate.from_messages(
     {research_facts}
 
     Decide whether to:
-    1. 'research': If you need more information to answer the question comprehensively.
-    2. 'write': If you have sufficient information to draft the investment memo.
+    1. 'research': If you need more information. Provide a specific 'research_topic' to search for.
+    2. 'write': If you have sufficient information. 'research_topic' should be None.
 
     Provide a reason for your decision.""",
         ),
@@ -52,4 +53,9 @@ def planner_node(state: FounderState) -> dict[str, Any]:
 
     result = planner_chain.invoke({"research_question": state["research_question"], "research_facts": facts_str})
 
-    return {"next_step": result["action"]}
+    # We pass the research_topic to the state so the researcher node can use it.
+    # We need to add 'current_research_topic' to FounderState?
+    # Or we can just pass it in the graph state update, but FounderState needs to define it to hold it.
+    # Let's add 'current_research_topic' to FounderState in a bit.
+    # For now, let's just return it and see where it goes.
+    return {"next_step": result["action"], "research_topic": result.get("research_topic")}

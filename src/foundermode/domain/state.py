@@ -18,6 +18,9 @@ class FounderState(TypedDict):
     memo_draft: InvestmentMemo
     """The current draft of the investment memo."""
 
+    research_topic: str | None
+    """The specific topic currently being researched."""
+
     messages: Annotated[list[BaseMessage], operator.add]
     """Chat history for the planner/agent conversation."""
 
