@@ -11,7 +11,7 @@
 - [x] Task: Implement Planner Node e131218
     - Create `src/foundermode/graph/nodes/planner.py`.
     - Use LLM to analyze state and output a `ResearchPlan` or signal to write.
-- [ ] Task: Implement Researcher Node
+- [x] Task: Implement Researcher Node c7fe94d
     - Create `src/foundermode/graph/nodes/researcher.py`.
     - Integrate `TavilySearch` and `ChromaManager`.
     - Logic: Search -> Extract Facts -> Save to Memory -> Update State.
