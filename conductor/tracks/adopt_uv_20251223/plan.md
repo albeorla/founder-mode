@@ -10,7 +10,7 @@
 - [x] Task: Update CI Workflow 90a3e76
     - Modify `.github/workflows/ci.yml` to use `astral-sh/setup-uv`.
     - Update jobs to use `uv run` or `uv sync`.
-- [ ] Task: Update Pre-commit (Optional)
+- [~] Task: Update Pre-commit (Optional)
     - Ensure pre-commit hooks are optimized for a `uv`-centric environment.
 
 ## Phase 3: Documentation & Verification

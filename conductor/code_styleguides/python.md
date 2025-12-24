@@ -3,18 +3,19 @@
 This document summarizes key rules and best practices from the Google Python Style Guide.
 
 ## 1. Python Language Rules
-- **Linting:** Run `pylint` on your code to catch bugs and style issues.
+- **Linting:** Run `ruff check` to enforce code quality.
 - **Imports:** Use `import x` for packages/modules. Use `from x import y` only when `y` is a submodule.
 - **Exceptions:** Use built-in exception classes. Do not use bare `except:` clauses.
 - **Global State:** Avoid mutable global state. Module-level constants are okay and should be `ALL_CAPS_WITH_UNDERSCORES`.
 - **Comprehensions:** Use for simple cases. Avoid for complex logic where a full loop is more readable.
 - **Default Argument Values:** Do not use mutable objects (like `[]` or `{}`) as default values.
 - **True/False Evaluations:** Use implicit false (e.g., `if not my_list:`). Use `if foo is None:` to check for `None`.
-- **Type Annotations:** Strongly encouraged for all public APIs.
+- **Type Annotations:** **Mandatory** for all code. Enforced by `mypy` in strict mode.
 
 ## 2. Python Style Rules
-- **Line Length:** Maximum 80 characters.
+- **Line Length:** Maximum 88 characters (Ruff default).
 - **Indentation:** 4 spaces per indentation level. Never use tabs.
+- **Formatting:** Enforced automatically by `ruff format`.
 - **Blank Lines:** Two blank lines between top-level definitions (classes, functions). One blank line between method definitions.
 - **Whitespace:** Avoid extraneous whitespace. Surround binary operators with single spaces.
 - **Docstrings:** Use `"""triple double quotes"""`. Every public module, function, class, and method must have a docstring.

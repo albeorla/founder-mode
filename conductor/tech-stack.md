@@ -19,6 +19,12 @@
 - **API:** **FastAPI** (Production backend)
 - **CLI:** **Typer** (Development testing)
 
+## Development & Build
+- **Build Backend:** **Hatchling** (Standards-based packaging)
+- **Linting & Formatting:** **Ruff** (Fast, unified linter/formatter)
+- **Type Checking:** **Mypy** (Strict mode static analysis)
+- **Testing:** **Pytest**
+
 ## Design Principles
 - **Agentic First:** Prefer graph-based state machines over linear chains.
 - **Async Native:** All I/O operations must be asynchronous.
