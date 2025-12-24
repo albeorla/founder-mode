@@ -23,3 +23,7 @@ class FounderState(TypedDict):
 
     next_step: str
     """The next node to execute (e.g., 'research', 'write', 'finish')."""
+
+
+# Backward compatibility alias
+GraphState = FounderState

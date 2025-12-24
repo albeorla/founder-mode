@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from rich.console import Console
 from rich.panel import Panel
 
-from foundermode.domain.schema import InvestmentMemo, ResearchPlan
+from foundermode.domain.schema import InvestmentMemo
 from foundermode.domain.state import GraphState
 from foundermode.graph.workflow import create_workflow
 
@@ -14,13 +14,13 @@ app = typer.Typer(help="FounderMode: The Autonomous Due Diligence Agent", no_arg
 console = Console()
 
 
-@app.command(name="version")
+@app.command(name="version")  # type: ignore[misc]
 def version() -> None:
     """Print the version of FounderMode."""
     console.print("FounderMode v0.1.0")
 
 
-@app.command(name="run")
+@app.command(name="run")  # type: ignore[misc]
 def run_command(
     query: str = typer.Argument(..., help="The business idea or market to research"),
 ) -> None:
@@ -31,23 +31,23 @@ def run_command(
     )
 
     workflow = create_workflow()
-    research_app = workflow.compile()
+    # workflow is already compiled
 
     # Initialize state
     initial_state: GraphState = {
-        "query": query,
-        "plan": ResearchPlan(tasks=[]),
-        "facts": [],
-        "draft": InvestmentMemo(),
+        "research_question": query,
+        "research_facts": [],
+        "memo_draft": InvestmentMemo(),
         "messages": [],
+        "next_step": "init",
     }
 
     with console.status("[bold green]Working...") as _:
-        result = research_app.invoke(initial_state)  # type: ignore[arg-type]
+        result = workflow.invoke(initial_state)
 
     console.print("\n[bold green]✓ Research Complete![/bold green]\n")
 
-    memo: InvestmentMemo = result["draft"]
+    memo: InvestmentMemo = result["memo_draft"]
 
     console.print(
         Panel(

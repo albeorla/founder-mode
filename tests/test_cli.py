@@ -1,6 +1,5 @@
-from typer.testing import CliRunner
-
 from foundermode.api.cli import app
+from typer.testing import CliRunner
 
 runner = CliRunner()
 
@@ -10,4 +9,6 @@ def test_cli_run_success() -> None:
     assert result.exit_code == 0
     assert "FounderMode" in result.stdout
     assert "Researching: Test Idea" in result.stdout
-    assert "Mock Executive Summary" in result.stdout
+    # Skeleton graph returns empty memo, so we check for the structure headers
+    assert "Executive Summary:" in result.stdout
+    assert "Market Analysis:" in result.stdout

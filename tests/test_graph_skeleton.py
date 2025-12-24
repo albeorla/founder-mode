@@ -1,9 +1,9 @@
 from foundermode.domain.schema import InvestmentMemo
-from foundermode.graph.workflow import create_graph
+from foundermode.graph.workflow import create_workflow
 
 
 def test_graph_compilation_and_execution() -> None:
-    app = create_graph()
+    app = create_workflow()
 
     # Check that we got a compiled graph
     assert app is not None

@@ -19,7 +19,7 @@ def writer(state: FounderState) -> dict[str, Any]:
     return {"next_step": "finish"}
 
 
-def create_graph() -> CompiledStateGraph:
+def create_workflow() -> CompiledStateGraph:
     workflow = StateGraph(FounderState)
 
     # Add nodes

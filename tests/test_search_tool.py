@@ -1,7 +1,6 @@
 from unittest.mock import MagicMock, patch
 
 import pytest
-
 from foundermode.tools.search import TavilySearch
 
 

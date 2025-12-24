@@ -1,7 +1,6 @@
 import httpx
 import pytest
 import respx
-
 from foundermode.tools.scrape import scrape_url
 
 
