@@ -20,6 +20,7 @@
 - **CLI:** **Typer** (Development testing)
 
 ## Development & Build
+- **Package Manager:** **uv** (High-speed dependency management)
 - **Build Backend:** **Hatchling** (Standards-based packaging)
 - **Linting & Formatting:** **Ruff** (Fast, unified linter/formatter)
 - **Type Checking:** **Mypy** (Strict mode static analysis)
