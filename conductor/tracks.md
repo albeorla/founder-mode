@@ -4,7 +4,7 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-## [~] Track: The Research Tools
+## [x] Track: The Research Tools
 *Link: [./conductor/tracks/research_tools/](./conductor/tracks/research_tools/)*
 
 ---
