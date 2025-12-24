@@ -7,7 +7,7 @@
     - Run `uv run pytest` to ensure tests pass in a managed environment.
 
 ## Phase 2: Infrastructure Update
-- [ ] Task: Update CI Workflow
+- [x] Task: Update CI Workflow 90a3e76
     - Modify `.github/workflows/ci.yml` to use `astral-sh/setup-uv`.
     - Update jobs to use `uv run` or `uv sync`.
 - [ ] Task: Update Pre-commit (Optional)
