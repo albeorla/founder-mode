@@ -12,6 +12,7 @@ def test_planner_decides_research() -> None:
         "memo_draft": InvestmentMemo(),
         "messages": [],
         "next_step": "init",
+        "research_topic": None,
     }
 
     # We need to mock the LLM call inside the node.
@@ -42,6 +43,7 @@ def test_planner_decides_write() -> None:
         "memo_draft": InvestmentMemo(),
         "messages": [],
         "next_step": "init",
+        "research_topic": None,
     }
 
     with patch("foundermode.graph.nodes.planner.planner_chain") as mock_chain:

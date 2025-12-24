@@ -10,6 +10,7 @@ def test_mock_analyst_updates_state() -> None:
         "memo_draft": InvestmentMemo(),
         "messages": [],
         "next_step": "init",
+        "research_topic": None,
     }
 
     result = mock_analyst(initial_state)
