@@ -14,10 +14,10 @@ This plan outlines the transition to real agent logic, integrated memory, and a 
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Environment Setup & Hygiene' (Protocol in workflow.md)
 
 ## Phase 2: Working Memory Integration
-- [ ] **Task: Enhanced Search Tool**
-    - [ ] Write tests in `tests/test_search_memory.py` for search-as-memory and deduplication logic.
-    - [ ] Update `src/foundermode/tools/search.py` to check `ChromaDB` before calling `Tavily`.
-    - [ ] Implement automatic upsert, metadata tagging, and similarity-based deduplication.
+- [x] **Task: Enhanced Search Tool**
+    - [x] Write tests in `tests/test_search_memory.py` for search-as-memory and deduplication logic.
+    - [x] Update `src/foundermode/tools/search.py` to check `ChromaDB` before calling `Tavily`.
+    - [x] Implement automatic upsert, metadata tagging, and similarity-based deduplication.
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Working Memory Integration' (Protocol in workflow.md)
 
 ## Phase 3: Logic Loops & Dynamic Fallback

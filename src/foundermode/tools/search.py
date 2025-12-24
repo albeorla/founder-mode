@@ -44,9 +44,7 @@ class TavilySearch(BaseTool):  # type: ignore
 
         # 2. Live Search: Call Tavily
         if not self.api_key:
-            # If no API key, we can't do live search.
-            # But we already checked memory.
-            return [{"content": "No API key provided for live search, and no relevant memory found.", "url": "none"}]
+            raise ValueError("TAVILY_API_KEY must be set in environment or passed to the tool.")
 
         client = TavilyClient(api_key=self.api_key)
         response = client.search(query=query, search_depth="advanced")
