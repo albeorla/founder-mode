@@ -1,7 +1,9 @@
+import importlib.util
+
 import pytest
 
+
 def test_import_foundermode():
-    try:
-        import foundermode
-    except ImportError:
+    if not importlib.util.find_spec("foundermode"):
         pytest.fail("Could not import foundermode package")
+
