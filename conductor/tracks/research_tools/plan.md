@@ -15,7 +15,7 @@
     - Write `tests/test_scraper.py` with mocks for HTTP requests.
 
 ## Phase 3: Integration & Logic
-- [ ] Task: Refine Research Logic
+- [x] Task: Refine Research Logic 6a4327e
     - Update `src/foundermode/domain/schema.py` if needed to better support tool outputs.
 - [ ] Task: Final Verification
     - Execute the Phase Completion Verification and Checkpointing Protocol.
