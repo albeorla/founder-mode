@@ -1,7 +1,7 @@
 # Plan: The Skeleton & State
 
 ## Phase 1: Structure & Schema
-- [~] Task: Project Structure & Dependencies
+- [x] Task: Project Structure & Dependencies 8130fea
     - Create folders: `src/foundermode/{domain,graph,memory,tools,api}`.
     - Add dependencies: `langgraph`, `langchain-core`, `typer`, `langsmith`.
 - [ ] Task: Define Domain Models
