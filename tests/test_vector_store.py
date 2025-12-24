@@ -68,3 +68,42 @@ def test_query_similar(chroma_manager: ChromaManager) -> None:
     assert isinstance(results[0], ResearchFact)
     assert results[0].content == "The market for AI is growing."
     assert results[0].source == "TechCrunch"
+
+
+@pytest.mark.skipif(not os.getenv("OPENAI_API_KEY"), reason="OPENAI_API_KEY not set")  # type: ignore
+def test_vector_store_integration() -> None:
+    # Use a unique collection for integration test
+    persist_dir = ".test_chroma_db_integration"
+    if os.path.exists(persist_dir):
+        shutil.rmtree(persist_dir)
+
+    manager = ChromaManager(persist_directory=persist_dir, collection_name="integration_test")
+    try:
+        facts = [
+            ResearchFact(
+                content="Apple makes the iPhone.",
+                source="Apple",
+                relevance_score=1.0,
+                title="Apple Products",
+            ),
+            ResearchFact(
+                content="Tesla makes electric cars.",
+                source="Tesla",
+                relevance_score=1.0,
+                title="Tesla Products",
+            ),
+        ]
+
+        # Add facts
+        manager.add_facts(facts)
+
+        # Query
+        results = manager.query_similar("Which company makes phones?", k=1)
+
+        assert len(results) == 1
+        assert "Apple" in results[0].content
+        assert results[0].source == "Apple"
+
+    finally:
+        if os.path.exists(persist_dir):
+            shutil.rmtree(persist_dir)
