@@ -4,6 +4,7 @@ from rich.console import Console
 from rich.panel import Panel
 
 from foundermode.domain.schema import InvestmentMemo, ResearchPlan
+from foundermode.domain.state import GraphState
 from foundermode.graph.workflow import create_workflow
 
 # Load environment variables from .env file
@@ -16,20 +17,24 @@ console = Console()
 @app.command(name="version")  # type: ignore
 def version() -> None:
     """Print the version of FounderMode."""
-
     console.print("FounderMode v0.1.0")
 
 
 @app.command(name="run")  # type: ignore
-def run_command(query: str = typer.Argument(..., help="The business idea or market to research")) -> None:
+def run_command(
+    query: str = typer.Argument(..., help="The business idea or market to research"),
+) -> None:
     """Run the research agent on a business idea."""
-    console.print(Panel(f"[bold blue]FounderMode[/bold blue]\nResearching: [italic]{query}[/italic]"), style="blue")
+    console.print(
+        Panel(f"[bold blue]FounderMode[/bold blue]\nResearching: [italic]{query}[/italic]"),
+        style="blue",
+    )
 
     workflow = create_workflow()
     research_app = workflow.compile()
 
     # Initialize state
-    initial_state = {
+    initial_state: GraphState = {
         "query": query,
         "plan": ResearchPlan(tasks=[]),
         "facts": [],

@@ -15,6 +15,6 @@ def test_graph_state_keys() -> None:
 
 def test_graph_state_types() -> None:
     hints = get_type_hints(GraphState)
-    assert hints["query"] == str
-    assert hints["plan"] == ResearchPlan
-    assert hints["draft"] == InvestmentMemo
+    assert hints["query"] is str
+    assert hints["plan"] is ResearchPlan
+    assert hints["draft"] is InvestmentMemo
