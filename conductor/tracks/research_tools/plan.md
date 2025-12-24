@@ -8,7 +8,7 @@
     - Write `tests/test_search_tool.py` with mocks for the Tavily API.
 
 ## Phase 2: Web Scraping
-- [ ] Task: Implement Web Scraper
+- [x] Task: Implement Web Scraper f403004
     - Create `src/foundermode/tools/scrape.py`.
     - Build an async scraper using `httpx` and `BeautifulSoup`.
 - [ ] Task: Verify Scraper
