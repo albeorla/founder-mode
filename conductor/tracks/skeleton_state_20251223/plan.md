@@ -16,7 +16,7 @@
     - Create `src/foundermode/graph/workflow.py` with `StateGraph`.
 
 ## Phase 3: Interface & Verification
-- [ ] Task: Implement CLI
+- [x] Task: Implement CLI c1a4aba
     - Create `src/foundermode/api/cli.py` using Typer.
     - Register command in `pyproject.toml` (`[project.scripts]`).
 - [ ] Task: Final Verification
