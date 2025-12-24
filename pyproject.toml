@@ -1,0 +1,79 @@
+[project]
+name = "foundermode"
+version = "0.1.0"
+description = "An autonomous due diligence agent that validates business ideas using LangGraph and Vector Search."
+readme = "README.md"
+requires-python = ">=3.12"
+license = "MIT"
+authors = [
+    { name = "Your Name", email = "your.email@example.com" }
+]
+dependencies = [
+    "langgraph>=0.0.20",           # Agent orchestration
+    "langchain>=0.1.0",            # Framework interfaces
+    "langchain-openai>=0.0.5",     # LLM integration
+    "langchain-community>=0.0.10", # Community tools
+    "chromadb>=0.4.22",            # Vector database
+    "fastapi>=0.109.0",            # API
+    "uvicorn>=0.27.0",             # ASGI Server
+    "typer>=0.9.0",                # CLI
+    "pydantic>=2.6.0",             # Data validation
+    "pydantic-settings>=2.1.0",    # Config management
+    "httpx>=0.26.0",               # Async HTTP
+    "tenacity>=8.2.0",             # Retries
+    "beautifulsoup4>=4.12.0",      # Web scraping
+    "tiktoken>=0.5.0",             # Token counting
+]
+
+[project.scripts]
+foundermode = "foundermode.api.cli:app"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-cov>=4.1.0",
+    "ruff>=0.3.0",
+    "mypy>=1.9.0",
+    "pre-commit>=3.6.0",
+    "types-beautifulsoup4",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/foundermode"]
+
+# --- Tool Configuration ---
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "B",  # flake8-bugbear
+    "UP", # pyupgrade
+]
+ignore = []
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+ignore_missing_imports = true
+plugins = ["pydantic.mypy"]
+
+[tool.coverage.run]
+source = ["src"]
+omit = ["tests/*"]
