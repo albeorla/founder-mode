@@ -13,5 +13,5 @@
     - Test ingestion and retrieval using a mock embedding function (to avoid API costs during tests) or a real one if configured.
 
 ## Phase 3: Integration
-- [ ] Task: Final Verification
+- [~] Task: Final Verification
     - Execute the Phase Completion Verification Protocol.
