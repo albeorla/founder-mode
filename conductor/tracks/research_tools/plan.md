@@ -4,7 +4,7 @@
 - [x] Task: Implement Tavily Search Tool 6b73141
     - Create `src/foundermode/tools/search.py`.
     - Implement the `TavilySearch` class inheriting from LangChain's `BaseTool`.
-- [ ] Task: Verify Search Tool
+- [x] Task: Verify Search Tool 83e1b03
     - Write `tests/test_search_tool.py` with mocks for the Tavily API.
 
 ## Phase 2: Web Scraping
