@@ -9,20 +9,22 @@ authors = [
     { name = "Your Name", email = "your.email@example.com" }
 ]
 dependencies = [
-    "langgraph>=0.0.20",           # Agent orchestration
-    "langchain>=0.1.0",            # Framework interfaces
-    "langchain-openai>=0.0.5",     # LLM integration
+    "langgraph>=0.0.20", # Agent orchestration
+    "langchain>=0.1.0", # Framework interfaces
+    "langchain-openai>=0.0.5", # LLM integration
     "langchain-community>=0.0.10", # Community tools
-    "chromadb>=0.4.22",            # Vector database
-    "fastapi>=0.109.0",            # API
-    "uvicorn>=0.27.0",             # ASGI Server
-    "typer>=0.9.0",                # CLI
-    "pydantic>=2.6.0",             # Data validation
-    "pydantic-settings>=2.1.0",    # Config management
-    "httpx>=0.26.0",               # Async HTTP
-    "tenacity>=8.2.0",             # Retries
-    "beautifulsoup4>=4.12.0",      # Web scraping
-    "tiktoken>=0.5.0",             # Token counting
+    "chromadb>=0.4.22", # Vector database
+    "fastapi>=0.109.0", # API
+    "uvicorn>=0.27.0", # ASGI Server
+    "typer>=0.9.0", # CLI
+    "pydantic>=2.6.0", # Data validation
+    "pydantic-settings>=2.1.0", # Config management
+    "httpx>=0.26.0", # Async HTTP
+    "tenacity>=8.2.0", # Retries
+    "beautifulsoup4>=4.12.0", # Web scraping
+    "tiktoken>=0.5.0", # Token counting
+    "langchain-core>=1.2.5",
+    "langsmith>=0.5.0",
 ]
 
 [project.scripts]

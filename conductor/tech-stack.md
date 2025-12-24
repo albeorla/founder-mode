@@ -5,6 +5,7 @@
 - **Orchestration:** **LangGraph** (Stateful, cyclic multi-agent workflows)
 - **Framework:** **LangChain** (Components & Interfaces)
 - **Type Safety:** Pydantic (Strict data validation)
+- **Observability:** **LangSmith** (Tracing & Debugging)
 
 ## Data & Memory
 - **Vector Database:** **ChromaDB** (Local persistent storage)
