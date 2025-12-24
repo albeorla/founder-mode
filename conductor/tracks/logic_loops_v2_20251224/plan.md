@@ -18,15 +18,15 @@ This plan outlines the transition to real agent logic, integrated memory, and a 
     - [x] Write tests in `tests/test_search_memory.py` for search-as-memory and deduplication logic.
     - [x] Update `src/foundermode/tools/search.py` to check `ChromaDB` before calling `Tavily`.
     - [x] Implement automatic upsert, metadata tagging, and similarity-based deduplication.
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Working Memory Integration' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Working Memory Integration' (Protocol in workflow.md)
 
 ## Phase 3: Logic Loops & Dynamic Fallback
 - [x] **Task: Implement Planner Node**
     - [x] Write tests for Planner logic and fallback behavior.
     - [x] Implement `Planner` logic in `src/foundermode/graph/nodes/planner.py` with dynamic fallback to mock data.
-- [ ] **Task: Implement Researcher Node**
-    - [ ] Write tests for Researcher logic and fallback behavior.
-    - [ ] Implement `Researcher` logic in `src/foundermode/graph/nodes/researcher.py` with dynamic fallback to mock data.
+- [x] **Task: Implement Researcher Node**
+    - [x] Write tests for Researcher logic and fallback behavior.
+    - [x] Implement `Researcher` logic in `src/foundermode/graph/nodes/researcher.py` with dynamic fallback to mock data.
 - [ ] **Task: Implement Writer Node**
     - [ ] Write tests for Writer logic (Markdown synthesis) and fallback behavior.
     - [ ] Implement `Writer` logic in `src/foundermode/graph/nodes/writer.py` with dynamic fallback to mock data.
