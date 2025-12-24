@@ -43,3 +43,4 @@ venv.bak/
 
 # VS Code
 .vscode/
+.chroma_db/
