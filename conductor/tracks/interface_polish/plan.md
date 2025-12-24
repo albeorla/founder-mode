@@ -18,7 +18,7 @@
     - Update `src/foundermode/api/cli.py` to save the report at the end of the run.
 
 ## Phase 3: The API
-- [ ] Task: Setup FastAPI Skeleton
+- [x] Task: Setup FastAPI Skeleton
     - Create `src/foundermode/api/server.py`.
     - Define request/response models.
 - [ ] Task: Implement Run & Status Endpoints
