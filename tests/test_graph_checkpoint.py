@@ -28,7 +28,7 @@ def test_graph_interrupt_before_researcher() -> None:
     config = {"configurable": {"thread_id": "test_thread_1"}}
 
     # Mock planner to return research action
-    with patch("foundermode.graph.workflow.planner_node") as mock_planner:
+    with patch("foundermode.graph.nodes.planner.planner_node") as mock_planner:
         mock_planner.return_value = {"next_step": "research", "research_topic": "rocks"}
 
         # Run. It should stop after planner (which outputs next_step='research')
@@ -61,7 +61,7 @@ def test_resume_graph() -> None:
     }
 
     # Run 1: Should stop before researcher
-    with patch("foundermode.graph.workflow.planner_node") as mock_planner:
+    with patch("foundermode.graph.nodes.planner.planner_node") as mock_planner:
         mock_planner.return_value = {"next_step": "research", "research_topic": "plants"}
         for _ in workflow.stream(initial_state, config=config):
             pass
