@@ -1,12 +1,13 @@
 import os
 
 
-def test_precommit_config_exists():
+def test_precommit_config_exists() -> None:
     assert os.path.exists(".pre-commit-config.yaml")
 
-def test_precommit_config_content():
+
+def test_precommit_config_content() -> None:
     if not os.path.exists(".pre-commit-config.yaml"):
-        return # Checked by previous test
+        return  # Checked by previous test
     with open(".pre-commit-config.yaml") as f:
         content = f.read()
     assert "repos:" in content

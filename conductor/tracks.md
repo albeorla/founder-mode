@@ -4,5 +4,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-## [ ] Track: Project Configuration & CI Setup
+## [~] Track: Project Configuration & CI Setup
 *Link: [./conductor/tracks/config_ci_20251223/](./conductor/tracks/config_ci_20251223/)*

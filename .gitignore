@@ -1,0 +1,5 @@
+.benchmarks
+.ruff_cache
+.pytest_cache
+.mypy_cache
+GEMINI.md

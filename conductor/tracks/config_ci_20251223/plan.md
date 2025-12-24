@@ -17,10 +17,10 @@
     - Create `ci.yml` with jobs for Code Quality (Lint, Format, Type Check) and Tests.
 
 ## Phase 3: Verification
-- [x] Task: Verify Environment Setup 8a8b7b9
+- [ ] Task: Verify Environment Setup 8a8b7b9
     - **Instructions:**
         1. Create a virtual environment (optional but recommended).
         2. Run `pip install -e ".[dev]"` to install dependencies.
         3. Run `ruff check .` to verify linting configuration.
         4. Run `pytest` to verify test configuration (should pass with no tests or empty collection).
-- [ ] Task: Conductor - User Manual Verification 'Verification' (Protocol in workflow.md)
+- [~] Task: Conductor - User Manual Verification 'Verification' (Protocol in workflow.md)

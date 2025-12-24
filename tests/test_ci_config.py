@@ -1,10 +1,11 @@
 import os
 
 
-def test_ci_workflow_exists():
+def test_ci_workflow_exists() -> None:
     assert os.path.exists(".github/workflows/ci.yml")
 
-def test_ci_workflow_content():
+
+def test_ci_workflow_content() -> None:
     if not os.path.exists(".github/workflows/ci.yml"):
         return
     with open(".github/workflows/ci.yml") as f:
