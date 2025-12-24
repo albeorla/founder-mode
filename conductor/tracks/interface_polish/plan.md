@@ -10,12 +10,12 @@
     - Resume graph execution with updated state if edited.
 
 ## Phase 2: Report Generation
-- [ ] Task: Implement HTML Renderer
+- [x] Task: Implement HTML Renderer
     - Create `src/foundermode/tools/reporter.py`.
     - Function: `render_memo(memo: InvestmentMemo, filename: str) -> str`.
     - Use a simple Jinja2 template or string replacement with basic CSS.
-- [ ] Task: Integrate Renderer into Workflow
-    - Update `src/foundermode/graph/workflow.py` (or a new `Publisher` node) to save the report at the end of the run.
+- [x] Task: Integrate Renderer into Workflow
+    - Update `src/foundermode/api/cli.py` to save the report at the end of the run.
 
 ## Phase 3: The API
 - [ ] Task: Setup FastAPI Skeleton
