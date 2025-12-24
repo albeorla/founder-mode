@@ -15,9 +15,9 @@
 - [x] Task: Wire Workflow 12b5373
     - Create `src/foundermode/graph/workflow.py` with `StateGraph`.
 
-## Phase 3: Interface & Verification
+## Phase 3: Interface & Verification [checkpoint: 44a975e]
 - [x] Task: Implement CLI c1a4aba
     - Create `src/foundermode/api/cli.py` using Typer.
     - Register command in `pyproject.toml` (`[project.scripts]`).
-- [~] Task: Final Verification
+- [x] Task: Final Verification 44a975e
     - Run the CLI end-to-end.
