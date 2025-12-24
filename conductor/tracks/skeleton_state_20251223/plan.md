@@ -10,7 +10,7 @@
     - Implement `src/foundermode/domain/state.py` with `GraphState`.
 
 ## Phase 2: Graph Logic (Mock)
-- [ ] Task: Implement Mock Analyst
+- [x] Task: Implement Mock Analyst c63eb54
     - Create `src/foundermode/graph/nodes/mock.py`.
 - [ ] Task: Wire Workflow
     - Create `src/foundermode/graph/workflow.py` with `StateGraph`.
