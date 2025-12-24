@@ -12,7 +12,7 @@
     - Create `.pre-commit-config.yaml` with hooks for trailing whitespace, ruff, and mypy.
 
 ## Phase 2: CI Pipeline
-- [ ] Task: Create GitHub Actions Workflow
+- [x] Task: Create GitHub Actions Workflow a71c8c4
     - Create directory `.github/workflows`
     - Create `ci.yml` with jobs for Code Quality (Lint, Format, Type Check) and Tests.
 
