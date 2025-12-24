@@ -49,6 +49,14 @@ class ChromaManager:
         if not facts:
             return True
 
+        # Deduplicate facts within the input list by ID
+        unique_facts = {}
+        for f in facts:
+            fact_id = self._generate_id(f)
+            unique_facts[fact_id] = f
+
+        facts = list(unique_facts.values())
+
         documents = [f.content for f in facts]
         metadatas = [
             cast(

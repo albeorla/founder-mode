@@ -44,6 +44,7 @@ venv.bak/
 # VS Code
 .vscode/
 .chroma_db/
+.chroma_db_test/
 test_memo.html
 *_memo.html
 .out/

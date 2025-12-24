@@ -32,13 +32,9 @@ class TavilySearch(BaseTool):  # type: ignore
 
     def _run(self, query: str) -> list[dict[str, Any]]:
         """Execute the search tool with memory integration."""
-
         # 1. Search-as-Memory: Check ChromaDB first
         if self.chroma:
             existing_facts = self.chroma.query_similar(query, k=3)
-            # If we find very relevant facts, we could return them.
-            # For now, let's say if we have anything, we return it to save API costs
-            # in a real app we might want a threshold.
             if existing_facts:
                 return [{"content": f.content, "url": f.source, "title": f.title} for f in existing_facts]
 
@@ -68,6 +64,4 @@ class TavilySearch(BaseTool):  # type: ignore
 
     async def _arun(self, query: str) -> list[dict[str, Any]]:
         """Asynchronous execution."""
-        # For now, just call sync _run.
-        # Ideally, we'd use an async client.
         return self._run(query)

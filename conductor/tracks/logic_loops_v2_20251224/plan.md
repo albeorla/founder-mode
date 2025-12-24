@@ -30,10 +30,10 @@ This plan outlines the transition to real agent logic, integrated memory, and a 
 - [ ] **Task: Implement Writer Node**
     - [ ] Write tests for Writer logic (Markdown synthesis) and fallback behavior.
     - [ ] Implement `Writer` logic in `src/foundermode/graph/nodes/writer.py` with dynamic fallback to mock data.
-- [ ] **Task: Graph Orchestration**
-    - [ ] Update `src/foundermode/graph/workflow.py` to wire the real nodes into the cyclic graph.
-    - [ ] Verify graph topology and state transitions via integration tests.
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Logic Loops & Dynamic Fallback' (Protocol in workflow.md)
+- [x] **Task: Graph Orchestration**
+    - [x] Update `src/foundermode/graph/workflow.py` to wire the real nodes into the cyclic graph.
+    - [x] Verify graph topology and state transitions via integration tests.
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Logic Loops & Dynamic Fallback' (Protocol in workflow.md)
 
 ## Phase 4: Final Verification
 - [ ] **Task: End-to-End Integration Testing**
