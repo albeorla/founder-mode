@@ -6,11 +6,12 @@ from langchain_core.messages import HumanMessage
 def test_founder_state_structure() -> None:
     # Verify that the keys exist and typing is correct (at runtime check)
     state: FounderState = {
-        "research_question": "Test Question",
+        "research_question": "Idea",
         "research_facts": [],
         "memo_draft": InvestmentMemo(),
         "messages": [],
         "next_step": "init",
+        "research_topic": None,
     }
 
     assert state["research_question"] == "Test Question"
@@ -39,6 +40,7 @@ def test_founder_state_reducer() -> None:
         "memo_draft": InvestmentMemo(),
         "messages": [HumanMessage(content="Hi")],
         "next_step": "research",
+        "research_topic": None,
     }
 
     # Simulate addition

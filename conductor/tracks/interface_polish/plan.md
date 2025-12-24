@@ -1,7 +1,7 @@
 # Plan: Interface & Polish
 
 ## Phase 1: Human-in-the-Loop (CLI)
-- [ ] Task: Configure Graph Checkpointing
+- [x] Task: Configure Graph Checkpointing
     - Update `src/foundermode/graph/workflow.py` to use `MemorySaver` (or SQLite) and set `interrupt_before=["researcher"]`.
 - [ ] Task: Update CLI for Interaction
     - Update `src/foundermode/api/cli.py` to handle the pause.
