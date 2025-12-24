@@ -1,8 +1,9 @@
 from unittest.mock import patch
 
+from typer.testing import CliRunner
+
 from foundermode.api.cli import app
 from foundermode.domain.schema import InvestmentMemo
-from typer.testing import CliRunner
 
 runner = CliRunner()
 

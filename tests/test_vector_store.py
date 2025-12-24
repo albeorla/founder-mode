@@ -4,6 +4,7 @@ from collections.abc import Generator
 from unittest.mock import MagicMock
 
 import pytest
+
 from foundermode.domain.schema import ResearchFact
 from foundermode.memory.vector_store import ChromaManager
 

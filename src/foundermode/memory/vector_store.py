@@ -10,7 +10,7 @@ from langchain_openai import OpenAIEmbeddings
 from foundermode.domain.schema import ResearchFact
 
 
-class ChromaLangChainAdapter(EmbeddingFunction[Documents]):  # type: ignore[misc]
+class ChromaLangChainAdapter(EmbeddingFunction[Documents]):  # type: ignore
     def __init__(self, langchain_embeddings: Any) -> None:
         self._langchain_embeddings = langchain_embeddings
 

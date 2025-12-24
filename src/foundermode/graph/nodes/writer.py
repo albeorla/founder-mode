@@ -1,9 +1,10 @@
 from typing import Any
 
-from foundermode.domain.schema import InvestmentMemo
-from foundermode.domain.state import FounderState
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
+
+from foundermode.domain.schema import InvestmentMemo
+from foundermode.domain.state import FounderState
 
 # Define the prompt
 writer_prompt = ChatPromptTemplate.from_messages(

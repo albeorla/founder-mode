@@ -67,6 +67,9 @@ select = [
 ]
 ignore = []
 
+[tool.ruff.lint.isort]
+known-first-party = ["foundermode"]
+
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 testpaths = ["tests"]

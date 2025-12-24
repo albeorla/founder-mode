@@ -33,17 +33,17 @@ class StatusResponse(BaseModel):
     state: dict[str, Any]
 
 
-@app.get("/")  # type: ignore[misc]
+@app.get("/")  # type: ignore
 async def read_root() -> dict[str, str]:
     return {"message": "FounderMode API is running"}
 
 
-@app.get("/health")  # type: ignore[misc]
+@app.get("/health")  # type: ignore
 async def health_check() -> dict[str, str]:
     return {"status": "ok"}
 
 
-@app.post("/run", response_model=RunResponse)  # type: ignore[misc]
+@app.post("/run", response_model=RunResponse)  # type: ignore
 async def create_run(request: RunRequest) -> RunResponse:
     run_id = str(uuid.uuid4())
 
@@ -69,7 +69,7 @@ async def create_run(request: RunRequest) -> RunResponse:
     return RunResponse(run_id=run_id, status="started")
 
 
-@app.get("/run/{run_id}", response_model=StatusResponse)  # type: ignore[misc]
+@app.get("/run/{run_id}", response_model=StatusResponse)  # type: ignore
 async def get_run_status(run_id: str) -> StatusResponse:
     config: RunnableConfig = {"configurable": {"thread_id": run_id}}
 
@@ -83,7 +83,7 @@ async def get_run_status(run_id: str) -> StatusResponse:
     return StatusResponse(run_id=run_id, next_node=next_node, state=snapshot.values)
 
 
-@app.post("/run/{run_id}/resume")  # type: ignore[misc]
+@app.post("/run/{run_id}/resume")  # type: ignore
 async def resume_run(run_id: str) -> dict[str, str]:
     config: RunnableConfig = {"configurable": {"thread_id": run_id}}
 

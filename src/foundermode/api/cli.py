@@ -18,13 +18,13 @@ app = typer.Typer(help="FounderMode: The Autonomous Due Diligence Agent", no_arg
 console = Console()
 
 
-@app.command(name="version")  # type: ignore[misc]
+@app.command(name="version")  # type: ignore
 def version() -> None:
     """Print the version of FounderMode."""
     console.print("FounderMode v0.1.0")
 
 
-@app.command(name="run")  # type: ignore[misc]
+@app.command(name="run")  # type: ignore
 def run_command(
     query: str = typer.Argument(..., help="The business idea or market to research"),
 ) -> None:

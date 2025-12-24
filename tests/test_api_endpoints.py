@@ -2,6 +2,7 @@ from typing import Any, NamedTuple
 from unittest.mock import MagicMock, patch
 
 from fastapi.testclient import TestClient
+
 from foundermode.api.server import app
 
 client = TestClient(app)

@@ -4,8 +4,8 @@ from langchain_core.tools import tool
 from tenacity import retry, stop_after_attempt, wait_exponential
 
 
-@tool  # type: ignore[misc]
-@retry(  # type: ignore[misc]
+@tool  # type: ignore
+@retry(  # type: ignore
     stop=stop_after_attempt(3),
     wait=wait_exponential(multiplier=1, min=4, max=10),
 )

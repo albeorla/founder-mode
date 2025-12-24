@@ -1,7 +1,8 @@
 from unittest.mock import MagicMock, patch
 
-from foundermode.api.cli import app
 from typer.testing import CliRunner
+
+from foundermode.api.cli import app
 
 runner = CliRunner()
 

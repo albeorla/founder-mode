@@ -10,7 +10,7 @@ class TavilySearchInput(BaseModel):
     query: str = Field(description="The search query to execute")
 
 
-class TavilySearch(BaseTool):  # type: ignore[misc]
+class TavilySearch(BaseTool):  # type: ignore
     """
     A tool that uses the Tavily API to perform web searches.
     """

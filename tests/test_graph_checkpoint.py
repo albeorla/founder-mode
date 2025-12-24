@@ -1,5 +1,6 @@
-from foundermode.graph.workflow import create_workflow
 from langgraph.checkpoint.memory import MemorySaver
+
+from foundermode.graph.workflow import create_workflow
 
 
 def test_graph_interrupt_before_researcher() -> None:

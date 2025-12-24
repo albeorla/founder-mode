@@ -1,8 +1,9 @@
 from typing import Any, Literal, TypedDict
 
-from foundermode.domain.state import FounderState
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
+
+from foundermode.domain.state import FounderState
 
 
 class PlannerOutput(TypedDict):

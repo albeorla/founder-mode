@@ -1,6 +1,7 @@
+from langchain_core.messages import HumanMessage
+
 from foundermode.domain.schema import InvestmentMemo, ResearchFact
 from foundermode.domain.state import FounderState
-from langchain_core.messages import HumanMessage
 
 
 def test_founder_state_structure() -> None:
