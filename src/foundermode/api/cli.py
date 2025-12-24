@@ -1,9 +1,13 @@
 import typer
+from dotenv import load_dotenv
 from rich.console import Console
 from rich.panel import Panel
 
 from foundermode.domain.schema import InvestmentMemo, ResearchPlan
 from foundermode.graph.workflow import create_workflow
+
+# Load environment variables from .env file
+load_dotenv()
 
 app = typer.Typer(help="FounderMode: The Autonomous Due Diligence Agent", no_args_is_help=True)
 console = Console()
