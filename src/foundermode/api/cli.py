@@ -1,5 +1,3 @@
-from typing import Any
-
 import typer
 from dotenv import load_dotenv
 from rich.console import Console
