@@ -1,6 +1,6 @@
 # Plan: The Skeleton & State
 
-## Phase 1: Structure & Schema
+## Phase 1: Structure & Schema [checkpoint: ef42124]
 - [x] Task: Project Structure & Dependencies 8130fea
     - Create folders: `src/foundermode/{domain,graph,memory,tools,api}`.
     - Add dependencies: `langgraph`, `langchain-core`, `typer`, `langsmith`.
