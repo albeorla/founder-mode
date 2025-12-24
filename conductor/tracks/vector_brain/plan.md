@@ -12,6 +12,6 @@
     - Write `tests/test_vector_store.py`.
     - Test ingestion and retrieval using a mock embedding function (to avoid API costs during tests) or a real one if configured.
 
-## Phase 3: Integration
-- [~] Task: Final Verification
+## Phase 3: Integration [checkpoint: ed31b19]
+- [x] Task: Final Verification ed31b19
     - Execute the Phase Completion Verification Protocol.
