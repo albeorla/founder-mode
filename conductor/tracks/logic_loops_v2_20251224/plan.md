@@ -3,10 +3,10 @@
 This plan outlines the transition to real agent logic, integrated memory, and a strict branch-based workflow.
 
 ## Phase 1: Environment Setup & Hygiene
-- [ ] **Task: Setup Output Management**
-    - [ ] Create `.out/` directory.
-    - [ ] Update `.gitignore` to ignore `.out/`.
-    - [ ] Move `test_memo.html`, `test_idea_memo.html`, and `my_idea_memo.html` to `.out/`.
+- [x] **Task: Setup Output Management**
+    - [x] Create `.out/` directory.
+    - [x] Update `.gitignore` to ignore `.out/`.
+    - [x] Move `test_memo.html`, `test_idea_memo.html`, and `my_idea_memo.html` to `.out/`.
 - [ ] **Task: Implement Configuration Management**
     - [ ] Create `src/foundermode/config.py`.
     - [ ] Write tests in `tests/test_config.py` for environment variable loading and validation.
