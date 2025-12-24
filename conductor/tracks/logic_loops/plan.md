@@ -20,7 +20,7 @@
     - Logic: Query `ChromaManager` for all facts -> Generate Memo Sections -> Update `memo_draft`.
 
 ## Phase 3: Wiring & Integration
-- [ ] Task: Wire the Graph
+- [x] Task: Wire the Graph 9c0b4b6
     - Update `src/foundermode/graph/workflow.py` with real nodes and conditional edges.
     - Define the router logic (`should_continue`).
 - [ ] Task: Final Verification
