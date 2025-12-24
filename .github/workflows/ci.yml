@@ -54,6 +54,8 @@ jobs:
         run: uv sync --all-extras --dev
 
       - name: Run Tests with Coverage
+        env:
+          OPENAI_API_KEY: sk-dummy-key-for-tests
         run: |
           uv run pytest --cov=foundermode --cov-report=xml
 
