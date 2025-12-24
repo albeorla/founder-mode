@@ -17,7 +17,7 @@
 - **Scraping:** BeautifulSoup4 (for targeted extraction)
 
 ## Interface
-- **API:** **FastAPI** (Production backend)
+- **API:** **FastAPI** with **uvicorn** (Production backend)
 - **CLI:** **Typer** (Development testing)
 
 ## Development & Build

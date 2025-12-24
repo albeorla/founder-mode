@@ -24,5 +24,5 @@
 - [x] Task: Implement Run & Status Endpoints
     - `POST /run`: Trigger the background graph execution.
     - `GET /run/{id}`: Poll for status.
-- [ ] Task: Implement Resume Endpoint
-    - `POST /run/{id}/resume`: Handle the HITL approval via API.
+- [x] Task: Implement Resume Endpoint
+    - `POST /runs/{run_id}/resume`: Handle the HITL approval via API.

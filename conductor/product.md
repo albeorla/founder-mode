@@ -17,3 +17,5 @@ FounderMode is an autonomous market research agent that validates business ideas
 - **Vector-Native Memory:** Uses embeddings (ChromaDB) to deduplicate and cluster semantically.
 - **Research Agent:** A dedicated agent that uses tools (Tavily) to fact-check assumptions.
 - **Strategic Synthesis:** Merges "User Pain" (social signals) with "Market Reality" (competitor data).
+- **Human-in-the-Loop:** Allows users to review and refine research plans before execution.
+- **Polished Artifacts:** Automatically generates professional HTML reports from synthesized memos.
