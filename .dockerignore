@@ -45,3 +45,4 @@ tests/
 .pytest_cache/
 .ruff_cache/
 GEMINI.md
+.chroma_db/
