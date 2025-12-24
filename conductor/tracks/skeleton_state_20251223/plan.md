@@ -6,7 +6,7 @@
     - Add dependencies: `langgraph`, `langchain-core`, `typer`, `langsmith`.
 - [x] Task: Define Domain Models 7aafca8
     - Implement `src/foundermode/domain/schema.py` with Pydantic models.
-- [ ] Task: Define Graph State
+- [x] Task: Define Graph State 697cd0b
     - Implement `src/foundermode/domain/state.py` with `GraphState`.
 
 ## Phase 2: Graph Logic (Mock)
