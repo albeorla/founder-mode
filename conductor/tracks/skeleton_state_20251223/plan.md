@@ -19,5 +19,5 @@
 - [x] Task: Implement CLI c1a4aba
     - Create `src/foundermode/api/cli.py` using Typer.
     - Register command in `pyproject.toml` (`[project.scripts]`).
-- [ ] Task: Final Verification
+- [~] Task: Final Verification
     - Run the CLI end-to-end.
