@@ -9,6 +9,7 @@ from rich.prompt import Prompt
 from foundermode.domain.schema import InvestmentMemo
 from foundermode.domain.state import GraphState
 from foundermode.graph.workflow import create_workflow
+from foundermode.tools.reporter import render_memo
 
 # Load environment variables from .env file
 load_dotenv()
@@ -110,6 +111,11 @@ def run_command(
             border_style="green",
         )
     )
+
+    # Generate HTML Report
+    filename = f"{query.lower().replace(' ', '_')}_memo.html"
+    render_memo(memo, filename)
+    console.print(f"\n[dim]Report saved to {filename}[/dim]")
 
 
 if __name__ == "__main__":
