@@ -66,6 +66,11 @@ All tasks follow a strict lifecycle:
     - **Action:** Stage the modified `plan.md` file.
     - **Action:** Commit this change with a descriptive message (e.g., `conductor(plan): Mark task 'Create user model' as complete`).
 
+12. **Verify CI Pipeline:**
+    - **Action:** Push the changes to the remote repository.
+    - **Action:** Check the CI/CD pipeline status (e.g., GitHub Actions) to ensure all checks pass.
+    - **CRITICAL:** If the pipeline fails, address the issues immediately. Do not proceed to the next task until the pipeline is green.
+
 ### Phase Completion Verification and Checkpointing Protocol
 
 **Trigger:** This protocol is executed immediately after a task is completed that also concludes a phase in `plan.md`.

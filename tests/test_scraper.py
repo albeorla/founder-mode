@@ -56,3 +56,20 @@ async def test_scrape_url_empty_html() -> None:
 
     text = await scrape_url(url)
     assert text == ""
+
+
+@pytest.mark.asyncio  # type: ignore
+@respx.mock  # type: ignore
+async def test_scrape_url_retry() -> None:
+    url = "https://example.com/retry"
+    # Fail twice with connection error, then succeed
+    route = respx.get(url)
+    route.side_effect = [
+        httpx.ConnectError("Fail 1"),
+        httpx.ConnectError("Fail 2"),
+        httpx.Response(200, text="Success"),
+    ]
+
+    text = await scrape_url(url)
+    assert text == "Success"
+    assert route.call_count == 3

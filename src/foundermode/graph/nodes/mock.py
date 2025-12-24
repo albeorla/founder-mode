@@ -1,4 +1,4 @@
-from foundermode.domain.schema import InvestmentMemo, ResearchPlan
+from foundermode.domain.schema import InvestmentMemo, ResearchPlan, ResearchTask
 from foundermode.domain.state import GraphState
 
 
@@ -6,12 +6,12 @@ def mock_analyst(state: GraphState) -> GraphState:
     """A mock node that simulates analysis by updating the state with dummy data."""
     print(f"--- Mock Analyst processing query: {state['query']} ---")
 
-    # Simulate a research plan
+    # Simulate a research plan with ResearchTask objects
     plan = ResearchPlan(
         tasks=[
-            "Identify top 3 competitors",
-            "Determine average market pricing",
-            "Analyze customer pain points in social media",
+            ResearchTask(question="Identify top 3 competitors"),
+            ResearchTask(question="Determine average market pricing"),
+            ResearchTask(question="Analyze customer pain points in social media"),
         ]
     )
 

@@ -1,9 +1,15 @@
 import httpx
 from bs4 import BeautifulSoup
+from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_exponential
 
 
+@retry(  # type: ignore
+    stop=stop_after_attempt(3),
+    wait=wait_exponential(multiplier=1, min=4, max=10),
+    retry=retry_if_exception_type(httpx.RequestError),
+)
 async def scrape_url(url: str) -> str:
-    """Scrapes text content from a given URL asynchronously."""
+    """Scrapes text content from a given URL asynchronously with retries."""
     try:
         async with httpx.AsyncClient() as client:
             response = await client.get(url, follow_redirects=True)
@@ -24,9 +30,9 @@ async def scrape_url(url: str) -> str:
     except httpx.HTTPStatusError as e:
         print(f"HTTP error occurred: {e}")
         return ""
-    except httpx.RequestError as e:
-        print(f"An error occurred while requesting {e.request.url!r}")
-        return ""
     except Exception as e:
+        # Let tenacity handle RequestError, catch others
+        if isinstance(e, httpx.RequestError):
+            raise e
         print(f"An unexpected error occurred: {e}")
         return ""
