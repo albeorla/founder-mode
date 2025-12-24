@@ -1,16 +1,25 @@
-from operator import add
+import operator
 from typing import Annotated, TypedDict
 
 from langchain_core.messages import BaseMessage
 
-from foundermode.domain.schema import InvestmentMemo, ResearchFact, ResearchPlan
+from foundermode.domain.schema import InvestmentMemo, ResearchFact
 
 
-class GraphState(TypedDict):
-    """The state of the FounderMode research graph."""
+class FounderState(TypedDict):
+    """The persistent state of the FounderMode agent."""
 
-    query: str
-    plan: ResearchPlan
-    facts: Annotated[list[ResearchFact], add]
-    draft: InvestmentMemo
-    messages: Annotated[list[BaseMessage], add]
+    research_question: str
+    """The original question or idea from the user."""
+
+    research_facts: Annotated[list[ResearchFact], operator.add]
+    """Accumulated list of research facts. Merged by addition."""
+
+    memo_draft: InvestmentMemo
+    """The current draft of the investment memo."""
+
+    messages: Annotated[list[BaseMessage], operator.add]
+    """Chat history for the planner/agent conversation."""
+
+    next_step: str
+    """The next node to execute (e.g., 'research', 'write', 'finish')."""
