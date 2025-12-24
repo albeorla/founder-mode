@@ -46,9 +46,11 @@ async def health_check() -> dict[str, str]:
 @app.post("/run", response_model=RunResponse)  # type: ignore[misc]
 async def create_run(request: RunRequest) -> RunResponse:
     run_id = str(uuid.uuid4())
+
     config: RunnableConfig = {"configurable": {"thread_id": run_id}}
 
     # Initialize state
+
     initial_state: GraphState = {
         "research_question": request.idea,
         "research_facts": [],
@@ -60,6 +62,7 @@ async def create_run(request: RunRequest) -> RunResponse:
 
     try:
         workflow.invoke(initial_state, config=config)
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e)) from e
 
@@ -69,6 +72,7 @@ async def create_run(request: RunRequest) -> RunResponse:
 @app.get("/run/{run_id}", response_model=StatusResponse)  # type: ignore[misc]
 async def get_run_status(run_id: str) -> StatusResponse:
     config: RunnableConfig = {"configurable": {"thread_id": run_id}}
+
     snapshot = workflow.get_state(config)
 
     if not snapshot.values:

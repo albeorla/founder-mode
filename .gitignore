@@ -45,3 +45,4 @@ venv.bak/
 .vscode/
 .chroma_db/
 test_memo.html
+*_memo.html

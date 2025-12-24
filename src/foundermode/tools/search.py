@@ -11,7 +11,9 @@ class TavilySearchInput(BaseModel):
 
 
 class TavilySearch(BaseTool):  # type: ignore[misc]
-    """Tool for performing web searches using the Tavily API."""
+    """
+    A tool that uses the Tavily API to perform web searches.
+    """
 
     name: str = "tavily_search"
     description: str = "Search the web for information about companies, markets, and business ideas."

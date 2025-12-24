@@ -34,7 +34,7 @@ def test_workflow_execution() -> None:
             "next_step": "finish",
         }
 
-        app = create_workflow()
+        app = create_workflow(interrupt_before=[])
 
         initial_state: FounderState = {
             "research_question": "Revolutionary AI tool",

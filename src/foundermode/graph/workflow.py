@@ -1,4 +1,4 @@
-from typing import Literal
+from typing import Any, Literal
 
 from langgraph.checkpoint.base import BaseCheckpointSaver
 from langgraph.graph import END, StateGraph
@@ -22,7 +22,9 @@ def should_continue(state: FounderState) -> Literal["researcher", "writer"]:
         return "writer"
 
 
-def create_workflow(checkpointer: BaseCheckpointSaver | None = None) -> CompiledStateGraph:
+def create_workflow(
+    checkpointer: BaseCheckpointSaver[Any] | None = None, interrupt_before: list[str] | None = None
+) -> CompiledStateGraph[Any, Any]:
     workflow = StateGraph(FounderState)
 
     # Add nodes
@@ -42,4 +44,7 @@ def create_workflow(checkpointer: BaseCheckpointSaver | None = None) -> Compiled
     # End after writer
     workflow.add_edge("writer", END)
 
-    return workflow.compile(checkpointer=checkpointer, interrupt_before=["researcher"])
+    # Default interruption before researcher for HITL
+    interrupt = interrupt_before if interrupt_before is not None else ["researcher"]
+
+    return workflow.compile(checkpointer=checkpointer, interrupt_before=interrupt)

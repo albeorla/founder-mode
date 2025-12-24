@@ -6,7 +6,7 @@ from langchain_core.messages import HumanMessage
 def test_founder_state_structure() -> None:
     # Verify that the keys exist and typing is correct (at runtime check)
     state: FounderState = {
-        "research_question": "Idea",
+        "research_question": "Test Question",
         "research_facts": [],
         "memo_draft": InvestmentMemo(),
         "messages": [],
