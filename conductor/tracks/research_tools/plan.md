@@ -14,8 +14,9 @@
 - [x] Task: Verify Scraper 9dfedcd
     - Write `tests/test_scraper.py` with mocks for HTTP requests.
 
-## Phase 3: Integration & Logic
+## Phase 3: Integration & Logic [checkpoint: 40d29c7]
 - [x] Task: Refine Research Logic 6a4327e
     - Update `src/foundermode/domain/schema.py` if needed to better support tool outputs.
-- [ ] Task: Final Verification
+- [x] Task: Final Verification 40d29c7
+    - Execute the Phase Completion Verification and Checkpointing Protocol.
     - Execute the Phase Completion Verification and Checkpointing Protocol.
