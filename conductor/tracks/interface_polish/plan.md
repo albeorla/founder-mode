@@ -21,7 +21,7 @@
 - [x] Task: Setup FastAPI Skeleton
     - Create `src/foundermode/api/server.py`.
     - Define request/response models.
-- [ ] Task: Implement Run & Status Endpoints
+- [x] Task: Implement Run & Status Endpoints
     - `POST /run`: Trigger the background graph execution.
     - `GET /run/{id}`: Poll for status.
 - [ ] Task: Implement Resume Endpoint
