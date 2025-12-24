@@ -3,7 +3,7 @@
 ## Phase 1: State & Skeleton
 - [x] Task: Define Agent State dad361c
     - Update `src/foundermode/domain/state.py` with the full `FounderState` definition including `ResearchFact` lists and `InvestmentMemo`.
-- [ ] Task: Create Graph Skeleton
+- [x] Task: Create Graph Skeleton 98009f4
     - Update `src/foundermode/graph/workflow.py` to initialize a `StateGraph`.
     - Create placeholder nodes (pass-throughs) to verify graph compilation.
 
