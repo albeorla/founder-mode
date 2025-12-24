@@ -4,7 +4,7 @@ from foundermode.domain.state import GraphState
 from foundermode.graph.nodes.mock import mock_analyst
 
 
-def create_workflow() -> StateGraph:
+def create_workflow() -> StateGraph[GraphState]:
     """Creates the LangGraph workflow."""
     workflow = StateGraph(GraphState)
 

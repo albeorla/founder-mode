@@ -4,8 +4,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-## [x] Track: The Research Tools
-*Link: [./conductor/tracks/research_tools/](./conductor/tracks/research_tools/)*
+## [~] Track: DevOps: Docker & CI/CD
+*Link: [./conductor/tracks/devops_docker_20251223/](./conductor/tracks/devops_docker_20251223/)*
 
 ---
 
