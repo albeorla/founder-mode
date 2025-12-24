@@ -10,7 +10,7 @@
 ## Phase 2: Verification & CI
 - [x] Task: Verify Local Build
     - Build the image and run the CLI verification command inside it.
-- [~] Task: Update CI Pipeline
+- [x] Task: Update CI Pipeline debf248
     - Modify `.github/workflows/ci.yml` to include a `docker-build` job.
 
 ## Phase 3: Finalize
