@@ -10,7 +10,7 @@ class TavilySearchInput(BaseModel):
     query: str = Field(description="The search query to execute")
 
 
-class TavilySearch(BaseTool):  # type: ignore
+class TavilySearch(BaseTool):
     """Tool for performing web searches using the Tavily API."""
 
     name: str = "tavily_search"

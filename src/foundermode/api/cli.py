@@ -1,3 +1,5 @@
+from typing import Any
+
 import typer
 from dotenv import load_dotenv
 from rich.console import Console
@@ -14,13 +16,13 @@ app = typer.Typer(help="FounderMode: The Autonomous Due Diligence Agent", no_arg
 console = Console()
 
 
-@app.command(name="version")  # type: ignore
+@app.command(name="version")
 def version() -> None:
     """Print the version of FounderMode."""
     console.print("FounderMode v0.1.0")
 
 
-@app.command(name="run")  # type: ignore
+@app.command(name="run")
 def run_command(
     query: str = typer.Argument(..., help="The business idea or market to research"),
 ) -> None:
@@ -43,7 +45,7 @@ def run_command(
     }
 
     with console.status("[bold green]Working...") as _:
-        result = research_app.invoke(initial_state)
+        result = research_app.invoke(initial_state)  # type: ignore[arg-type]
 
     console.print("\n[bold green]✓ Research Complete![/bold green]\n")
 
