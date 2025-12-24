@@ -8,7 +8,7 @@
     - Implement `ChromaManager` class with `__init__`, `add_facts`, and `query_similar`.
 
 ## Phase 2: Verification
-- [ ] Task: Verify Vector Store
+- [x] Task: Verify Vector Store d981f8c
     - Write `tests/test_vector_store.py`.
     - Test ingestion and retrieval using a mock embedding function (to avoid API costs during tests) or a real one if configured.
 
