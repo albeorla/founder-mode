@@ -14,7 +14,7 @@
     - Ensure pre-commit hooks are optimized for a `uv`-centric environment.
 
 ## Phase 3: Documentation & Verification
-- [ ] Task: Update Workflow Documentation
+- [x] Task: Update Workflow Documentation f60db58
     - Update `conductor/workflow.md` and `tech-stack.md` (if needed) to recommend `uv`.
 - [ ] Task: Final Verification
     - Protocol execution from `workflow.md`.
