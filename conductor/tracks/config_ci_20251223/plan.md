@@ -8,7 +8,7 @@
     - Create `tests/__init__.py`
 - [x] Task: Create pyproject.toml 1d02020
     - Implement the `pyproject.toml` file with the specified metadata, dependencies, and tool configurations (Ruff, Pytest, Mypy).
-- [ ] Task: Create pre-commit configuration
+- [x] Task: Create pre-commit configuration 7a0626b
     - Create `.pre-commit-config.yaml` with hooks for trailing whitespace, ruff, and mypy.
 
 ## Phase 2: CI Pipeline
