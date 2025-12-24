@@ -80,3 +80,8 @@ plugins = ["pydantic.mypy"]
 [tool.coverage.run]
 source = ["src"]
 omit = ["tests/*"]
+
+[dependency-groups]
+dev = [
+    "respx>=0.22.0",
+]
