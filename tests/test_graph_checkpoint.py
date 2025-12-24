@@ -7,8 +7,8 @@ from foundermode.graph.workflow import create_workflow
 
 def test_graph_interrupt_before_researcher() -> None:
     """Test that the graph interrupts before the researcher node."""
-    # Mock planner node to return research action
-    with patch("foundermode.graph.nodes.planner.planner_node") as mock_planner:
+    # Mock planner node where it's used in the workflow module
+    with patch("foundermode.graph.workflow.planner_node") as mock_planner:
         mock_planner.return_value = {"next_step": "research", "research_topic": "rocks"}
 
         # 1. Setup with checkpointer
@@ -48,7 +48,7 @@ def test_graph_interrupt_before_researcher() -> None:
 def test_resume_graph() -> None:
     """Test that we can resume the graph after interruption."""
     # Run 1: Should stop before researcher
-    with patch("foundermode.graph.nodes.planner.planner_node") as mock_planner:
+    with patch("foundermode.graph.workflow.planner_node") as mock_planner:
         mock_planner.return_value = {"next_step": "research", "research_topic": "plants"}
 
         memory = MemorySaver()
