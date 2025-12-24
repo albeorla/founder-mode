@@ -15,7 +15,7 @@
     - Create `src/foundermode/graph/nodes/researcher.py`.
     - Integrate `TavilySearch` and `ChromaManager`.
     - Logic: Search -> Extract Facts -> Save to Memory -> Update State.
-- [ ] Task: Implement Writer Node
+- [x] Task: Implement Writer Node 40f89cb
     - Create `src/foundermode/graph/nodes/writer.py`.
     - Logic: Query `ChromaManager` for all facts -> Generate Memo Sections -> Update `memo_draft`.
 
