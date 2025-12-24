@@ -4,5 +4,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-## [ ] Track: Interface & Polish
+## [~] Track: Interface & Polish
 *Link: [./conductor/tracks/interface_polish/](./conductor/tracks/interface_polish/)*
