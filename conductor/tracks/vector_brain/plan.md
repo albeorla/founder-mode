@@ -1,6 +1,6 @@
 # Plan: The Vector Brain (Memory)
 
-## Phase 1: Infrastructure
+## Phase 1: Infrastructure [checkpoint: 6c55611]
 - [x] Task: Install Dependencies 638c57f
     - Add `chromadb` and `langchain-openai` to project.
 - [x] Task: Implement Chroma Manager 02c16ac
