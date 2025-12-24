@@ -17,7 +17,7 @@
     - Create `ci.yml` with jobs for Code Quality (Lint, Format, Type Check) and Tests.
 
 ## Phase 3: Verification
-- [ ] Task: Verify Environment Setup
+- [x] Task: Verify Environment Setup 8a8b7b9
     - **Instructions:**
         1. Create a virtual environment (optional but recommended).
         2. Run `pip install -e ".[dev]"` to install dependencies.
