@@ -4,11 +4,6 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-## [~] Track: The Vector Brain (Memory)
-*Link: [./conductor/tracks/vector_brain/](./conductor/tracks/vector_brain/)*
-
----
-
 ## [ ] Track: The Logic Loops
 *Link: [./conductor/tracks/logic_loops/](./conductor/tracks/logic_loops/)*
 
