@@ -71,7 +71,10 @@ def test_query_similar(chroma_manager: ChromaManager) -> None:
     assert results[0].source == "TechCrunch"
 
 
-@pytest.mark.skipif(not os.getenv("OPENAI_API_KEY"), reason="OPENAI_API_KEY not set")  # type: ignore
+@pytest.mark.skipif(
+    not os.getenv("OPENAI_API_KEY") or os.getenv("OPENAI_API_KEY") == "sk-dummy-key-for-tests",
+    reason="Valid OPENAI_API_KEY not set",
+)  # type: ignore
 def test_vector_store_integration() -> None:
     # Use a unique collection for integration test
     persist_dir = ".test_chroma_db_integration"
