@@ -6,7 +6,7 @@
     - Create directory `tests`
     - Create `src/foundermode/__init__.py`
     - Create `tests/__init__.py`
-- [ ] Task: Create pyproject.toml
+- [x] Task: Create pyproject.toml 1d02020
     - Implement the `pyproject.toml` file with the specified metadata, dependencies, and tool configurations (Ruff, Pytest, Mypy).
 - [ ] Task: Create pre-commit configuration
     - Create `.pre-commit-config.yaml` with hooks for trailing whitespace, ruff, and mypy.
