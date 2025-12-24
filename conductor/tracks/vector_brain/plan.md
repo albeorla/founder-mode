@@ -1,7 +1,7 @@
 # Plan: The Vector Brain (Memory)
 
 ## Phase 1: Infrastructure
-- [ ] Task: Install Dependencies
+- [x] Task: Install Dependencies 638c57f
     - Add `chromadb` and `langchain-openai` to project.
 - [ ] Task: Implement Chroma Manager
     - Create `src/foundermode/memory/vector_store.py`.
