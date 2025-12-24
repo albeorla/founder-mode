@@ -4,13 +4,13 @@
 - **Runtime:** Python 3.12+
 - **Orchestration:** **LangGraph** (Stateful, cyclic multi-agent workflows)
 - **Framework:** **LangChain** (Components & Interfaces)
-- **Type Safety:** Pydantic (Strict data validation)
+- **Type Safety:** Pydantic and **pydantic-settings** (Strict data & config validation)
 - **Observability:** **LangSmith** (Tracing & Debugging)
 
 ## Data & Memory
 - **Vector Database:** **ChromaDB** (Local persistent storage)
 - **Embeddings:** **OpenAI text-embedding-3-small**
-- **LLM:** **gpt-5.2** (Reasoning & Synthesis)
+- **LLM:** **gpt-4o** (Reasoning & Synthesis)
 
 ## External Tools
 - **Search:** **Tavily API** (Optimized for AI agents)
@@ -31,3 +31,4 @@
 - **Agentic First:** Prefer graph-based state machines over linear chains.
 - **Async Native:** All I/O operations must be asynchronous.
 - **Modular:** Clear separation between `graph/`, `tools/`, and `domain/`.
+- **Dynamic Fallback:** Systems must handle missing API keys gracefully with mock data for local development and CI.

@@ -36,7 +36,7 @@ This plan outlines the transition to real agent logic, integrated memory, and a 
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Logic Loops & Dynamic Fallback' (Protocol in workflow.md)
 
 ## Phase 4: Final Verification
-- [ ] **Task: End-to-End Integration Testing**
-    - [ ] Run full research cycle with valid API keys and verify ChromaDB ingestion.
-    - [ ] Run full research cycle with missing API keys and verify graceful fallback.
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: Final Verification' (Protocol in workflow.md)
+- [x] **Task: End-to-End Integration Testing**
+    - [x] Run full research cycle with valid API keys and verify ChromaDB ingestion.
+    - [x] Run full research cycle with missing API keys and verify graceful fallback.
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Final Verification' (Protocol in workflow.md)
