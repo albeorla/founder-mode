@@ -12,7 +12,7 @@
 ## Phase 2: Graph Logic (Mock)
 - [x] Task: Implement Mock Analyst c63eb54
     - Create `src/foundermode/graph/nodes/mock.py`.
-- [ ] Task: Wire Workflow
+- [x] Task: Wire Workflow 12b5373
     - Create `src/foundermode/graph/workflow.py` with `StateGraph`.
 
 ## Phase 3: Interface & Verification
