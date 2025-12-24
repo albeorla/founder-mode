@@ -27,7 +27,7 @@ def test_graph_interrupt_before_researcher() -> None:
     # config is required for checkpointing
     config = {"configurable": {"thread_id": "test_thread_1"}}
 
-    # Mock planner to return research action
+    # Mock planner node to return research action
     with patch("foundermode.graph.nodes.planner.planner_node") as mock_planner:
         mock_planner.return_value = {"next_step": "research", "research_topic": "rocks"}
 
