@@ -16,5 +16,5 @@
 ## Phase 3: Documentation & Verification
 - [x] Task: Update Workflow Documentation f60db58
     - Update `conductor/workflow.md` and `tech-stack.md` (if needed) to recommend `uv`.
-- [ ] Task: Final Verification
+- [~] Task: Final Verification
     - Protocol execution from `workflow.md`.
