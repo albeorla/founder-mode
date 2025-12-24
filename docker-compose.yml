@@ -5,4 +5,5 @@ services:
       - .env
     volumes:
       - .:/app
+      - /app/.venv # Protect the container's venv from being overwritten by host mount
     command: run "Test Idea"

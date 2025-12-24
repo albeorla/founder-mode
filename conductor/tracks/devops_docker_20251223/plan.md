@@ -14,5 +14,5 @@
     - Modify `.github/workflows/ci.yml` to include a `docker-build` job.
 
 ## Phase 3: Finalize
-- [ ] Task: Final Verification
+- [~] Task: Final Verification
     - Execute the Phase Completion Verification Protocol.
