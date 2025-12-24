@@ -1,5 +1,6 @@
-import os
 import importlib.util
+import os
+
 
 def test_directories_exist() -> None:
     dirs = [
@@ -11,6 +12,7 @@ def test_directories_exist() -> None:
     ]
     for d in dirs:
         assert os.path.isdir(d), f"Directory {d} does not exist"
+
 
 def test_dependencies_installed() -> None:
     packages = ["langgraph", "langchain_core", "typer", "langsmith"]

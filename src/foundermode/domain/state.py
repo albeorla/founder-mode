@@ -1,12 +1,16 @@
-from typing import List, TypedDict, Annotated
 from operator import add
+from typing import Annotated, TypedDict
+
 from langchain_core.messages import BaseMessage
-from foundermode.domain.schema import ResearchPlan, ResearchFact, InvestmentMemo
+
+from foundermode.domain.schema import InvestmentMemo, ResearchFact, ResearchPlan
+
 
 class GraphState(TypedDict):
     """The state of the FounderMode research graph."""
+
     query: str
     plan: ResearchPlan
-    facts: Annotated[List[ResearchFact], add]
+    facts: Annotated[list[ResearchFact], add]
     draft: InvestmentMemo
-    messages: Annotated[List[BaseMessage], add]
+    messages: Annotated[list[BaseMessage], add]
