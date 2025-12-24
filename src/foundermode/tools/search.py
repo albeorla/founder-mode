@@ -1,9 +1,12 @@
-import os
 from typing import Any
 
 from langchain_core.tools import BaseTool
 from pydantic import BaseModel, Field
 from tavily import TavilyClient
+
+from foundermode.config import settings
+from foundermode.domain.schema import ResearchFact
+from foundermode.memory.vector_store import ChromaManager
 
 
 class TavilySearchInput(BaseModel):
@@ -12,30 +15,61 @@ class TavilySearchInput(BaseModel):
 
 class TavilySearch(BaseTool):  # type: ignore
     """
-    A tool that uses the Tavily API to perform web searches.
+    A tool that uses the Tavily API to perform web searches,
+    integrated with ChromaDB for working memory.
     """
 
     name: str = "tavily_search"
     description: str = "Search the web for information about companies, markets, and business ideas."
     args_schema: type[BaseModel] = TavilySearchInput
     api_key: str | None = None
+    chroma: ChromaManager | None = None
 
-    def __init__(self, api_key: str | None = None, **kwargs: Any) -> None:
+    def __init__(self, api_key: str | None = None, chroma: ChromaManager | None = None, **kwargs: Any) -> None:
         super().__init__(**kwargs)
-        self.api_key = api_key or os.getenv("TAVILY_API_KEY")
+        self.api_key = api_key or settings.tavily_api_key
+        self.chroma = chroma or ChromaManager()
 
     def _run(self, query: str) -> list[dict[str, Any]]:
-        """Execute the search tool."""
+        """Execute the search tool with memory integration."""
+
+        # 1. Search-as-Memory: Check ChromaDB first
+        if self.chroma:
+            existing_facts = self.chroma.query_similar(query, k=3)
+            # If we find very relevant facts, we could return them.
+            # For now, let's say if we have anything, we return it to save API costs
+            # in a real app we might want a threshold.
+            if existing_facts:
+                return [{"content": f.content, "url": f.source, "title": f.title} for f in existing_facts]
+
+        # 2. Live Search: Call Tavily
         if not self.api_key:
-            raise ValueError("TAVILY_API_KEY must be set in environment or passed to the tool.")
+            # If no API key, we can't do live search.
+            # But we already checked memory.
+            return [{"content": "No API key provided for live search, and no relevant memory found.", "url": "none"}]
 
         client = TavilyClient(api_key=self.api_key)
         response = client.search(query=query, search_depth="advanced")
-
         results = response.get("results", [])
+
+        # 3. Automatic Upsert: Add new results to ChromaDB
+        if self.chroma and results:
+            facts_to_add = []
+            for r in results:
+                facts_to_add.append(
+                    ResearchFact(
+                        content=r.get("content", ""),
+                        source=r.get("url", ""),
+                        title=r.get("title"),
+                        relevance_score=r.get("score"),
+                    )
+                )
+            self.chroma.add_facts(facts_to_add)
+
         return results  # type: ignore
 
     async def _arun(self, query: str) -> list[dict[str, Any]]:
-        """Asynchronous execution (not implemented)."""
-        # Tavily python client is synchronous, but we can implement async if needed using httpx
+        """Asynchronous execution."""
+        # For now, just call sync _run.
+        # Ideally, we'd use an async client.
         return self._run(query)

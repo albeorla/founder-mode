@@ -1,5 +1,4 @@
-import os
-import uuid
+import hashlib
 from typing import Any, cast
 
 import chromadb
@@ -7,6 +6,7 @@ from chromadb.api.types import Documents, EmbeddingFunction, Embeddings
 from chromadb.utils import embedding_functions
 from langchain_openai import OpenAIEmbeddings
 
+from foundermode.config import settings
 from foundermode.domain.schema import ResearchFact
 
 
@@ -19,13 +19,15 @@ class ChromaLangChainAdapter(EmbeddingFunction[Documents]):  # type: ignore
 
 
 class ChromaManager:
-    def __init__(self, persist_directory: str = ".chroma_db", collection_name: str = "founder_mode_memory") -> None:
-        self.client = chromadb.PersistentClient(path=persist_directory)
+    def __init__(self, persist_directory: str | None = None, collection_name: str = "founder_mode_memory") -> None:
+        path = persist_directory or settings.chroma_db_path
+        self.client = chromadb.PersistentClient(path=path)
 
-        api_key = os.getenv("OPENAI_API_KEY")
+        # Use settings for API key
+        api_key = settings.openai_api_key
         self.embedding_fn: EmbeddingFunction[Any]
         if api_key:
-            langchain_emb = OpenAIEmbeddings(model="text-embedding-3-small")
+            langchain_emb = OpenAIEmbeddings(model="text-embedding-3-small", openai_api_key=api_key)
             self.embedding_fn = ChromaLangChainAdapter(langchain_emb)
         else:
             # Fallback for tests if no key is present
@@ -34,6 +36,14 @@ class ChromaManager:
         self.collection = self.client.get_or_create_collection(
             name=collection_name, embedding_function=cast(Any, self.embedding_fn)
         )
+
+    def _generate_id(self, fact: ResearchFact) -> str:
+        """Generate a deterministic ID for a fact to prevent duplicates."""
+        # Prefer source URL as a stable identifier
+        if fact.source and fact.source.startswith("http"):
+            return hashlib.md5(fact.source.encode()).hexdigest()
+        # Fallback to content hash
+        return hashlib.md5(fact.content.encode()).hexdigest()
 
     def add_facts(self, facts: list[ResearchFact]) -> bool:
         if not facts:
@@ -47,16 +57,21 @@ class ChromaManager:
             )
             for f in facts
         ]
-        ids = [str(uuid.uuid4()) for _ in facts]
+        ids = [self._generate_id(f) for f in facts]
 
         try:
-            self.collection.add(documents=documents, metadatas=cast(Any, metadatas), ids=ids)
+            # Use upsert to handle existing IDs gracefully
+            self.collection.upsert(documents=documents, metadatas=cast(Any, metadatas), ids=ids)
             return True
         except Exception as e:
             print(f"Error adding facts: {e}")
             return False
 
     def query_similar(self, query: str, k: int = 3) -> list[ResearchFact]:
+        # Optimization: Only query if collection has items
+        if self.collection.count() == 0:
+            return []
+
         results = self.collection.query(query_texts=[query], n_results=k)
 
         facts = []
@@ -65,9 +80,8 @@ class ChromaManager:
             # We queried one text, so we take index 0
             docs = results["documents"][0]
             metas = results["metadatas"][0] if results["metadatas"] else None
-            # dists = results['distances'][0] # usage optional
 
-            if docs and metas:  # Verify they are not None
+            if docs and metas:
                 for i in range(len(docs)):
                     content = docs[i]
                     meta = metas[i]

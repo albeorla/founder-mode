@@ -7,11 +7,11 @@ This plan outlines the transition to real agent logic, integrated memory, and a 
     - [x] Create `.out/` directory.
     - [x] Update `.gitignore` to ignore `.out/`.
     - [x] Move `test_memo.html`, `test_idea_memo.html`, and `my_idea_memo.html` to `.out/`.
-- [ ] **Task: Implement Configuration Management**
-    - [ ] Create `src/foundermode/config.py`.
-    - [ ] Write tests in `tests/test_config.py` for environment variable loading and validation.
-    - [ ] Implement `Settings` class using `pydantic-settings`.
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Environment Setup & Hygiene' (Protocol in workflow.md)
+- [x] **Task: Implement Configuration Management**
+    - [x] Create `src/foundermode/config.py`.
+    - [x] Write tests in `tests/test_config.py` for environment variable loading and validation.
+    - [x] Implement `Settings` class using `pydantic-settings`.
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Environment Setup & Hygiene' (Protocol in workflow.md)
 
 ## Phase 2: Working Memory Integration
 - [ ] **Task: Enhanced Search Tool**
