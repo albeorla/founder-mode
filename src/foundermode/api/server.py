@@ -7,10 +7,11 @@ from langgraph.checkpoint.memory import MemorySaver
 from pydantic import BaseModel
 
 from foundermode.domain.schema import InvestmentMemo
-from foundermode.domain.state import GraphState
+from foundermode.domain.state import FounderState
 from foundermode.graph.workflow import create_workflow
 
 app = FastAPI(title="FounderMode API", version="0.1.0")
+
 
 # For the prototype, we use an in-memory checkpointer.
 # In production, this would be a persistent store (SQLite, Postgres).
@@ -51,13 +52,15 @@ async def create_run(request: RunRequest) -> RunResponse:
 
     # Initialize state
 
-    initial_state: GraphState = {
+    initial_state: FounderState = {
         "research_question": request.idea,
         "research_facts": [],
         "memo_draft": InvestmentMemo(),
         "messages": [],
         "next_step": "init",
         "research_topic": None,
+        "critique_history": [],
+        "revision_count": 0,
     }
 
     try:

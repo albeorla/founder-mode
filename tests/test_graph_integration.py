@@ -26,23 +26,29 @@ def test_full_graph_execution_mocked() -> None:
     mock_writer = MagicMock()
     mock_writer.return_value = {"memo_draft": InvestmentMemo(executive_summary="Mock Memo"), "next_step": "finish"}
 
+    mock_critic = MagicMock()
+    mock_critic.return_value = {"next_step": "approve", "critique_history": ["Good"]}
+
     with patch("foundermode.graph.workflow.planner_node", mock_planner):
         with patch("foundermode.graph.workflow.researcher_node", mock_researcher):
             with patch("foundermode.graph.workflow.writer_node", mock_writer):
-                # Compile without HITL for easier testing
-                app = create_workflow(interrupt_before=[])
+                with patch("foundermode.graph.workflow.critic_node", mock_critic):
+                    # Compile without HITL for easier testing
+                    app = create_workflow(interrupt_before=[])
 
-                initial_state: FounderState = {
-                    "research_question": "Test Question",
-                    "research_facts": [],
-                    "memo_draft": InvestmentMemo(),
-                    "messages": [],
-                    "next_step": "init",
-                    "research_topic": None,
-                }
+                    initial_state: FounderState = {
+                        "research_question": "Test Question",
+                        "research_facts": [],
+                        "memo_draft": InvestmentMemo(),
+                        "messages": [],
+                        "next_step": "init",
+                        "research_topic": None,
+                        "critique_history": [],
+                        "revision_count": 0,
+                    }
 
-                # Execute
-                final_state = app.invoke(initial_state)
+                    # Execute
+                    final_state = app.invoke(initial_state)
 
                 # Verify Flow
                 assert mock_planner.call_count == 2

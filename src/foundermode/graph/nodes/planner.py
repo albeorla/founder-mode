@@ -29,8 +29,14 @@ planner_prompt = ChatPromptTemplate.from_messages(
     Key Facts Collected So Far:
     {research_facts}
 
+    [ADVERSARIAL FEEDBACK]
+    The Managing Partner has critiqued previous drafts. You MUST address these points:
+    {critique_history}
+
     Your Mandate:
     - Prioritize "Hard Truths": Unit Economics (CAC, LTV), Market Size (TAM/SAM), and Incumbent Moats.
+    - If the Managing Partner rejected a draft, your next 'research' steps MUST target the
+      specific missing data they identified.
     - Ignore generic fluff. We need specific numbers and competitor names.
     - If key financial or competitive data is missing, you MUST choose 'research'.
     - Only choose 'write' when you have enough evidence to write a 10-page committee memo.
@@ -66,14 +72,16 @@ def planner_node(state: FounderState) -> dict[str, Any]:
     """
     logger.info("Planner Node: Starting execution.")
     logger.debug(
-        f"Planner Input State: facts_count={len(state['research_facts'])}, topic={state.get('research_topic')}"
+        f"Planner Input State: facts_count={len(state['research_facts'])}, "
+        f"topic={state.get('research_topic')}, "
+        f"revision={state.get('revision_count', 0)}"
     )
 
     # 1. Attempt Live Logic
     chain = get_planner_chain()
 
     # Safety Check: Limit total facts to prevent infinite loops
-    MAX_FACTS = 15  # Approx 5 loops of 3 facts
+    MAX_FACTS = 20  # Increased to accommodate revisions
     if len(state["research_facts"]) >= MAX_FACTS:
         logger.warning(f"Planner: Reached MAX_FACTS ({MAX_FACTS}). Forcing 'write' transition.")
         return {"next_step": "write", "research_topic": None}
@@ -87,8 +95,24 @@ def planner_node(state: FounderState) -> dict[str, Any]:
                 else "No facts collected yet."
             )
 
-            logger.debug(f"Invoking Planner LLM with {len(state['research_facts'])} facts.")
-            result = chain.invoke({"research_question": state["research_question"], "research_facts": facts_str})
+            # Format critique history
+            critique_str = (
+                "\n".join([f"- {c}" for c in state.get("critique_history", [])])
+                if state.get("critique_history")
+                else "No previous critiques."
+            )
+
+            logger.debug(
+                f"Invoking Planner LLM with {len(state['research_facts'])} facts "
+                f"and {len(state.get('critique_history', []))} critiques."
+            )
+            result = chain.invoke(
+                {
+                    "research_question": state["research_question"],
+                    "research_facts": facts_str,
+                    "critique_history": critique_str,
+                }
+            )
             logger.info(f"Planner Decision: {result['action']} (Topic: {result.get('research_topic')})")
             logger.debug(f"Planner Reasoning: {result.get('reason')}")
 
@@ -101,7 +125,7 @@ def planner_node(state: FounderState) -> dict[str, Any]:
     # 2. Mock Fallback Logic
     # Simple heuristic: if we have fewer than 3 facts, keep researching.
     logger.info("Planner Node: Using Mock Fallback Logic.")
-    if len(state["research_facts"]) < 3:
+    if len(state["research_facts"]) < 3 or (state.get("critique_history") and len(state["research_facts"]) < 6):
         # Generate a mock topic based on the question if none exists
         mock_topics = ["Market size", "Competitor analysis", "Pricing strategy"]
         topic_idx = len(state["research_facts"]) % len(mock_topics)

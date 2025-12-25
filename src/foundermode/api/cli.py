@@ -59,6 +59,8 @@ def run_command(
         "messages": [],
         "next_step": "init",
         "research_topic": None,
+        "critique_history": [],
+        "revision_count": 0,
     }
 
     # 2. Run the graph (handling interruptions)

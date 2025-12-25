@@ -1,6 +1,6 @@
 from unittest.mock import MagicMock, patch
 
-from foundermode.domain.schema import InvestmentMemo
+from foundermode.domain.schema import CriticVerdict, InvestmentMemo
 from foundermode.domain.state import FounderState
 from foundermode.graph.workflow import create_workflow
 
@@ -34,6 +34,8 @@ def test_e2e_graceful_fallback() -> None:
                 "messages": [],
                 "next_step": "init",
                 "research_topic": None,
+                "critique_history": [],
+                "revision_count": 0,
             }
 
             # Execute the full graph
@@ -43,7 +45,10 @@ def test_e2e_graceful_fallback() -> None:
             assert final_state["memo_draft"].executive_summary != ""
             assert "Mock" in final_state["memo_draft"].executive_summary
             assert len(final_state["research_facts"]) >= 3
-            assert final_state["next_step"] == "finish"
+            # In fallback mode, the critic will reject the "Mock" memo
+            # and it will loop until revision_count reaches 3
+            assert final_state["revision_count"] == 3
+            assert final_state["next_step"] == "reject"
 
 
 def test_e2e_live_smoke() -> None:
@@ -60,6 +65,7 @@ def test_e2e_live_smoke() -> None:
         with (
             patch("foundermode.graph.nodes.planner.get_planner_chain") as mock_get_planner,
             patch("foundermode.graph.nodes.writer.get_writer_chain") as mock_get_writer,
+            patch("foundermode.graph.nodes.critic.get_critic_chain") as mock_get_critic,
             patch("foundermode.tools.search.TavilySearch._run") as mock_search_run,
         ):
             # Mock Planner to research then write
@@ -74,6 +80,13 @@ def test_e2e_live_smoke() -> None:
             mock_writer_chain = MagicMock()
             mock_get_writer.return_value = mock_writer_chain
             mock_writer_chain.invoke.return_value = InvestmentMemo(executive_summary="Real-ish Memo")
+
+            # Mock Critic to approve the "Real-ish Memo"
+            mock_critic_chain = MagicMock()
+            mock_get_critic.return_value = mock_critic_chain
+            mock_critic_chain.invoke.return_value = CriticVerdict(
+                action="approve", feedback="Great job", missing_data=[]
+            )
 
             # Mock Search Tool
             mock_search_run.return_value = [{"content": "Live-ish fact", "url": "http://live", "score": 0.99}]
@@ -92,6 +105,8 @@ def test_e2e_live_smoke() -> None:
                     "messages": [],
                     "next_step": "init",
                     "research_topic": None,
+                    "critique_history": [],
+                    "revision_count": 0,
                 }
 
                 final_state = app.invoke(initial_state)

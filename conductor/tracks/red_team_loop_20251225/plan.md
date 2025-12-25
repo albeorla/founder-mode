@@ -13,11 +13,11 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 2: The Critic Node Implementation' (Protocol in workflow.md)
 
 ## Phase 3: Planner & Workflow Integration
-- [ ] Task: Update `foundermode/graph/nodes/planner.py` prompt to consume and prioritize `critique_history`.
-- [ ] Task: Modify `foundermode/graph/workflow.py` to include the `critic` node and the adversarial loop edge.
-- [ ] Task: Implement `should_revise` conditional logic in `workflow.py` to enforce the 3-revision limit.
-- [ ] Task: Write integration tests in `tests/test_red_team_integration.py` to verify the full cycle and loop termination.
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Planner & Workflow Integration' (Protocol in workflow.md)
+- [x] Task: Update `foundermode/graph/nodes/planner.py` prompt to consume and prioritize `critique_history`.
+- [x] Task: Modify `foundermode/graph/workflow.py` to include the `critic` node and the adversarial loop edge.
+- [x] Task: Implement `should_revise` conditional logic in `workflow.py` to enforce the 3-revision limit.
+- [x] Task: Write integration tests in `tests/test_red_team_integration.py` to verify the full cycle and loop termination.
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Planner & Workflow Integration' (Protocol in workflow.md)
 
 ## Phase 4: Validation & Hardening
 - [ ] Task: Create an adversarial benchmarking script to automate "Red Team" testing against known weak inputs.
