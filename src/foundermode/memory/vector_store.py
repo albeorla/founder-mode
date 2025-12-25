@@ -77,7 +77,10 @@ class ChromaManager:
             self.collection.upsert(documents=documents, metadatas=cast(Any, metadatas), ids=ids)
             return True
         except Exception as e:
-            logger.error(f"Error adding facts: {e}")
+            try:
+                logger.error("Error adding facts: %s", str(e))
+            except UnicodeEncodeError:
+                logger.error("Error adding facts: [UnicodeEncodeError during logging]")
             return False
 
     def add_scraped_text(self, url: str, text: str, title: str | None = None) -> bool:

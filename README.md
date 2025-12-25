@@ -35,11 +35,12 @@ Built with the **"Senior AI Engineer"** stack:
 
 ### Prerequisites
 
-- Python 3.12+
-- [uv](https://github.com/astral-sh/uv) (Fast Python package manager)
-- Docker (optional, for containerized execution)
+- [Docker](https://www.docker.com/) (Recommended)
+- Python 3.12+ & [uv](https://github.com/astral-sh/uv) (For local development)
 
-### Installation
+### Quick Start (Docker)
+
+This is the "Happy Path" that ensures all dependencies (browsers, OS libraries) are correctly configured.
 
 1.  **Clone the repository:**
     ```bash
@@ -47,43 +48,42 @@ Built with the **"Senior AI Engineer"** stack:
     cd founder-mode
     ```
 
-2.  **Install dependencies using `uv`:**
-    ```bash
-    uv sync
-    ```
-
-3.  **Configure Environment:**
+2.  **Configure Environment:**
     Copy the example environment file and add your API keys.
     ```bash
     cp .env.example .env
     ```
     *   `OPENAI_API_KEY`: Required for LLM (GPT-4o).
     *   `TAVILY_API_KEY`: Required for web search.
-    *   `LANGCHAIN_API_KEY`: Optional, for LangSmith tracing.
 
-### Usage
+3.  **Run the Agent:**
+    ```bash
+    docker compose build
+    docker compose run --rm app run "Uber for Dog Walking"
+    ```
 
-**Run the Agent (CLI):**
+### Local Development
 
-Analyze a business idea directly from your terminal.
+1.  **Install dependencies:**
+    ```bash
+    uv sync
+    ```
 
-```bash
-uv run foundermode run "Uber for Dog Walking"
-```
+2.  **Install Playwright Browsers:**
+    ```bash
+    uv run playwright install chromium
+    ```
 
-**Run via Docker:**
+3.  **Run the Agent:**
+    ```bash
+    uv run foundermode run "Uber for Dog Walking"
+    ```
 
-```bash
-docker build -t foundermode .
-docker run --env-file .env foundermode run "Uber for Dog Walking"
-```
-
-**Start the API Server:**
-
-```bash
-uv run uvicorn foundermode.api.server:app --reload
-```
-API docs available at: `http://localhost:8000/docs`
+4.  **Start the API Server:**
+    ```bash
+    uv run uvicorn foundermode.api.server:app --reload
+    ```
+    API docs available at: `http://localhost:8000/docs`
 
 ## 📂 Project Structure
 

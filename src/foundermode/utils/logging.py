@@ -20,7 +20,7 @@ def setup_logging() -> None:
     )
 
     # File Handler
-    file_handler = logging.FileHandler(log_file)
+    file_handler = logging.FileHandler(log_file, encoding="utf-8")
     file_handler.setFormatter(formatter)
     file_handler.setLevel(logging.DEBUG)  # Always capture debug in file
 
