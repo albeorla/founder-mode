@@ -1,3 +1,134 @@
-# FounderMode
+# FounderMode 🚀
 
-An autonomous due diligence agent that validates business ideas using LangGraph and Vector Search.
+**The Autonomous Due Diligence Agent**
+
+[![CI](https://github.com/aorlando/founder-mode/actions/workflows/ci.yml/badge.svg)](https://github.com/aorlando/founder-mode/actions/workflows/ci.yml)
+[![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
+[![LangGraph](https://img.shields.io/badge/Orchestration-LangGraph-orange.svg)](https://langchain-ai.github.io/langgraph/)
+[![Code Style: Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+
+**FounderMode** is an autonomous market research agent that validates business ideas end-to-end. Unlike simple wrapper tools, it employs a **multi-agent architecture** to simulate a human investment analyst: reading data, forming hypotheses, and actively verifying facts via web search.
+
+---
+
+## 🌟 Core Value Proposition
+
+- **🧠 Active Reasoning:** It doesn't just summarize; it actively validates claims by searching the web.
+- **📑 Deep Reports:** Generates strategic investment memos (10+ pages) from a single one-sentence prompt.
+- **🔄 Agentic Architecture:** Uses cyclic graphs to self-correct (e.g., "I couldn't find pricing, I'll look again").
+- **💾 Vector-Native Memory:** Uses embeddings (ChromaDB) to deduplicate and cluster semantically.
+- **🔍 Research Agent:** A dedicated agent that uses tools (Tavily) to fact-check assumptions.
+
+## 🛠 Tech Stack
+
+Built with the **"Senior AI Engineer"** stack:
+
+*   **Runtime:** Python 3.12+
+*   **Orchestration:** [LangGraph](https://langchain-ai.github.io/langgraph/) (Stateful, cyclic multi-agent workflows)
+*   **Framework:** [LangChain](https://www.langchain.com/) (Components & Interfaces)
+*   **Validation:** [Pydantic](https://docs.pydantic.dev/) (Strict data & config validation)
+*   **Memory:** [ChromaDB](https://www.trychroma.com/) (Local persistent vector storage)
+*   **Search:** [Tavily API](https://tavily.com/) (Optimized for AI agents)
+*   **Observability:** [LangSmith](https://smith.langchain.com/) (Tracing & Debugging)
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Python 3.12+
+- [uv](https://github.com/astral-sh/uv) (Fast Python package manager)
+- Docker (optional, for containerized execution)
+
+### Installation
+
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/yourusername/founder-mode.git
+    cd founder-mode
+    ```
+
+2.  **Install dependencies using `uv`:**
+    ```bash
+    uv sync
+    ```
+
+3.  **Configure Environment:**
+    Copy the example environment file and add your API keys.
+    ```bash
+    cp .env.example .env
+    ```
+    *   `OPENAI_API_KEY`: Required for LLM (GPT-4o).
+    *   `TAVILY_API_KEY`: Required for web search.
+    *   `LANGCHAIN_API_KEY`: Optional, for LangSmith tracing.
+
+### Usage
+
+**Run the Agent (CLI):**
+
+Analyze a business idea directly from your terminal.
+
+```bash
+uv run foundermode run "Uber for Dog Walking"
+```
+
+**Run via Docker:**
+
+```bash
+docker build -t foundermode .
+docker run --env-file .env foundermode run "Uber for Dog Walking"
+```
+
+**Start the API Server:**
+
+```bash
+uv run uvicorn foundermode.api.server:app --reload
+```
+API docs available at: `http://localhost:8000/docs`
+
+## 📂 Project Structure
+
+```
+founder-mode/
+├── conductor/           # Project management & specifications (Conductor framework)
+├── src/
+│   └── foundermode/
+│       ├── api/         # FastAPI endpoints & CLI entry points
+│       ├── domain/      # Pydantic models (Schema) & State definitions
+│       ├── graph/       # LangGraph workflow & Nodes (Planner, Researcher, Writer)
+│       ├── memory/      # Vector Store (ChromaDB) integration
+│       └── tools/       # External tools (Tavily Search, Scraper)
+├── tests/               # Pytest suite
+├── .github/             # GitHub Actions CI workflows
+└── pyproject.toml       # Project configuration & dependencies
+```
+
+## 🧪 Development & Testing
+
+We follow a strictly **Test-Driven Development (TDD)** workflow.
+
+*   **Run Tests:**
+    ```bash
+    uv run pytest
+    ```
+*   **Linting & Formatting:**
+    ```bash
+    uv run ruff check .
+    uv run ruff format .
+    ```
+*   **Type Checking:**
+    ```bash
+    uv run mypy src/
+    ```
+
+## 🤝 Contributing
+
+1.  Read the `conductor/workflow.md` to understand our development process.
+2.  Create a feature branch.
+3.  Write tests first (Red).
+4.  Implement the feature (Green).
+5.  Refactor and ensure all checks pass.
+6.  Submit a Pull Request.
+
+## 📄 License
+
+[MIT](LICENSE)

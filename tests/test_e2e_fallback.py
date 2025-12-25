@@ -25,7 +25,6 @@ def test_e2e_graceful_fallback() -> None:
 
         with (
             patch("foundermode.graph.nodes.planner.settings", mock_settings),
-            patch("foundermode.graph.nodes.researcher.settings", mock_settings),
             patch("foundermode.graph.nodes.writer.settings", mock_settings),
             patch("foundermode.tools.search.settings", mock_settings),
             patch("foundermode.memory.vector_store.settings", mock_settings),
