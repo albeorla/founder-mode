@@ -20,3 +20,4 @@ FounderMode is an autonomous market research agent that validates business ideas
 - **Human-in-the-Loop:** Allows users to review and refine research plans before execution.
 - **Polished Artifacts:** Automatically generates professional HTML reports from synthesized memos.
 - **Evaluation-Ready:** Built-in benchmarking and "LLM-as-a-Judge" evaluation suite using LangSmith to ensure analytical quality and citation accuracy.
+- **Self-Critiquing (Red Team):** Employs an adversarial "Managing Partner" node that rejects weak analysis and forces the agent to dig deeper until the memo is bulletproof.
