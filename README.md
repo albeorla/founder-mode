@@ -18,6 +18,8 @@
 - **🔄 Agentic Architecture:** Uses cyclic graphs to self-correct (e.g., "I couldn't find pricing, I'll look again").
 - **💾 Vector-Native Memory:** Uses embeddings (ChromaDB) to deduplicate and cluster semantically.
 - **🔍 Research Agent:** A dedicated agent that uses tools (Tavily) to fact-check assumptions.
+- **👨‍⚖️ Critic Agent:** A built-in adversarial reviewer that challenges weak analysis until it meets institutional standards.
+- **🌐 Multi-Stage Scraper:** Playwright-powered fallback scraper for JavaScript-heavy sites when standard requests fail.
 
 ## 🛠 Tech Stack
 
@@ -29,6 +31,7 @@ Built with the **"Senior AI Engineer"** stack:
 *   **Validation:** [Pydantic](https://docs.pydantic.dev/) (Strict data & config validation)
 *   **Memory:** [ChromaDB](https://www.trychroma.com/) (Local persistent vector storage)
 *   **Search:** [Tavily API](https://tavily.com/) (Optimized for AI agents)
+*   **Scraping:** [Playwright](https://playwright.dev/) (Browser automation for JS-heavy sites)
 *   **Observability:** [LangSmith](https://smith.langchain.com/) (Tracing & Debugging)
 
 ## 🚀 Getting Started
@@ -53,8 +56,9 @@ This is the "Happy Path" that ensures all dependencies (browsers, OS libraries) 
     ```bash
     cp .env.example .env
     ```
-    *   `OPENAI_API_KEY`: Required for LLM (GPT-4o).
+    *   `OPENAI_API_KEY`: Required for LLM.
     *   `TAVILY_API_KEY`: Required for web search.
+    *   `MODEL_NAME`: Optional. Defaults to `gpt-4o`. Can use any OpenAI-compatible model.
 
 3.  **Run the Agent:**
     ```bash
@@ -90,14 +94,26 @@ This is the "Happy Path" that ensures all dependencies (browsers, OS libraries) 
 ```
 founder-mode/
 ├── conductor/           # Project management & specifications (Conductor framework)
+├── docs/                # Comprehensive documentation
+│   ├── architecture.md  # Technical deep-dive into system design
+│   ├── getting-started.md
+│   ├── user-guide.md
+│   └── diagrams/        # PlantUML visualizations
+├── scripts/             # Utility scripts
+│   ├── create_benchmark.py   # Create LangSmith evaluation datasets
+│   ├── run_evals.py          # Run evaluation benchmarks
+│   └── adversarial_bench.py  # Adversarial testing suite
 ├── src/
 │   └── foundermode/
 │       ├── api/         # FastAPI endpoints & CLI entry points
 │       ├── domain/      # Pydantic models (Schema) & State definitions
-│       ├── graph/       # LangGraph workflow & Nodes (Planner, Researcher, Writer)
+│       ├── evaluation/  # LangSmith evaluators
+│       ├── graph/       # LangGraph workflow & Nodes (Planner, Researcher, Writer, Critic)
 │       ├── memory/      # Vector Store (ChromaDB) integration
-│       └── tools/       # External tools (Tavily Search, Scraper)
-├── tests/               # Pytest suite
+│       ├── tools/       # External tools (Tavily Search, Multi-stage Scraper)
+│       └── utils/       # Shared utilities (logging, etc.)
+├── tests/               # Pytest suite (unit, integration, container, e2e)
+│   └── container/       # Docker container integration tests
 ├── .github/             # GitHub Actions CI workflows
 └── pyproject.toml       # Project configuration & dependencies
 ```
@@ -132,9 +148,21 @@ Run the evaluation benchmark to measure output quality:
 # Requires LANGCHAIN_API_KEY
 uv run python scripts/create_benchmark.py  # Create dataset (once)
 uv run python scripts/run_evals.py         # Run evaluations
+uv run python scripts/adversarial_bench.py # Run adversarial testing
 ```
 
 Results are tracked in LangSmith for experiment comparison. See [User Guide](./docs/user-guide.md) for details.
+
+## 📖 Documentation
+
+Comprehensive documentation is available in the `docs/` directory:
+
+| Document | Description |
+|----------|-------------|
+| [Getting Started](./docs/getting-started.md) | Installation, configuration, and first run |
+| [User Guide](./docs/user-guide.md) | Detailed usage instructions, options, and examples |
+| [Architecture](./docs/architecture.md) | Technical deep-dive into system design |
+| [Diagrams](./docs/diagrams/) | PlantUML visualizations of the workflow |
 
 ## 🤝 Contributing
 
