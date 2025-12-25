@@ -2,7 +2,7 @@
 
 **The Autonomous Due Diligence Agent**
 
-[![CI](https://github.com/aorlando/founder-mode/actions/workflows/ci.yml/badge.svg)](https://github.com/aorlando/founder-mode/actions/workflows/ci.yml)
+[![CI](https://github.com/albeorla/founder-mode/actions/workflows/ci.yml/badge.svg)](https://github.com/albeorla/founder-mode/actions/workflows/ci.yml)
 [![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
 [![LangGraph](https://img.shields.io/badge/Orchestration-LangGraph-orange.svg)](https://langchain-ai.github.io/langgraph/)
 [![Code Style: Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
@@ -47,7 +47,7 @@ This is the "Happy Path" that ensures all dependencies (browsers, OS libraries) 
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/yourusername/founder-mode.git
+    git clone https://github.com/albeorla/founder-mode.git
     cd founder-mode
     ```
 
@@ -125,6 +125,11 @@ We follow a strictly **Test-Driven Development (TDD)** workflow.
 *   **Run Tests:**
     ```bash
     uv run pytest
+    ```
+*   **Run Tests with Coverage:**
+    ```bash
+    uv run pytest --cov=foundermode --cov-report=term-missing
+    uv run pytest --cov=foundermode --cov-report=html  # Generates htmlcov/
     ```
 *   **Run Container Integration Tests:**
     ```bash
