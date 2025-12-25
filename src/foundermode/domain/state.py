@@ -27,6 +27,12 @@ class FounderState(TypedDict):
     next_step: str
     """The next node to execute (e.g., 'research', 'write', 'finish')."""
 
+    critique_history: Annotated[list[str], operator.add]
+    """Historical feedback from the critic node."""
+
+    revision_count: int
+    """Number of times the memo has been revised."""
+
 
 # Backward compatibility alias
 GraphState = FounderState

@@ -33,3 +33,11 @@ class InvestmentMemo(BaseModel):
     executive_summary: str = Field(default="", description="High-level summary of the idea")
     market_analysis: str = Field(default="", description="Analysis of the market opportunity")
     competitive_landscape: str = Field(default="", description="Analysis of competitors and their positioning")
+
+
+class CriticVerdict(BaseModel):
+    """The result of the critic's analysis."""
+
+    action: str = Field(..., description="Either 'approve' or 'reject'")
+    feedback: str = Field(..., description="Constructive feedback for the planner/writer")
+    missing_data: list[str] = Field(default_factory=list, description="Specific data points missing from the memo")

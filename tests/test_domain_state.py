@@ -13,11 +13,15 @@ def test_founder_state_structure() -> None:
         "messages": [],
         "next_step": "init",
         "research_topic": None,
+        "critique_history": [],
+        "revision_count": 0,
     }
 
     assert state["research_question"] == "Test Question"
     assert isinstance(state["memo_draft"], InvestmentMemo)
     assert state["research_facts"] == []
+    assert state["critique_history"] == []
+    assert state["revision_count"] == 0
 
 
 def test_founder_state_reducer() -> None:
@@ -28,6 +32,7 @@ def test_founder_state_reducer() -> None:
     annotations = FounderState.__annotations__
     assert "research_facts" in annotations
     assert "messages" in annotations
+    assert "critique_history" in annotations
 
     # We can't easily test the 'operator.add' without the LangGraph runtime,
     # but we can verify the state object is valid python.
@@ -42,8 +47,13 @@ def test_founder_state_reducer() -> None:
         "messages": [HumanMessage(content="Hi")],
         "next_step": "research",
         "research_topic": None,
+        "critique_history": ["Weak research"],
+        "revision_count": 1,
     }
 
     # Simulate addition
     state["research_facts"] = state["research_facts"] + [fact2]
     assert len(state["research_facts"]) == 2
+
+    state["critique_history"] = state["critique_history"] + ["Better but not there"]
+    assert len(state["critique_history"]) == 2
