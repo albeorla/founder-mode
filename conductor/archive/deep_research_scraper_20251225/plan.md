@@ -25,4 +25,5 @@
 - [ ] Task: Run end-to-end smoke test on a known "Hard" target (e.g., Stripe Pricing).
 - [ ] Task: Verify Analyst/Critic performance improvements via LangSmith.
 - [ ] Task: Verify all changes against `mypy` and `ruff`.
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: Full System Validation' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Full System Validation' (Protocol in workflow.md)
+  > Checkpoint: 502e429

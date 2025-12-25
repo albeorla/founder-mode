@@ -19,7 +19,7 @@
 
 ## External Tools
 - **Search:** **Tavily API** (Optimized for AI agents)
-- **Scraping:** BeautifulSoup4 (for targeted extraction)
+- **Scraping:** **Playwright** (Dynamic rendering), **Readability-lxml** (Clean text extraction), and **BeautifulSoup4** (Targeted parsing)
 
 ## Interface
 - **API:** **FastAPI** with **uvicorn** (Production backend)

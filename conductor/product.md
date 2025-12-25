@@ -14,6 +14,7 @@ FounderMode is an autonomous market research agent that validates business ideas
 - **Corporate Strategy:** Rapid market sizing and competitor analysis.
 
 ## Key Features
+- **Deep Research Scraper:** Multi-stage scraper (Playwright, Readability-lxml, BS4) that extracts high-signal quantitative data from full web pages, solving the "Snippet-Only" limitation.
 - **Vector-Native Memory:** Uses embeddings (ChromaDB) to deduplicate and cluster semantically.
 - **Research Agent:** A dedicated agent that uses tools (Tavily) to fact-check assumptions.
 - **Strategic Synthesis:** Merges "User Pain" (social signals) with "Market Reality" (competitor data).
