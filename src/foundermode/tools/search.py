@@ -23,12 +23,12 @@ class TavilySearch(BaseTool):  # type: ignore
     description: str = "Search the web for information about companies, markets, and business ideas."
     args_schema: type[BaseModel] = TavilySearchInput
     api_key: str | None = None
-    chroma: ChromaManager | None = None
+    chroma: Any = Field(default_factory=ChromaManager)
 
-    def __init__(self, api_key: str | None = None, chroma: ChromaManager | None = None, **kwargs: Any) -> None:
+    def __init__(self, **kwargs: Any) -> None:
+        if "api_key" not in kwargs:
+            kwargs["api_key"] = settings.tavily_api_key
         super().__init__(**kwargs)
-        self.api_key = api_key or settings.tavily_api_key
-        self.chroma = chroma or ChromaManager()
 
     def _run(self, query: str) -> list[dict[str, Any]]:
         """Execute the search tool with memory integration."""
@@ -50,15 +50,21 @@ class TavilySearch(BaseTool):  # type: ignore
         if self.chroma and results:
             facts_to_add = []
             for r in results:
+                content = r.get("content", "")
+                # Skip errors or very short/useless content
+                if "error" in content.lower() or "unauthorized" in content.lower() or len(content) < 20:
+                    continue
+
                 facts_to_add.append(
                     ResearchFact(
-                        content=r.get("content", ""),
+                        content=content,
                         source=r.get("url", ""),
                         title=r.get("title"),
                         relevance_score=r.get("score"),
                     )
                 )
-            self.chroma.add_facts(facts_to_add)
+            if facts_to_add:
+                self.chroma.add_facts(facts_to_add)
 
         return results  # type: ignore
 

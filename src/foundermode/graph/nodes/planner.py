@@ -66,7 +66,7 @@ def planner_node(state: FounderState) -> dict[str, Any]:
     """
     logger.info("Planner Node: Starting execution.")
     logger.debug(
-        f"Planner Input State: facts_count={len(state['research_facts'])}, " f"topic={state.get('research_topic')}"
+        f"Planner Input State: facts_count={len(state['research_facts'])}, topic={state.get('research_topic')}"
     )
 
     # 1. Attempt Live Logic

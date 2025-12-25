@@ -59,7 +59,7 @@ def researcher_node(state: FounderState) -> dict[str, Any]:
     logger.info(f"Researcher Node: Searching for '{topic}'")
 
     # Initialize tools
-    search_tool = TavilySearch()
+    search_tool = TavilySearch(api_key=settings.tavily_api_key)
     memory = ChromaManager()
 
     # Execute search

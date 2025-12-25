@@ -30,7 +30,7 @@ def test_settings_default_values() -> None:
     ):
         settings = Settings()
         assert settings.log_level == "INFO"
-        assert settings.model_name == "gpt-4o"  # Default
+        assert settings.model_name == "gpt-5.2"  # Default
 
 
 def test_settings_validation_optional_keys() -> None:
