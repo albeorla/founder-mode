@@ -295,6 +295,62 @@ FounderMode pauses before the Researcher agent executes:
 - Bypasses interrupt
 - Fully autonomous operation
 
+## Deployment Architecture
+
+### Docker Infrastructure
+
+FounderMode is designed to run in a containerized environment, which solves several challenges:
+
+```
+┌────────────────────────────────────────────────────────────────┐
+│                      DOCKER CONTAINER                          │
+├────────────────────────────────────────────────────────────────┤
+│                                                                │
+│  ┌─────────────────┐  ┌─────────────────┐  ┌───────────────┐  │
+│  │   Python 3.12   │  │    Chromium     │  │  OS Libraries │  │
+│  │   + UV Runtime  │  │   (Playwright)  │  │  (bookworm)   │  │
+│  └─────────────────┘  └─────────────────┘  └───────────────┘  │
+│                                                                │
+│  ┌─────────────────────────────────────────────────────────┐  │
+│  │                  FounderMode Application                │  │
+│  │  ├── API Layer (FastAPI/CLI)                            │  │
+│  │  ├── Graph Layer (LangGraph agents)                     │  │
+│  │  ├── Tools Layer (Tavily + Deep Scraper)                │  │
+│  │  └── Memory Layer (ChromaDB)                            │  │
+│  └─────────────────────────────────────────────────────────┘  │
+│                                                                │
+└────────────────────────────────────────────────────────────────┘
+                               │
+                        ┌──────┴──────┐
+                        │   Volumes   │
+                        ├─────────────┤
+                        │ .chroma_db/ │ ← Persistent vector storage
+                        │ .env        │ ← API keys (mounted)
+                        └─────────────┘
+```
+
+### Why Containerization?
+
+1. **Browser Dependencies:** Playwright requires Chromium + OS libraries. The Docker image bundles these correctly.
+2. **Cross-Platform Consistency:** The `linux/amd64` platform setting ensures identical behavior across macOS (Intel/ARM) and Linux.
+3. **Isolated Virtual Environment:** The container excludes the host's `.venv` to prevent mixing Linux and macOS binaries.
+4. **Reproducible Builds:** `uv.lock` + deterministic Dockerfile ensures consistent dependency resolution.
+
+### Container Testing
+
+The system includes integration tests designed to run inside the container:
+
+```bash
+# Verify container health
+docker compose run --rm app pytest tests/container/
+```
+
+These tests validate:
+- Chromium browser accessibility
+- Playwright rendering functionality
+- ChromaDB persistence across restarts
+- Full researcher node execution
+
 ## Design Decisions
 
 ### Why Cyclic Graphs?
@@ -324,6 +380,60 @@ Autonomous agents can go off-track. HITL provides:
 - User oversight
 - Course correction
 - Trust building
+
+## Evaluation System
+
+FounderMode includes an evaluation framework using LangSmith for systematic quality assessment.
+
+### Architecture
+
+```
+┌───────────────────────────────────────────────────────────────────┐
+│                    EVALUATION PIPELINE                             │
+├───────────────────────────────────────────────────────────────────┤
+│                                                                   │
+│  ┌─────────────────┐     ┌─────────────────┐     ┌────────────┐  │
+│  │  Benchmark      │────▶│  Run Graph      │────▶│  Evaluate  │  │
+│  │  Dataset        │     │  (per case)     │     │  Results   │  │
+│  │  (LangSmith)    │     │                 │     │            │  │
+│  └─────────────────┘     └─────────────────┘     └──────┬─────┘  │
+│         │                                               │        │
+│         │                                               ▼        │
+│         │           ┌───────────────────────────────────────┐    │
+│         │           │        LLM-as-a-Judge Evaluators      │    │
+│         │           │  ┌─────────────┐  ┌────────────────┐  │    │
+│         │           │  │  Investor   │  │  Hallucination │  │    │
+│         │           │  │   Rubric    │  │    Checker     │  │    │
+│         │           │  └─────────────┘  └────────────────┘  │    │
+│         │           └───────────────────────────────────────┘    │
+│         │                                               │        │
+│         ▼                                               ▼        │
+│  ┌─────────────────────────────────────────────────────────────┐ │
+│  │                    LangSmith Dashboard                      │ │
+│  │  • Experiment tracking    • Score visualization             │ │
+│  │  • Trace inspection       • Regression detection            │ │
+│  └─────────────────────────────────────────────────────────────┘ │
+│                                                                   │
+└───────────────────────────────────────────────────────────────────┘
+```
+
+### Evaluator Types
+
+| Evaluator | Purpose | Output |
+|-----------|---------|--------|
+| `InvestorRubricEvaluator` | Grades memo quality using VC Partner persona | 0-10 score |
+| `HallucinationEvaluator` (planned) | Cross-references claims vs. facts | Pass/Fail |
+| `PlannerEvaluator` (planned) | Measures search query "due diligence intent" | Quality score |
+| `ResearcherEvaluator` (planned) | Signal-to-noise ratio of facts | Ratio metric |
+
+### Benchmark Categories
+
+The evaluation dataset includes diverse test cases:
+
+- **Easy (Consumer):** Well-documented markets (e.g., "Uber for Dog Walking")
+- **Hard (Niche B2B):** Sparse data markets (e.g., "SaaS for Construction Management")
+- **Trap (Physics):** Logic violation tests (e.g., impossible business models)
+- **Adversarial (Fluff):** No real business model to expose hallucination
 
 ## Diagrams
 

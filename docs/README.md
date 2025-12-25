@@ -74,9 +74,25 @@ Pauses before executing research to get your approval, giving you control over t
 
 ## Quick Start
 
+### Using Docker (Recommended)
+
 ```bash
-# Install
-pip install foundermode
+# Clone and configure
+git clone https://github.com/your-org/founder-mode.git
+cd founder-mode
+cp .env.example .env  # Add your API keys
+
+# Build and run
+docker compose build
+docker compose run --rm app run "Your business idea here"
+```
+
+### Using Local Installation
+
+```bash
+# Install dependencies
+uv sync
+uv run playwright install chromium
 
 # Configure API keys
 export OPENAI_API_KEY="your-key"

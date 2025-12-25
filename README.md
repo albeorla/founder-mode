@@ -110,6 +110,10 @@ We follow a strictly **Test-Driven Development (TDD)** workflow.
     ```bash
     uv run pytest
     ```
+*   **Run Container Integration Tests:**
+    ```bash
+    docker compose run --rm app pytest tests/container/
+    ```
 *   **Linting & Formatting:**
     ```bash
     uv run ruff check .
@@ -119,6 +123,18 @@ We follow a strictly **Test-Driven Development (TDD)** workflow.
     ```bash
     uv run mypy src/
     ```
+
+### Evaluations (LangSmith)
+
+Run the evaluation benchmark to measure output quality:
+
+```bash
+# Requires LANGCHAIN_API_KEY
+uv run python scripts/create_benchmark.py  # Create dataset (once)
+uv run python scripts/run_evals.py         # Run evaluations
+```
+
+Results are tracked in LangSmith for experiment comparison. See [User Guide](./docs/user-guide.md) for details.
 
 ## 🤝 Contributing
 

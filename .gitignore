@@ -45,4 +45,5 @@ venv.bak/
 .vscode/
 .chroma_db/
 .chroma_db_test/
+.chroma_db_container_test/
 .out/

@@ -4,30 +4,43 @@ This guide walks you through installing FounderMode, configuring your API keys, 
 
 ## Prerequisites
 
-- **Python 3.12+** - Required for modern async features
+- **[Docker](https://www.docker.com/)** - Recommended for production use
+- **Python 3.12+ & [uv](https://github.com/astral-sh/uv)** - For local development
 - **OpenAI API Key** - Powers the AI reasoning (GPT-4o)
 - **Tavily API Key** - Enables web search capabilities
 
 ## Installation
 
-### Option 1: pip (Recommended)
+### Option 1: Docker (Recommended)
 
-```bash
-pip install foundermode
-```
-
-### Option 2: From Source
+Docker is the **"Happy Path"** that ensures all dependencies (Playwright browsers, OS libraries) are correctly configured out of the box. This avoids common issues like "Playwright not found" or shared library errors.
 
 ```bash
 # Clone the repository
 git clone https://github.com/your-org/founder-mode.git
 cd founder-mode
 
-# Install with uv (recommended) or pip
-uv sync
-# or
-pip install -e .
+# Build the container
+docker compose build
 ```
+
+### Option 2: Local Development
+
+For contributors or those who prefer running natively:
+
+```bash
+# Clone the repository
+git clone https://github.com/your-org/founder-mode.git
+cd founder-mode
+
+# Install Python dependencies with uv
+uv sync
+
+# Install Playwright browsers (required for deep research/scraping)
+uv run playwright install chromium
+```
+
+> **Note:** The `playwright install chromium` step is critical for the Deep Research features. Without it, web scraping will fail.
 
 ## Configuration
 
@@ -72,7 +85,17 @@ FounderMode automatically loads this file on startup.
 
 ## Your First Analysis
 
-### Interactive Mode (Default)
+### Using Docker (Recommended)
+
+```bash
+# Interactive mode (default)
+docker compose run --rm app run "A marketplace connecting local farmers with restaurant chefs"
+
+# Auto mode (skip approval prompts)
+docker compose run --rm app run --auto "A marketplace connecting local farmers with restaurant chefs"
+```
+
+### Using Local Installation
 
 ```bash
 foundermode run "A marketplace connecting local farmers with restaurant chefs"
@@ -86,12 +109,12 @@ The system will:
 5. **Critique** and refine the analysis
 6. **Output** the final HTML report
 
-### Auto Mode
+### Auto Mode (Local)
 
 Skip the approval step for fully autonomous operation:
 
 ```bash
-foundermode run --auto "A marketplace connecting local farmers with restaurant chefs"
+foundermode run --auto "Your business idea"
 # or
 foundermode run -a "Your business idea"
 ```
@@ -185,6 +208,42 @@ If you see mock data in outputs, the system couldn't connect to APIs. Check:
 - API keys are valid and not expired
 - You have network connectivity
 - API rate limits haven't been exceeded
+
+### Playwright / Browser errors (Local Development)
+
+If you see errors like "Playwright not found" or "chromium not found":
+
+```bash
+# Install Playwright browsers
+uv run playwright install chromium
+
+# On Linux, you may also need system dependencies
+uv run playwright install-deps chromium
+```
+
+> **Tip:** Using Docker avoids these issues entirely—browsers are pre-installed in the container.
+
+### Docker-specific issues
+
+**Build fails with network errors:**
+```bash
+# Retry with no cache
+docker compose build --no-cache
+```
+
+**Container can't find API keys:**
+Ensure your `.env` file exists and contains valid keys:
+```bash
+ls -la .env
+cat .env | head -2  # Verify keys are present (don't share output!)
+```
+
+**Volume permission errors:**
+On some systems, you may need to adjust permissions:
+```bash
+# Reset ownership (Linux/macOS)
+sudo chown -R $(whoami) .
+```
 
 ### Slow performance
 

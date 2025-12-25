@@ -6,6 +6,12 @@ This guide covers all the ways to use FounderMode, including advanced options, b
 
 ### Basic Usage
 
+**Using Docker (Recommended):**
+```bash
+docker compose run --rm app run "Your business idea description"
+```
+
+**Using Local Installation:**
 ```bash
 foundermode run "Your business idea description"
 ```
@@ -19,6 +25,16 @@ foundermode run "Your business idea description"
 
 ### Examples
 
+**Docker:**
+```bash
+# Interactive mode (default) - pauses for approval
+docker compose run --rm app run "A B2B SaaS platform for construction project management"
+
+# Auto mode - no human interaction required
+docker compose run --rm app run --auto "An AI tutoring app for K-12 students"
+```
+
+**Local:**
 ```bash
 # Interactive mode (default) - pauses for approval
 foundermode run "A B2B SaaS platform for construction project management"
@@ -36,9 +52,21 @@ FounderMode also provides a REST API for programmatic access.
 
 ### Starting the Server
 
+**Using Docker (Recommended):**
+```bash
+# Start the API server (runs on port 8000)
+docker compose up
+
+# Or run in background
+docker compose up -d
+```
+
+**Using Local Installation:**
 ```bash
 uvicorn foundermode.api.server:app --host 0.0.0.0 --port 8000
 ```
+
+API docs available at: `http://localhost:8000/docs`
 
 ### Endpoints
 
@@ -284,6 +312,36 @@ This shows detailed progress including:
 - How long each step takes
 - Any retry attempts
 
+### Docker-Specific Issues
+
+#### Container can't access API keys
+
+Ensure your `.env` file is properly configured:
+```bash
+# Check file exists and has content
+ls -la .env
+```
+
+The `.env` file should contain:
+```env
+OPENAI_API_KEY=sk-...
+TAVILY_API_KEY=tvly-...
+```
+
+#### Playwright/Chromium errors in container
+
+If you see browser errors inside Docker, rebuild the container:
+```bash
+docker compose build --no-cache
+```
+
+#### Container tests for validation
+
+Run the container integration tests to verify everything works:
+```bash
+docker compose run --rm app pytest tests/container/
+```
+
 ### Error Messages
 
 | Error | Cause | Solution |
@@ -315,6 +373,61 @@ This shows detailed progress including:
 2. **Market sizing**: Use for TAM/SAM analysis
 3. **Feature prioritization**: Research specific feature markets
 4. **Positioning**: Understand competitive positioning options
+
+## Running Evaluations
+
+FounderMode includes a benchmark and evaluation system for measuring output quality.
+
+### Prerequisites
+
+You need a LangSmith account and API key:
+```bash
+export LANGCHAIN_API_KEY="ls-..."
+export LANGCHAIN_TRACING_V2=true
+```
+
+### Create Benchmark Dataset
+
+First, create the benchmark dataset in LangSmith:
+
+```bash
+# Local
+uv run python scripts/create_benchmark.py
+
+# Docker
+docker compose run --rm app python scripts/create_benchmark.py
+```
+
+This creates "FounderMode Benchmark v1" with diverse test cases.
+
+### Run Evaluations
+
+Execute the full evaluation suite:
+
+```bash
+# Local
+uv run python scripts/run_evals.py
+
+# Docker
+docker compose run --rm app python scripts/run_evals.py
+```
+
+Results are logged to LangSmith for visualization and comparison.
+
+### Evaluation Metrics
+
+| Metric | Description | Target |
+|--------|-------------|--------|
+| **Investor Score** | Overall memo quality (1-10) | >7.0 |
+| **Hallucination Rate** | Claims without citations | <20% |
+| **Analytical Depth** | Presence of "Why now?", moats, unit economics | 4+/5 |
+
+### Viewing Results
+
+Access your results at [smith.langchain.com](https://smith.langchain.com):
+1. Navigate to your project
+2. View experiment runs and traces
+3. Compare scores across experiments
 
 ## Advanced Configuration
 
