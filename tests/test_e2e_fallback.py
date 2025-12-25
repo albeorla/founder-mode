@@ -18,13 +18,9 @@ def test_e2e_graceful_fallback() -> None:
         mock_settings.chroma_db_path = ".chroma_db_test"
 
         # 2. Create the real workflow (it will use the mocked settings)
-        # We must also mock the internal imports in nodes if they use the global 'settings' instance
-        # instead of the one we just patched.
-        # Actually, if they do 'from foundermode.config import settings', they get the instance.
-        # Patching 'foundermode.config.settings' should affect all modules importing it.
-
         with (
             patch("foundermode.graph.nodes.planner.settings", mock_settings),
+            patch("foundermode.graph.nodes.researcher.settings", mock_settings),
             patch("foundermode.graph.nodes.writer.settings", mock_settings),
             patch("foundermode.tools.search.settings", mock_settings),
             patch("foundermode.memory.vector_store.settings", mock_settings),
@@ -41,7 +37,6 @@ def test_e2e_graceful_fallback() -> None:
             }
 
             # Execute the full graph
-            # It should loop researcher 3 times (based on our mock logic in planner) then write.
             final_state = app.invoke(initial_state)
 
             # 3. Verify Final State

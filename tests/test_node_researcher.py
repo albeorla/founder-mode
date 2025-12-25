@@ -2,7 +2,7 @@ from unittest.mock import patch
 
 from foundermode.domain.schema import InvestmentMemo
 from foundermode.domain.state import FounderState
-from foundermode.graph.nodes.researcher import researcher_node
+from foundermode.graph.nodes.researcher import EvaluatedFact, FactList, researcher_node
 
 
 def test_researcher_fallback_when_search_fails() -> None:
@@ -44,10 +44,18 @@ def test_researcher_success() -> None:
 
     with patch("foundermode.graph.nodes.researcher.TavilySearch") as MockTool:
         mock_tool_instance = MockTool.return_value
-        mock_tool_instance.invoke.return_value = [{"content": "Live result", "url": "http"}]
+        mock_tool_instance.invoke.return_value = [{"content": "Live result", "url": "http", "score": 0.9}]
 
         with patch("foundermode.graph.nodes.researcher.ChromaManager") as _:
-            result = researcher_node(state)
+            # Mock the extractor chain
+            with patch("foundermode.graph.nodes.researcher.get_extractor_chain") as mock_get_chain:
+                mock_chain = mock_get_chain.return_value
+                # Make it return a valid FactList
+                mock_chain.invoke.return_value = FactList(
+                    facts=[EvaluatedFact(content="Extracted Fact", source_url="http", relevance_score=0.9)]
+                )
 
-            assert len(result["research_facts"]) == 1
-            assert "Live result" in result["research_facts"][0].content
+                result = researcher_node(state)
+
+                assert len(result["research_facts"]) == 1
+                assert "Extracted Fact" in result["research_facts"][0].content

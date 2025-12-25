@@ -7,11 +7,11 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Evaluation Infrastructure' (Protocol in workflow.md)
 
 ## Phase 2: Core Agent Logic Refinement
-- [ ] Task: Refine `planner.py` system prompt to prioritize unit economics, CAC, and incumbent analysis.
-- [ ] Task: Refine `researcher.py` interpretation logic to filter for high-signal data before vector ingestion.
-- [ ] Task: Refine `writer.py` template to enforce professional committee formatting and mandatory citations.
-- [ ] Task: Verify refinements against `mypy` and `ruff`.
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Core Agent Logic Refinement' (Protocol in workflow.md)
+- [x] Task: Refine `planner.py` system prompt to prioritize unit economics, CAC, and incumbent analysis.
+- [x] Task: Refine `researcher.py` interpretation logic to filter for high-signal data before vector ingestion.
+- [x] Task: Refine `writer.py` template to enforce professional committee formatting and mandatory citations.
+- [x] Task: Verify refinements against `mypy` and `ruff`.
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Core Agent Logic Refinement' (Protocol in workflow.md)
 
 ## Phase 3: Quality Validation & Tuning
 - [ ] Task: Run full evaluation suite against the LangSmith benchmark dataset.
