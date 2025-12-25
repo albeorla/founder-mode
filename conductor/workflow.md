@@ -6,6 +6,7 @@
 2. **Continuous Delivery (Local):** We use short-lived feature branches and merge locally after verification. Main is always deployable.
 3. **Test-Driven Development:** Write tests first. Green tests = Mergeable.
 4. **Production Artifacts:** Docker is our deployment target, but `uv` is our development driver.
+5. **Output Isolation:** All generated artifacts (reports, logs) must be written to `.out/` and ignored by git.
 
 ## Task Workflow
 
@@ -21,6 +22,7 @@
 ### 3. Verification
 - **Run Tests:** `uv run pytest` (Ensure all pass).
 - **Run Checks:** `pre-commit run --all-files` (Ensure style/types).
+- **Check CI:** If pushed, verify pipeline health with `gh run list`.
 
 ### 4. Merge & Finalize
 - **Merge:** Switch to `main` and merge the task branch (`git merge task/...`).
