@@ -1,3 +1,5 @@
+from typing import Any
+
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
 from langsmith.evaluation import EvaluationResult, RunEvaluator
@@ -44,7 +46,7 @@ class InvestorRubricEvaluator(RunEvaluator):  # type: ignore
             ]
         )
 
-    def evaluate_run(self, run: Run, example: Example | None = None) -> EvaluationResult:
+    def evaluate_run(self, run: Run, example: Example | None = None, **kwargs: Any) -> EvaluationResult:
         if not run.outputs or "memo_draft" not in run.outputs:
             return EvaluationResult(key="investor_score", score=0, comment="No memo generated")
 

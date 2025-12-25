@@ -14,7 +14,7 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Core Agent Logic Refinement' (Protocol in workflow.md)
 
 ## Phase 3: Quality Validation & Tuning
-- [ ] Task: Run full evaluation suite against the LangSmith benchmark dataset.
-- [ ] Task: Execute manual smoke test ("Uber for Dog Walking") and archive the result.
-- [ ] Task: Analyze evaluation failures and perform final prompt tuning.
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Quality Validation & Tuning' (Protocol in workflow.md)
+- [x] Task: Run full evaluation suite against the LangSmith benchmark dataset.
+- [x] Task: Execute manual smoke test ("Uber for Dog Walking") and archive the result.
+- [x] Task: Analyze evaluation failures and perform final prompt tuning.
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Quality Validation & Tuning' (Protocol in workflow.md)

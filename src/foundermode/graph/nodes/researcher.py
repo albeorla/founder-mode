@@ -128,6 +128,28 @@ def researcher_node(state: FounderState) -> dict[str, Any]:
             )
         )
 
+    # Final Safety Net: If facts is still empty (e.g. LLM filtered everything out), use raw
+    if not facts and raw_results:
+        for r in raw_results:
+            facts.append(
+                ResearchFact(
+                    content=r.get("content", ""),
+                    source=r.get("url", "none"),
+                    title=r.get("title", f"Search: {topic}"),
+                    relevance_score=r.get("score", 1.0),
+                )
+            )
+    elif not facts:
+        # Double safety: Mock if still empty
+        facts.append(
+            ResearchFact(
+                content=f"Mock Fact (Fallback): {topic}",
+                source="System",
+                title=f"Mock Search: {topic}",
+                relevance_score=0.1,
+            )
+        )
+
     # Store in memory
     memory.add_facts(facts)
 

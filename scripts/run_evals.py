@@ -1,0 +1,49 @@
+import os
+from typing import Any
+
+from langsmith import evaluate
+
+from foundermode.domain.schema import InvestmentMemo
+from foundermode.evaluation.evaluators import InvestorRubricEvaluator
+from foundermode.graph.workflow import create_workflow
+
+
+def run_evals() -> None:
+    # Define target function (wrap the graph)
+    def target(inputs: dict[str, Any]) -> dict[str, Any]:
+        app = create_workflow()
+        initial_state = {
+            "research_question": inputs["research_question"],
+            "research_facts": [],
+            "memo_draft": InvestmentMemo(),
+            "messages": [],
+            "next_step": "init",
+            "research_topic": None,
+        }
+        # Run graph
+        final_state = app.invoke(initial_state)
+        return final_state  # type: ignore
+
+    # Define evaluators
+    evaluators = [
+        InvestorRubricEvaluator(model_name="gpt-4o"),
+        # Add more standard evaluators if needed
+    ]
+
+    # Run evaluation
+    results = evaluate(
+        target,
+        data="FounderMode Benchmark v1",
+        evaluators=evaluators,
+        experiment_prefix="foundermode-v1",
+        max_concurrency=4,
+    )
+
+    print(results)
+
+
+if __name__ == "__main__":
+    if not os.environ.get("LANGCHAIN_API_KEY"):
+        print("Skipping LangSmith evaluation: LANGCHAIN_API_KEY not found.")
+    else:
+        run_evals()

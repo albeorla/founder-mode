@@ -27,6 +27,7 @@ def version() -> None:
 @app.command(name="run")  # type: ignore
 def run_command(
     query: str = typer.Argument(..., help="The business idea or market to research"),
+    auto: bool = typer.Option(False, "--auto", "-a", help="Run without user confirmation"),
 ) -> None:
     """Run the research agent on a business idea."""
     console.print(
@@ -82,8 +83,12 @@ def run_command(
         for task in research_plan:
             console.print(f"- {task}")
 
-        # Ask user for input
-        choice = Prompt.ask("Proceed?", choices=["y", "n", "edit"], default="y")
+        if auto:
+            console.print("[dim]Auto-proceeding...[/dim]")
+            choice = "y"
+        else:
+            # Ask user for input
+            choice = Prompt.ask("Proceed?", choices=["y", "n", "edit"], default="y")
 
         if choice == "y":
             input_to_graph = None  # Resume execution
