@@ -26,7 +26,7 @@ def run_evals() -> None:
 
     # Define evaluators
     evaluators = [
-        InvestorRubricEvaluator(model_name="gpt-4o"),
+        InvestorRubricEvaluator(),
         # Add more standard evaluators if needed
     ]
 

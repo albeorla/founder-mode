@@ -13,9 +13,9 @@ class InvestorRubricEvaluator(RunEvaluator):  # type: ignore
     Evaluates an Investment Memo against a professional Investor Rubric.
     """
 
-    def __init__(self, model_name: str = "gpt-4o"):
-        self.model_name = model_name
-        self.eval_llm = ChatOpenAI(model=model_name, temperature=0, openai_api_key=settings.openai_api_key)
+    def __init__(self, model_name: str | None = None):
+        self.model_name = model_name or settings.model_name
+        self.eval_llm = ChatOpenAI(model=self.model_name, temperature=0, openai_api_key=settings.openai_api_key)
 
         self.prompt = ChatPromptTemplate.from_messages(
             [
@@ -46,7 +46,9 @@ class InvestorRubricEvaluator(RunEvaluator):  # type: ignore
             ]
         )
 
-    def evaluate_run(self, run: Run, example: Example | None = None, **kwargs: Any) -> EvaluationResult:
+    def evaluate_run(  # type: ignore[override]
+        self, run: Run, example: Example | None = None, **kwargs: Any
+    ) -> EvaluationResult:
         if not run.outputs or "memo_draft" not in run.outputs:
             return EvaluationResult(key="investor_score", score=0, comment="No memo generated")
 

@@ -17,7 +17,7 @@ class Settings(BaseSettings):
     tavily_api_key: str | None = Field(default=None, alias="TAVILY_API_KEY")
     """API key for Tavily search."""
 
-    model_name: str = Field(default="gpt-4o", alias="FM_MODEL_NAME")
+    model_name: str = Field(default="gpt-4o", alias="MODEL_NAME")
     """LLM model to use."""
 
     log_level: str = Field(default="INFO", alias="FM_LOG_LEVEL")
