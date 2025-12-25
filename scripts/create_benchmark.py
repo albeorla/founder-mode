@@ -1,6 +1,9 @@
 import os
 
+from dotenv import load_dotenv
 from langsmith import Client
+
+load_dotenv()
 
 
 def create_benchmark_dataset() -> None:

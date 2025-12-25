@@ -1,3 +1,4 @@
+import logging
 from typing import Any
 
 from langchain_core.prompts import ChatPromptTemplate
@@ -9,6 +10,8 @@ from foundermode.domain.schema import ResearchFact
 from foundermode.domain.state import FounderState
 from foundermode.memory.vector_store import ChromaManager
 from foundermode.tools.search import TavilySearch
+
+logger = logging.getLogger(__name__)
 
 
 class EvaluatedFact(BaseModel):
@@ -53,6 +56,7 @@ def researcher_node(state: FounderState) -> dict[str, Any]:
     Supports dynamic fallback to mock data if search fails.
     """
     topic = state.get("research_topic") or state["research_question"]
+    logger.info(f"Researcher Node: Searching for '{topic}'")
 
     # Initialize tools
     search_tool = TavilySearch()
@@ -64,7 +68,21 @@ def researcher_node(state: FounderState) -> dict[str, Any]:
         # If search_results is a string (error message or single result), wrap it
         if isinstance(raw_results, str):
             raw_results = [{"content": raw_results, "url": "none", "title": "Search Result"}]
+
+        # Filter out API Errors (e.g. "Unauthorized", "invalid API key")
+        valid_results = []
+        if raw_results:
+            for r in raw_results:
+                content = r.get("content", "").lower()
+                if "unauthorized" in content or "invalid api key" in content or "error searching" in content:
+                    logger.warning(f"Detected API error in search result: {content[:50]}...")
+                    continue
+                valid_results.append(r)
+
+        raw_results = valid_results if valid_results else None
+        logger.debug(f"Search returned {len(raw_results) if raw_results else 0} valid results.")
     except Exception as e:
+        logger.error(f"Researcher search failed: {e}", exc_info=True)
         print(f"Researcher search failed, falling back to mock: {e}")
         raw_results = None
 
@@ -76,6 +94,7 @@ def researcher_node(state: FounderState) -> dict[str, Any]:
     if raw_results and chain:
         # LLM-based extraction
         try:
+            logger.debug("Attempting LLM-based fact extraction.")
             # Prepare input for LLM
             # We map the raw dicts to a string representation
             results_str = "\n".join([f"Source: {r.get('url')}\nContent: {r.get('content')}\n---" for r in raw_results])
@@ -90,10 +109,14 @@ def researcher_node(state: FounderState) -> dict[str, Any]:
                                 content=ef.content,
                                 source=ef.source_url,
                                 title=f"Fact from {topic}",
-                                relevance_score=ef.relevance_score,
+                                relevance=ef.relevance_score,
                             )
                         )
+                logger.info(f"LLM extracted {len(facts)} high-signal facts.")
+            else:
+                logger.warning("LLM extraction returned no facts.")
         except Exception as e:
+            logger.error(f"Fact extraction failed: {e}. Falling back to raw.", exc_info=True)
             print(f"Fact extraction failed: {e}. Falling back to raw.")
             # Fallback to raw if LLM fails
             for r in raw_results:
@@ -108,6 +131,7 @@ def researcher_node(state: FounderState) -> dict[str, Any]:
 
     elif raw_results:
         # No LLM chain available, use raw
+        logger.info("LLM extraction unavailable. Using raw results.")
         for r in raw_results:
             facts.append(
                 ResearchFact(
@@ -119,6 +143,7 @@ def researcher_node(state: FounderState) -> dict[str, Any]:
             )
     else:
         # Mock Fallback Logic
+        logger.info("Researcher Node: Using Mock Fallback Logic (No raw results).")
         facts.append(
             ResearchFact(
                 content=f"Mock Fact: {topic} is a high-growth sector with significant potential.",
@@ -130,6 +155,7 @@ def researcher_node(state: FounderState) -> dict[str, Any]:
 
     # Final Safety Net: If facts is still empty (e.g. LLM filtered everything out), use raw
     if not facts and raw_results:
+        logger.warning("Facts empty after processing. Fallback to raw results to ensure progress.")
         for r in raw_results:
             facts.append(
                 ResearchFact(
@@ -141,6 +167,7 @@ def researcher_node(state: FounderState) -> dict[str, Any]:
             )
     elif not facts:
         # Double safety: Mock if still empty
+        logger.warning("Facts empty after all fallbacks. Injecting safety mock fact.")
         facts.append(
             ResearchFact(
                 content=f"Mock Fact (Fallback): {topic}",
@@ -152,6 +179,7 @@ def researcher_node(state: FounderState) -> dict[str, Any]:
 
     # Store in memory
     memory.add_facts(facts)
+    logger.debug(f"Added {len(facts)} facts to memory.")
 
     # Update state
     return {"research_facts": facts, "next_step": "planner"}

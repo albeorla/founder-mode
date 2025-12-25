@@ -1,3 +1,4 @@
+import logging
 from typing import Any
 
 from langchain_core.prompts import ChatPromptTemplate
@@ -6,6 +7,8 @@ from langchain_openai import ChatOpenAI
 from foundermode.config import settings
 from foundermode.domain.schema import InvestmentMemo
 from foundermode.domain.state import FounderState
+
+logger = logging.getLogger(__name__)
 
 # Define the prompt
 writer_prompt = ChatPromptTemplate.from_messages(
@@ -53,6 +56,9 @@ def writer_node(state: FounderState) -> dict[str, Any]:
     Synthesizes the investment memo.
     Supports dynamic fallback to mock data if OpenAI key is missing.
     """
+    logger.info("Writer Node: Starting memo synthesis.")
+    logger.debug(f"Writer Input: facts_count={len(state['research_facts'])}")
+
     # 1. Attempt Live Logic
     chain = get_writer_chain()
     if chain:
@@ -64,12 +70,16 @@ def writer_node(state: FounderState) -> dict[str, Any]:
                 else "No facts collected."
             )
 
+            logger.debug("Invoking Writer LLM.")
             memo = chain.invoke({"research_question": state["research_question"], "research_facts": facts_str})
+            logger.info("Writer Node: Memo generated successfully.")
             return {"memo_draft": memo, "next_step": "finish"}
         except Exception as e:
+            logger.error(f"Writer LLM call failed, falling back to mock: {e}", exc_info=True)
             print(f"Writer LLM call failed, falling back to mock: {e}")
 
     # 2. Mock Fallback Logic
+    logger.info("Writer Node: Using Mock Fallback Logic.")
     memo = InvestmentMemo(
         executive_summary=(
             f"Mock Executive Summary for {state['research_question']}. "

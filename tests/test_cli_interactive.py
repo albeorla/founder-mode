@@ -54,9 +54,9 @@ def test_cli_interactive_flow(mock_memory: MagicMock, mock_create_workflow: Magi
         print(result.stdout)  # For debugging failures
 
     assert result.exit_code == 0
-    assert "Research Plan Generated" in result.stdout
-    assert "Find competitors" in result.stdout
-    assert "Proceed?" in result.stdout
+    assert "⏸  Interrupt: Before researcher" in result.stdout
+    assert "Current fact count: 0" in result.stdout
+    assert "✓ Research Complete!" in result.stdout
 
     # Verify we called stream twice: once to start, once to resume
     assert mock_graph.stream.call_count == 2

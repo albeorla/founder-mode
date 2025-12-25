@@ -1,3 +1,5 @@
+import os
+
 import typer
 from dotenv import load_dotenv
 from langchain_core.runnables import RunnableConfig
@@ -10,9 +12,16 @@ from foundermode.domain.schema import InvestmentMemo
 from foundermode.domain.state import GraphState
 from foundermode.graph.workflow import create_workflow
 from foundermode.tools.reporter import render_memo
+from foundermode.utils.logging import setup_logging
 
 # Load environment variables from .env file
 load_dotenv()
+
+# Force LangSmith off to stop 403 noise during debugging
+os.environ["LANGCHAIN_TRACING_V2"] = "false"
+
+# Setup logging
+setup_logging()
 
 app = typer.Typer(help="FounderMode: The Autonomous Due Diligence Agent", no_args_is_help=True)
 console = Console()
@@ -53,16 +62,19 @@ def run_command(
     }
 
     # 2. Run the graph (handling interruptions)
-
-    # First pass: Run until interruption or completion
-    # We pass 'None' as input for subsequent resumes if we aren't updating state
     input_to_graph: GraphState | None = initial_state
 
     while True:
-        with console.status("[bold green]Working...") as _:
-            # stream returns events, but we just want to run until it stops
-            for _event in workflow.stream(input_to_graph, config=config):
-                pass
+        with console.status("[bold green]Agent Thinking...") as _:
+            # stream returns events, we'll log them to see progress
+            for event in workflow.stream(input_to_graph, config=config, stream_mode="updates"):
+                for node_name, output in event.items():
+                    console.print(f"[dim]Node [bold]{node_name}[/bold] completed.[/dim]")
+                    if "next_step" in output:
+                        console.print(f"[dim]  Transition -> [blue]{output['next_step']}[/blue][/dim]")
+                    if "research_facts" in output:
+                        count = len(output["research_facts"])
+                        console.print(f"[dim]  Facts found: {count}[/dim]")
 
         # Check current status
         snapshot = workflow.get_state(config)
@@ -74,20 +86,24 @@ def run_command(
             break
 
         # If we are here, the graph is interrupted
-        # In our specific workflow, it interrupts before 'researcher'
-        # Let's show the plan from the state
         current_values = snapshot.values
-        research_plan = current_values.get("research_plan", [])
+        next_node = snapshot.next[0]
 
-        console.print("\n[bold yellow]! Research Plan Generated[/bold yellow]")
-        for task in research_plan:
-            console.print(f"- {task}")
+        console.print(f"\n[bold yellow]⏸  Interrupt: Before {next_node}[/bold yellow]")
+
+        # Show current progress
+        facts = current_values.get("research_facts", [])
+        console.print(f"[dim]Current fact count: {len(facts)}[/dim]")
+
+        # Show the plan/topic if researcher is next
+        if next_node == "researcher":
+            topic = current_values.get("research_topic")
+            console.print(f"[bold blue]Next Research Topic:[/bold blue] {topic}")
 
         if auto:
             console.print("[dim]Auto-proceeding...[/dim]")
             choice = "y"
         else:
-            # Ask user for input
             choice = Prompt.ask("Proceed?", choices=["y", "n", "edit"], default="y")
 
         if choice == "y":

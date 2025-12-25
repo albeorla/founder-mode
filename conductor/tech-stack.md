@@ -7,6 +7,11 @@
 - **Type Safety:** Pydantic and **pydantic-settings** (Strict data & config validation)
 - **Observability:** **LangSmith** (Tracing & Debugging)
 
+## Evaluation & Testing
+- **Benchmarking:** **LangSmith Datasets**
+- **Quality Control:** **LLM-as-a-Judge** (Custom rubric evaluators)
+- **Testing Framework:** **Pytest**
+
 ## Data & Memory
 - **Vector Database:** **ChromaDB** (Local persistent storage)
 - **Embeddings:** **OpenAI text-embedding-3-small**

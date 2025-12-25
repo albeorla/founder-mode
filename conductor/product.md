@@ -1,7 +1,7 @@
 # Product Guide: FounderMode (The Autonomous Due Diligence Agent)
 
 ## Vision
-FounderMode is an autonomous market research agent that validates business ideas end-to-end. Unlike simple wrapper tools, it employs a **multi-agent architecture** to simulate a human investment analyst: reading data, forming hypotheses, and actively verifying facts via web search.
+FounderMode is an autonomous market research agent that validates business ideas end-to-end with "Senior Analyst" level reasoning. Unlike simple wrapper tools, it employs a **multi-agent architecture** to simulate a human investment analyst: reading data, forming hypotheses, and actively verifying facts via web search.
 
 ## Core Value Proposition
 - **Active Reasoning:** It doesn't just summarize; it actively validates claims by searching the web.
@@ -19,3 +19,4 @@ FounderMode is an autonomous market research agent that validates business ideas
 - **Strategic Synthesis:** Merges "User Pain" (social signals) with "Market Reality" (competitor data).
 - **Human-in-the-Loop:** Allows users to review and refine research plans before execution.
 - **Polished Artifacts:** Automatically generates professional HTML reports from synthesized memos.
+- **Evaluation-Ready:** Built-in benchmarking and "LLM-as-a-Judge" evaluation suite using LangSmith to ensure analytical quality and citation accuracy.
