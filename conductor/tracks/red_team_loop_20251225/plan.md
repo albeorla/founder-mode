@@ -20,7 +20,7 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Planner & Workflow Integration' (Protocol in workflow.md)
 
 ## Phase 4: Validation & Hardening
-- [ ] Task: Create an adversarial benchmarking script to automate "Red Team" testing against known weak inputs.
-- [ ] Task: Run full evaluation suite and verify `revision_count` and `critique_history` persistence.
-- [ ] Task: Verify all changes against `mypy` and `ruff`.
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: Validation & Hardening' (Protocol in workflow.md)
+- [x] Task: Create an adversarial benchmarking script to automate "Red Team" testing against known weak inputs.
+- [x] Task: Run full evaluation suite and verify `revision_count` and `critique_history` persistence.
+- [x] Task: Verify all changes against `mypy` and `ruff`.
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Validation & Hardening' (Protocol in workflow.md)
