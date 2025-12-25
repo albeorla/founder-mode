@@ -13,6 +13,8 @@ def test_researcher_fallback_when_search_fails() -> None:
         "messages": [],
         "next_step": "research",
         "research_topic": "Airbnb business model",
+        "critique_history": [],
+        "revision_count": 0,
     }
 
     # Mock TavilySearch to raise error (e.g. missing API key)
@@ -40,6 +42,8 @@ def test_researcher_success() -> None:
         "messages": [],
         "next_step": "research",
         "research_topic": "Airbnb business model",
+        "critique_history": [],
+        "revision_count": 0,
     }
 
     with patch("foundermode.graph.nodes.researcher.TavilySearch") as MockTool:

@@ -1,0 +1,119 @@
+@startuml state-machine
+!theme plain
+skinparam backgroundColor #FEFEFE
+
+title FounderMode - State Machine Diagram
+
+[*] --> Initializing : User submits\nbusiness idea
+
+state Initializing {
+    [*] --> LoadConfig
+    LoadConfig --> ValidateKeys
+    ValidateKeys --> CreateWorkflow
+    CreateWorkflow --> [*]
+}
+
+Initializing --> Planning : Workflow ready
+
+state Planning {
+    [*] --> AnalyzeGaps
+    AnalyzeGaps --> CheckFactCount
+
+    CheckFactCount --> DecideResearch : facts < 20 AND\ngaps exist
+    CheckFactCount --> DecideWrite : facts >= 20 OR\nno gaps
+
+    DecideResearch --> SetTopic
+    SetTopic --> [*] : next_step = "research"
+
+    DecideWrite --> [*] : next_step = "write"
+}
+
+Planning --> HumanApproval : next_step = "research"
+Planning --> Writing : next_step = "write"
+
+state HumanApproval <<choice>>
+HumanApproval --> Researching : User approves\n(or auto mode)
+HumanApproval --> Planning : User modifies\nquery
+
+state Researching {
+    [*] --> SearchWeb
+    SearchWeb --> SelectURLs
+    SelectURLs --> DeepScrape
+
+    state DeepScrape {
+        [*] --> FetchPage
+        FetchPage --> ExtractContent
+        ExtractContent --> [*]
+        --
+        note right
+          Multi-stage:
+          1. Playwright
+          2. Readability
+          3. BeautifulSoup
+        end note
+    }
+
+    DeepScrape --> ExtractFacts
+    ExtractFacts --> StoreInMemory
+    StoreInMemory --> [*]
+}
+
+Researching --> Planning : Facts gathered,\nre-evaluate
+
+state Writing {
+    [*] --> RetrieveFacts
+    RetrieveFacts --> SynthesizeMemo
+    SynthesizeMemo --> FormatOutput
+    FormatOutput --> [*]
+}
+
+Writing --> Critiquing : Memo draft ready
+
+state Critiquing {
+    [*] --> EvaluateQuality
+
+    EvaluateQuality --> CheckMetrics : Verify TAM/CAC/LTV
+    CheckMetrics --> CheckCitations : Verify sources
+    CheckCitations --> CheckDepth : Verify analysis
+
+    CheckDepth --> RenderVerdict
+
+    RenderVerdict --> Approve : All criteria met
+    RenderVerdict --> Reject : Gaps identified
+
+    Approve --> [*] : next_step = "approve"
+    Reject --> [*] : next_step = "reject"
+}
+
+Critiquing --> Complete : APPROVED
+
+state RevisionCheck <<choice>>
+Critiquing --> RevisionCheck : REJECTED
+
+RevisionCheck --> Planning : revision_count < 3
+RevisionCheck --> Complete : revision_count >= 3\n(force approve)
+
+state Complete {
+    [*] --> RenderHTML
+    RenderHTML --> SaveOutput
+    SaveOutput --> [*]
+}
+
+Complete --> [*] : Memo delivered
+
+note right of Critiquing
+  **Quality Criteria:**
+  1. Quantitative metrics present
+  2. All claims have citations
+  3. Risks concretely identified
+  4. Analysis not promotional
+end note
+
+note left of Planning
+  **Loop Prevention:**
+  - Max 20 facts
+  - Max 3 revisions
+  - Timeout safeguards
+end note
+
+@enduml

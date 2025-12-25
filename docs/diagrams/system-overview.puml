@@ -1,0 +1,86 @@
+@startuml system-overview
+!theme plain
+skinparam backgroundColor #FEFEFE
+skinparam componentStyle rectangle
+
+title FounderMode - System Architecture Overview
+
+package "User Interface" {
+    [CLI] as cli
+    [FastAPI Server] as api
+}
+
+package "Graph Layer" <<Cloud>> {
+    [LangGraph\nWorkflow Engine] as langgraph
+
+    package "Agents" {
+        [Planner] as planner
+        [Researcher] as researcher
+        [Writer] as writer
+        [Critic] as critic
+    }
+}
+
+package "Tools Layer" {
+    [Tavily Search] as tavily
+    [Deep Scraper] as scraper
+    [Report Renderer] as reporter
+}
+
+package "Memory Layer" {
+    database "ChromaDB\nVector Store" as chromadb
+    [Embeddings\n(OpenAI)] as embeddings
+}
+
+package "External Services" <<Cloud>> {
+    cloud "OpenAI API\n(GPT-4o)" as openai
+    cloud "Tavily API\n(Web Search)" as tavilyapi
+    cloud "Web Pages" as web
+}
+
+' User Interface connections
+cli --> langgraph : runs workflow
+api --> langgraph : REST endpoints
+
+' Graph Layer internal
+langgraph --> planner
+langgraph --> researcher
+langgraph --> writer
+langgraph --> critic
+
+' Agent to Tools
+researcher --> tavily : search queries
+researcher --> scraper : URL extraction
+writer --> reporter : memo formatting
+
+' Tools to External
+tavily --> tavilyapi : API calls
+scraper --> web : HTTP requests
+
+' Memory connections
+tavily --> chromadb : cache/retrieve
+researcher --> chromadb : store facts
+chromadb --> embeddings : vectorize
+embeddings --> openai : embed text
+
+' LLM connections
+planner --> openai : reasoning
+researcher --> openai : fact extraction
+writer --> openai : synthesis
+critic --> openai : evaluation
+
+note right of langgraph
+  **Stateful Workflow**
+  - Cyclic graph with feedback loops
+  - Human-in-the-loop interrupts
+  - Checkpoint support
+end note
+
+note bottom of chromadb
+  **Persistent Memory**
+  - Semantic deduplication
+  - Context retrieval
+  - Cross-session knowledge
+end note
+
+@enduml

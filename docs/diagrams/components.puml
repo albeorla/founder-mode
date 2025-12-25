@@ -1,0 +1,127 @@
+@startuml components
+!theme plain
+skinparam backgroundColor #FEFEFE
+skinparam componentStyle rectangle
+
+title FounderMode - Component Diagram
+
+package "src/foundermode" {
+
+    package "api" <<Rectangle>> {
+        [cli.py] as cli
+        [server.py] as server
+
+        note bottom of cli
+          CLI entry point
+          - Typer commands
+          - Interactive prompts
+          - Rich console output
+        end note
+    }
+
+    package "graph" <<Rectangle>> {
+        [workflow.py] as workflow
+
+        package "nodes" {
+            [planner.py] as planner
+            [researcher.py] as researcher
+            [writer.py] as writer
+            [critic.py] as critic
+        }
+
+        note bottom of workflow
+          LangGraph state machine
+          - Node registration
+          - Edge definitions
+          - Conditional routing
+          - Checkpoint config
+        end note
+    }
+
+    package "domain" <<Rectangle>> {
+        [state.py] as state
+        [schema.py] as schema
+
+        note bottom of state
+          FounderState TypedDict
+          - research_question
+          - research_facts
+          - memo_draft
+          - next_step
+          - critique_history
+        end note
+
+        note bottom of schema
+          Pydantic Models
+          - ResearchFact
+          - ResearchPlan
+          - InvestmentMemo
+          - CriticVerdict
+        end note
+    }
+
+    package "tools" <<Rectangle>> {
+        [search.py] as search
+        [scrape.py] as scrape
+        [reporter.py] as reporter
+
+        note bottom of search
+          TavilySearch tool
+          - Memory-augmented
+          - Auto-caching
+        end note
+
+        note bottom of scrape
+          Multi-stage scraper
+          - Playwright
+          - Readability
+          - BeautifulSoup
+        end note
+    }
+
+    package "memory" <<Rectangle>> {
+        [vector_store.py] as vector
+
+        note bottom of vector
+          ChromaManager
+          - Embeddings
+          - Semantic search
+          - Deduplication
+        end note
+    }
+
+    [config.py] as config
+}
+
+' Dependencies
+cli --> workflow : creates & runs
+server --> workflow : creates & runs
+
+workflow --> planner : registers node
+workflow --> researcher : registers node
+workflow --> writer : registers node
+workflow --> critic : registers node
+
+planner --> state : reads/writes
+researcher --> state : reads/writes
+writer --> state : reads/writes
+critic --> state : reads/writes
+
+planner --> schema : uses models
+researcher --> schema : uses models
+writer --> schema : uses models
+critic --> schema : uses models
+
+researcher --> search : invokes
+researcher --> scrape : invokes
+writer --> reporter : invokes
+
+search --> vector : cache lookup
+researcher --> vector : store facts
+
+cli --> config : loads settings
+server --> config : loads settings
+search --> config : API keys
+vector --> config : embedding config
+
+@enduml

@@ -76,3 +76,30 @@ def test_vector_store_integration() -> None:
 
         manager.query_similar("search")
         assert mock_coll.query.called
+
+
+def test_add_scraped_text(chroma_manager: ChromaManager) -> None:
+    # Setup
+    chroma_manager.collection = MagicMock()
+
+    url = "https://example.com/long"
+    long_text = "Word " * 500  # 500 words ~ 2500 chars. Should result in multiple chunks (chunk_size=1000).
+
+    success = chroma_manager.add_scraped_text(url, long_text)
+
+    assert success is True
+    assert chroma_manager.collection.upsert.called
+
+    call_args = chroma_manager.collection.upsert.call_args
+    documents = call_args.kwargs["documents"]
+    metadatas = call_args.kwargs["metadatas"]
+    ids = call_args.kwargs["ids"]
+
+    # Verify chunks
+    assert len(documents) > 1
+    assert len(metadatas) == len(documents)
+    assert len(ids) == len(documents)
+
+    # Verify metadata contains source and chunk index
+    assert metadatas[0]["source"] == url
+    assert "chunk" in metadatas[0]

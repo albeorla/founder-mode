@@ -1,0 +1,8 @@
+{
+  "track_id": "deep_research_scraper_20251225",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2025-12-25T16:00:00Z",
+  "updated_at": "2025-12-25T16:00:00Z",
+  "description": "Upgrade Researcher from Snippet-Only to Deep Scraper (Readability + BS4 + Playwright)."
+}

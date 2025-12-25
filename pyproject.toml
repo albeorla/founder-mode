@@ -27,6 +27,8 @@ dependencies = [
     "langsmith>=0.5.0",
     "tavily-python>=0.7.17",
     "python-dotenv>=1.2.1",
+    "readability-lxml>=0.8.1",
+    "playwright>=1.42.0",
 ]
 
 [project.scripts]

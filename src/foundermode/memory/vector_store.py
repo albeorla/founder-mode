@@ -1,13 +1,17 @@
 import hashlib
+import logging
 from typing import Any, cast
 
 import chromadb
 from chromadb.api.types import Documents, EmbeddingFunction, Embeddings
 from chromadb.utils import embedding_functions
 from langchain_openai import OpenAIEmbeddings
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 from foundermode.config import settings
 from foundermode.domain.schema import ResearchFact
+
+logger = logging.getLogger(__name__)
 
 
 class ChromaLangChainAdapter(EmbeddingFunction[Documents]):  # type: ignore
@@ -41,6 +45,7 @@ class ChromaManager:
         """Generate a deterministic ID for a fact to prevent duplicates."""
         # Prefer source URL as a stable identifier
         if fact.source and fact.source.startswith("http"):
+            # For chunked data, we will append chunk index to the URL hash
             return hashlib.md5(fact.source.encode()).hexdigest()
         # Fallback to content hash
         return hashlib.md5(fact.content.encode()).hexdigest()
@@ -72,7 +77,34 @@ class ChromaManager:
             self.collection.upsert(documents=documents, metadatas=cast(Any, metadatas), ids=ids)
             return True
         except Exception as e:
-            print(f"Error adding facts: {e}")
+            logger.error(f"Error adding facts: {e}")
+            return False
+
+    def add_scraped_text(self, url: str, text: str, title: str | None = None) -> bool:
+        """Splits long text into chunks and adds them to the vector store."""
+        if not text:
+            return True
+
+        text_splitter = RecursiveCharacterTextSplitter(
+            chunk_size=1000,
+            chunk_overlap=100,
+            length_function=len,
+        )
+
+        chunks = text_splitter.split_text(text)
+        logger.info(f"Adding {len(chunks)} chunks to memory for {url}")
+
+        documents = chunks
+        metadatas = [{"source": url, "title": title or "Scraped Page", "chunk": i} for i, _ in enumerate(chunks)]
+        # Generate unique IDs for each chunk
+        base_id = hashlib.md5(url.encode()).hexdigest()
+        ids = [f"{base_id}_{i}" for i in range(len(chunks))]
+
+        try:
+            self.collection.upsert(documents=documents, metadatas=cast(Any, metadatas), ids=ids)
+            return True
+        except Exception as e:
+            logger.error(f"Error adding scraped text: {e}")
             return False
 
     def query_similar(self, query: str, k: int = 3) -> list[ResearchFact]:

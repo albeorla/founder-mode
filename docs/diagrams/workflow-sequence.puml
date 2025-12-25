@@ -1,0 +1,103 @@
+@startuml workflow-sequence
+!theme plain
+skinparam backgroundColor #FEFEFE
+
+title FounderMode - Workflow Sequence Diagram
+
+actor User
+participant "CLI" as CLI
+participant "Planner" as Planner
+participant "Researcher" as Researcher
+participant "Writer" as Writer
+participant "Critic" as Critic
+database "ChromaDB" as Memory
+collections "Tavily/Web" as Web
+
+== Initialization ==
+
+User -> CLI: foundermode run "business idea"
+activate CLI
+CLI -> Planner: Initialize workflow\n(research_question)
+
+== Research Loop ==
+
+loop Until sufficient facts gathered
+    activate Planner
+    Planner -> Planner: Analyze gaps in knowledge
+    Planner -> CLI: research_topic = "market size"
+    deactivate Planner
+
+    == Human-in-the-Loop ==
+    CLI -> User: "Search for: market size?\n[Y/n]"
+    User -> CLI: "Y"
+
+    activate Researcher
+    Researcher -> Memory: Check for cached results
+    Memory --> Researcher: Cache miss
+
+    Researcher -> Web: Tavily search
+    Web --> Researcher: Search results + URLs
+
+    Researcher -> Researcher: LLM selects best URLs
+
+    loop For each selected URL (1-3)
+        Researcher -> Web: Deep scrape page
+        Web --> Researcher: Page content
+    end
+
+    Researcher -> Researcher: Extract structured facts
+    Researcher -> Memory: Store facts (vector)
+    Researcher --> Planner: research_facts updated
+    deactivate Researcher
+end
+
+== Writing Phase ==
+
+Planner -> Writer: next_step = "write"
+activate Writer
+Writer -> Memory: Retrieve all facts
+Memory --> Writer: Fact collection
+
+Writer -> Writer: Synthesize Investment Memo
+Writer --> Critic: memo_draft
+deactivate Writer
+
+== Critique Loop ==
+
+loop Until approved (max 3 iterations)
+    activate Critic
+    Critic -> Critic: Evaluate memo quality
+
+    alt Memo meets standards
+        Critic -> CLI: APPROVED
+        CLI -> User: Display success
+    else Memo needs improvement
+        Critic -> Planner: REJECTED + feedback
+        deactivate Critic
+
+        note right of Critic
+          Feedback includes:
+          - Missing metrics
+          - Citation gaps
+          - Analysis weaknesses
+        end note
+
+        Planner -> Researcher: New research based on feedback
+        note right of Planner
+          revision_count++
+          If count > 3, force approve
+        end note
+
+        ' ... research cycle repeats ...
+        Researcher --> Writer: Updated facts
+        Writer --> Critic: Revised memo
+    end
+end
+
+== Output ==
+
+CLI -> CLI: Render HTML memo
+CLI -> User: memo_output.html
+deactivate CLI
+
+@enduml

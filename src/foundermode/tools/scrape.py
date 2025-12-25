@@ -72,11 +72,9 @@ async def scrape_with_playwright(url: str) -> str:
         return ""
 
 
-@tool  # type: ignore
-async def deep_scrape_url(url: str, use_playwright: bool = False) -> str:
+async def deep_scrape_logic(url: str, use_playwright: bool = False) -> str:
     """
-    Advanced scraper that extracts clean text from a URL using multi-stage logic.
-    Supports dynamic rendering via Playwright if specified.
+    Core logic for deep scraping.
     """
     logger.info(f"Deep scraping URL: {url} (Playwright: {use_playwright})")
 
@@ -113,8 +111,17 @@ async def deep_scrape_url(url: str, use_playwright: bool = False) -> str:
         return f"Error scraping {url}: {str(e)}"
 
 
+@tool  # type: ignore
+async def deep_scrape_url(url: str, use_playwright: bool = False) -> str:
+    """
+    Advanced scraper that extracts clean text from a URL using multi-stage logic.
+    Supports dynamic rendering via Playwright if specified.
+    """
+    return await deep_scrape_logic(url, use_playwright)
+
+
 # Maintain backward compatibility for now
 @tool  # type: ignore
 async def scrape_url(url: str) -> str:
     """Scrapes text content from a given URL asynchronously."""
-    return str(await deep_scrape_url(url))
+    return await deep_scrape_logic(url)
