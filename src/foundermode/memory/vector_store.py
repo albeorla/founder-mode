@@ -23,19 +23,26 @@ class ChromaLangChainAdapter(EmbeddingFunction[Documents]):  # type: ignore
 
 
 class ChromaManager:
-    def __init__(self, persist_directory: str | None = None, collection_name: str = "founder_mode_memory") -> None:
+    def __init__(
+        self,
+        persist_directory: str | None = None,
+        collection_name: str = "founder_mode_memory",
+        embedding_function: EmbeddingFunction[Any] | None = None,
+    ) -> None:
         path = persist_directory or settings.chroma_db_path
         self.client = chromadb.PersistentClient(path=path)
 
-        # Use settings for API key
-        api_key = settings.openai_api_key
-        self.embedding_fn: EmbeddingFunction[Any]
-        if api_key:
-            langchain_emb = OpenAIEmbeddings(model="text-embedding-3-small", openai_api_key=api_key)
-            self.embedding_fn = ChromaLangChainAdapter(langchain_emb)
+        if embedding_function:
+            self.embedding_fn = embedding_function
         else:
-            # Fallback for tests if no key is present
-            self.embedding_fn = cast(EmbeddingFunction[Any], embedding_functions.DefaultEmbeddingFunction())
+            # Use settings for API key
+            api_key = settings.openai_api_key
+            if api_key and not api_key.startswith("sk-dummy"):
+                langchain_emb = OpenAIEmbeddings(model="text-embedding-3-small", openai_api_key=api_key)
+                self.embedding_fn = ChromaLangChainAdapter(langchain_emb)
+            else:
+                # Fallback for tests if no key is present or it's a dummy key
+                self.embedding_fn = cast(EmbeddingFunction[Any], embedding_functions.DefaultEmbeddingFunction())
 
         self.collection = self.client.get_or_create_collection(
             name=collection_name, embedding_function=cast(Any, self.embedding_fn)
