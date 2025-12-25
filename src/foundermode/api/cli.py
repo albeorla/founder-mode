@@ -113,8 +113,13 @@ def run_command(
     )
 
     # Generate HTML Report
-    filename = f"{query.lower().replace(' ', '_')}_memo.html"
-    render_memo(memo, filename)
+    from pathlib import Path
+
+    output_dir = Path(".out")
+    output_dir.mkdir(exist_ok=True)
+
+    filename = output_dir / f"{query.lower().replace(' ', '_')}_memo.html"
+    render_memo(memo, str(filename))
     console.print(f"\n[dim]Report saved to {filename}[/dim]")
 
 
