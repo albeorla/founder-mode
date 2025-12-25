@@ -1,10 +1,10 @@
 # Implementation Plan: quality_tuning_20251225
 
 ## Phase 1: Evaluation Infrastructure & Benchmarking
-- [ ] Task: Create LangSmith benchmark dataset with 3-5 diverse business ideas.
-- [ ] Task: Implement "Investor Rubric" evaluator (LLM-as-a-Judge) in LangSmith.
-- [ ] Task: Develop automated structure tests (e.g., checking for required sections and citation formats).
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Evaluation Infrastructure' (Protocol in workflow.md)
+- [x] Task: Create LangSmith benchmark dataset with 3-5 diverse business ideas.
+- [x] Task: Implement "Investor Rubric" evaluator (LLM-as-a-Judge) in LangSmith.
+- [x] Task: Develop automated structure tests (e.g., checking for required sections and citation formats).
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Evaluation Infrastructure' (Protocol in workflow.md)
 
 ## Phase 2: Core Agent Logic Refinement
 - [ ] Task: Refine `planner.py` system prompt to prioritize unit economics, CAC, and incumbent analysis.
