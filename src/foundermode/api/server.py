@@ -59,6 +59,7 @@ async def create_run(request: RunRequest) -> RunResponse:
         "messages": [],
         "next_step": "init",
         "research_topic": None,
+        "search_history": [],
         "critique_history": [],
         "revision_count": 0,
     }
