@@ -1,40 +1,87 @@
-# FounderMode 🚀
+# Founder-Mode
 
-**The Autonomous Due Diligence Agent**
+**A One-Person AI Venture Studio**
 
 [![CI](https://github.com/albeorla/founder-mode/actions/workflows/ci.yml/badge.svg)](https://github.com/albeorla/founder-mode/actions/workflows/ci.yml)
 [![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
 [![LangGraph](https://img.shields.io/badge/Orchestration-LangGraph-orange.svg)](https://langchain-ai.github.io/langgraph/)
 [![Code Style: Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
-**FounderMode** is an autonomous market research agent that validates business ideas end-to-end. Unlike simple wrapper tools, it employs a **multi-agent architecture** to simulate a human investment analyst: reading data, forming hypotheses, and actively verifying facts via web search.
+This monorepo houses a **portfolio of AI agent applications** built on shared infrastructure. The goal: test multiple product hypotheses rapidly by standardizing plumbing and keeping business logic lean.
 
 ---
 
-## 🌟 Core Value Proposition
+## Vision
 
-- **🧠 Active Reasoning:** It doesn't just summarize; it actively validates claims by searching the web.
-- **📑 Deep Reports:** Generates strategic investment memos (10+ pages) from a single one-sentence prompt.
-- **🔄 Agentic Architecture:** Uses cyclic graphs to self-correct (e.g., "I couldn't find pricing, I'll look again").
-- **💾 Vector-Native Memory:** Uses embeddings (ChromaDB) to deduplicate and cluster semantically.
-- **🔍 Research Agent:** A dedicated agent that uses tools (Tavily) to fact-check assumptions.
-- **👨‍⚖️ Critic Agent:** A built-in adversarial reviewer that challenges weak analysis until it meets institutional standards.
-- **🌐 Multi-Stage Scraper:** Playwright-powered fallback scraper for JavaScript-heavy sites when standard requests fail.
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                       FOUNDER-MODE MONOREPO                         │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                     │
+│  APPS LAYER        Each app = 1-2 week experiment, ~200 LOC domain  │
+│  ┌──────────────┐ ┌──────────────┐ ┌──────────────┐                 │
+│  │ founder-mode │ │   vendor-    │ │    deal-     │  ...more        │
+│  │              │ │  validator   │ │  screener    │                 │
+│  │ Investment   │ │ Supply chain │ │ PE/VC deal   │                 │
+│  │ memos        │ │ risk assess  │ │  screening   │                 │
+│  └──────┬───────┘ └──────┬───────┘ └──────┬───────┘                 │
+│         └────────────────┼────────────────┘                         │
+│                          ▼                                          │
+│  LIBS LAYER       ┌─────────────────────────────────────────┐       │
+│                   │              agentkit                    │       │
+│                   │  infra/ │ services/ │ testing/ │ patterns│       │
+│                   └─────────────────────────────────────────┘       │
+│                                                                     │
+│  INFRA LAYER      docker/ │ .github/ │ scripts/ │ docs/             │
+│                                                                     │
+└─────────────────────────────────────────────────────────────────────┘
+```
 
-## 🛠 Tech Stack
+---
 
-Built with the **"Senior AI Engineer"** stack:
+## Core Philosophy
 
-*   **Runtime:** Python 3.12+
-*   **Orchestration:** [LangGraph](https://langchain-ai.github.io/langgraph/) (Stateful, cyclic multi-agent workflows)
-*   **Framework:** [LangChain](https://www.langchain.com/) (Components & Interfaces)
-*   **Validation:** [Pydantic](https://docs.pydantic.dev/) (Strict data & config validation)
-*   **Memory:** [ChromaDB](https://www.trychroma.com/) (Local persistent vector storage)
-*   **Search:** [Tavily API](https://tavily.com/) (Optimized for AI agents)
-*   **Scraping:** [Playwright](https://playwright.dev/) (Browser automation for JS-heavy sites)
-*   **Observability:** [LangSmith](https://smith.langchain.com/) (Tracing & Debugging)
+**Toolkit, Not Framework**
+- Use decorators instead of base classes
+- Write LangGraph directly, no wrappers
+- Document patterns, don't encode them
 
-## 🚀 Getting Started
+**Standardize Plumbing, Keep Business Logic Raw**
+- `agentkit`: Config, logging, API wrappers, test fixtures
+- `apps/`: Workflow structure, prompts, domain schemas
+
+**Extract When Repeated 3x**
+- First time: write in app
+- Second time: copy to new app
+- Third time: extract to libs/
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|------------|
+| **Runtime** | Python 3.12+ |
+| **Orchestration** | [LangGraph](https://langchain-ai.github.io/langgraph/) — stateful, cyclic workflows |
+| **Validation** | [Pydantic](https://docs.pydantic.dev/) — strict schemas |
+| **Memory** | [ChromaDB](https://www.trychroma.com/) — vector storage |
+| **Search** | [Tavily API](https://tavily.com/) — AI-optimized search |
+| **Scraping** | [Playwright](https://playwright.dev/) — JS-heavy site fallback |
+| **Observability** | [LangSmith](https://smith.langchain.com/) — tracing & evals |
+
+---
+
+## Current Apps
+
+| App | Description | Status |
+|-----|-------------|--------|
+| **founder-mode** | Investment memo generator for startup ideas | Active |
+| **vendor-validator** | Supply chain risk assessment | Planned |
+| **deal-screener** | PE/VC deal screening | Planned |
+
+---
+
+## Getting Started
 
 ### Prerequisites
 
@@ -89,38 +136,43 @@ This is the "Happy Path" that ensures all dependencies (browsers, OS libraries) 
     ```
     API docs available at: `http://localhost:8000/docs`
 
-## 📂 Project Structure
+## Project Structure (Target State)
 
 ```
-founder-mode/
-├── conductor/           # Project management & specifications (Conductor framework)
-├── docs/                # Comprehensive documentation
-│   ├── architecture.md  # Technical deep-dive into system design
-│   ├── getting-started.md
-│   ├── user-guide.md
-│   └── diagrams/        # PlantUML visualizations
-├── scripts/             # Utility scripts
-│   ├── create_benchmark.py   # Create LangSmith evaluation datasets
-│   ├── run_evals.py          # Run evaluation benchmarks
-│   └── adversarial_bench.py  # Adversarial testing suite
-├── src/
-│   └── foundermode/
-│       ├── api/         # FastAPI endpoints & CLI entry points
-│       ├── domain/      # Pydantic models (Schema) & State definitions
-│       ├── evaluation/  # LangSmith evaluators
-│       ├── graph/       # LangGraph workflow & Nodes (Planner, Researcher, Writer, Critic)
-│       ├── memory/      # Vector Store (ChromaDB) integration
-│       ├── tools/       # External tools (Tavily Search, Multi-stage Scraper)
-│       └── utils/       # Shared utilities (logging, etc.)
-├── tests/               # Pytest suite (unit, integration, container, e2e)
-│   └── container/       # Docker container integration tests
-├── .github/             # GitHub Actions CI workflows
-└── pyproject.toml       # Project configuration & dependencies
+founder-mode/                      # Monorepo root
+├── libs/                          # Shared libraries
+│   └── agentkit/                  # Core toolkit
+│       ├── infra/                 # config, logging, decorators
+│       ├── services/              # llm, search, extraction, vector_store
+│       ├── testing/               # pytest fixtures
+│       └── patterns/              # WORKFLOWS.md — copy-paste LangGraph patterns
+│
+├── apps/                          # Applications (experiments)
+│   ├── founder-mode/              # Investment memo generator
+│   │   ├── nodes/                 # LangGraph nodes (plain functions)
+│   │   ├── prompts/               # Domain prompts
+│   │   ├── schemas/               # Pydantic models
+│   │   └── workflow.py            # Graph definition
+│   ├── vendor-validator/          # Supply chain risk assessment
+│   ├── deal-screener/             # PE/VC deal screening
+│   └── _template/                 # Cookiecutter for new apps
+│
+├── infra/                         # Shared infrastructure
+│   ├── docker/                    # Dockerfile.base, compose.yml
+│   └── scripts/                   # setup-dev.sh, new-app.sh, release.sh
+│
+├── .github/workflows/             # CI/CD pipelines
+├── docs/                          # ADRs, runbooks
+└── conductor/                     # Project management (Conductor framework)
 ```
 
-## 🧪 Development & Testing
+> **Note:** The codebase is currently transitioning from the original monolithic structure (`src/foundermode/`) to this target state. See [docs/monorepo-plan.md](docs/monorepo-plan.md) for the migration roadmap.
 
-We follow a strictly **Test-Driven Development (TDD)** workflow with optimized test execution.
+---
+
+## Development & Testing
+
+Test-driven development with optimized execution.
 
 ### Running Tests
 
@@ -215,26 +267,29 @@ uv run python scripts/adversarial_bench.py # Run adversarial testing
 
 Results are tracked in LangSmith for experiment comparison. See [User Guide](./docs/user-guide.md) for details.
 
-## 📖 Documentation
+---
 
-Comprehensive documentation is available in the `docs/` directory:
+## Documentation
 
 | Document | Description |
 |----------|-------------|
-| [Getting Started](./docs/getting-started.md) | Installation, configuration, and first run |
-| [User Guide](./docs/user-guide.md) | Detailed usage instructions, options, and examples |
-| [Architecture](./docs/architecture.md) | Technical deep-dive into system design |
-| [Diagrams](./docs/diagrams/) | PlantUML visualizations of the workflow |
+| [Monorepo Plan](./docs/monorepo-plan.md) | Architecture vision and phased roadmap |
+| [Getting Started](./docs/getting-started.md) | Installation and first run |
+| [User Guide](./docs/user-guide.md) | Usage instructions and examples |
+| [Architecture](./docs/architecture.md) | Technical deep-dive |
 
-## 🤝 Contributing
+---
 
-1.  Read the `conductor/workflow.md` to understand our development process.
-2.  Create a feature branch.
-3.  Write tests first (Red).
-4.  Implement the feature (Green).
-5.  Refactor and ensure all checks pass.
-6.  Submit a Pull Request.
+## Contributing
 
-## 📄 License
+1. Read [docs/monorepo-plan.md](./docs/monorepo-plan.md) to understand the architecture
+2. Check `conductor/` for current project management and tracks
+3. Create a feature branch
+4. Write tests first (TDD)
+5. Submit a Pull Request
+
+---
+
+## License
 
 [MIT](LICENSE)
