@@ -57,6 +57,7 @@ def test_workflow_execution() -> None:
             "messages": [],
             "next_step": "init",
             "research_topic": None,
+            "search_history": [],
             "critique_history": [],
             "revision_count": 0,
         }

@@ -1,7 +1,11 @@
+from typing import cast
 from unittest.mock import patch
 
+from langchain_core.runnables import RunnableConfig
 from langgraph.checkpoint.memory import MemorySaver
 
+from foundermode.domain.schema import InvestmentMemo
+from foundermode.domain.state import FounderState
 from foundermode.graph.workflow import create_workflow
 
 
@@ -16,20 +20,23 @@ def test_graph_interrupt_before_researcher() -> None:
         workflow = create_workflow(checkpointer=memory)
 
         # 2. Initial input
-        initial_state = {
+        initial_state: FounderState = {
             "research_question": "A platform for pet rocks",
             "research_facts": [],
-            "memo_draft": None,
+            "memo_draft": InvestmentMemo(),
             "next_step": "plan",
             # Some optional fields might be needed depending on state definition
             # but these seem to be the core ones
             "messages": [],
             "research_topic": None,
+            "search_history": [],
+            "critique_history": [],
+            "revision_count": 0,
         }
 
         # 3. Run until interruption
         # config is required for checkpointing
-        config = {"configurable": {"thread_id": "test_thread_1"}}
+        config = cast(RunnableConfig, {"configurable": {"thread_id": "test_thread_1"}})
 
         # Run. It should stop after planner (which outputs next_step='research')
         # and BEFORE executing 'researcher'.
@@ -53,15 +60,18 @@ def test_resume_graph() -> None:
 
         memory = MemorySaver()
         workflow = create_workflow(checkpointer=memory)
-        config = {"configurable": {"thread_id": "test_thread_2"}}
+        config = cast(RunnableConfig, {"configurable": {"thread_id": "test_thread_2"}})
 
-        initial_state = {
+        initial_state: FounderState = {
             "research_question": "AI for plants",
             "research_facts": [],
-            "memo_draft": None,
+            "memo_draft": InvestmentMemo(),
             "next_step": "plan",
             "messages": [],
             "research_topic": None,
+            "search_history": [],
+            "critique_history": [],
+            "revision_count": 0,
         }
 
         for _ in workflow.stream(initial_state, config=config):

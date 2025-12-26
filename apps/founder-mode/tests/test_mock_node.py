@@ -11,6 +11,7 @@ def test_mock_analyst_updates_state() -> None:
         "messages": [],
         "next_step": "init",
         "research_topic": None,
+        "search_history": [],
         "critique_history": [],
         "revision_count": 0,
     }

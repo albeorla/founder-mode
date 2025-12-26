@@ -13,6 +13,9 @@ def test_planner_fallback_when_no_api_key() -> None:
         "messages": [],
         "next_step": "init",
         "research_topic": None,
+        "search_history": [],
+        "critique_history": [],
+        "revision_count": 0,
     }
 
     # Mock settings to have no API key
@@ -39,6 +42,9 @@ def test_planner_live_mode_calls_llm() -> None:
         "messages": [],
         "next_step": "init",
         "research_topic": None,
+        "search_history": [],
+        "critique_history": [],
+        "revision_count": 0,
     }
 
     with patch("foundermode.graph.nodes.planner.settings") as mock_settings:

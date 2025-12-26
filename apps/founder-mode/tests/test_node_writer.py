@@ -16,6 +16,9 @@ def test_writer_fallback_when_no_api_key() -> None:
         "messages": [],
         "next_step": "write",
         "research_topic": None,
+        "search_history": [],
+        "critique_history": [],
+        "revision_count": 0,
     }
 
     with patch("foundermode.graph.nodes.writer.settings") as mock_settings:
@@ -40,6 +43,9 @@ def test_writer_live_mode_calls_llm() -> None:
         "messages": [],
         "next_step": "write",
         "research_topic": None,
+        "search_history": [],
+        "critique_history": [],
+        "revision_count": 0,
     }
 
     with patch("foundermode.graph.nodes.writer.settings") as mock_settings:

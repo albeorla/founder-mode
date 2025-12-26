@@ -11,6 +11,9 @@ def test_router_logic() -> None:
         "messages": [],
         "next_step": "research",
         "research_topic": "T",
+        "search_history": [],
+        "critique_history": [],
+        "revision_count": 0,
     }
     assert should_continue(state_research) == "researcher"
 
@@ -21,6 +24,9 @@ def test_router_logic() -> None:
         "messages": [],
         "next_step": "write",
         "research_topic": None,
+        "search_history": [],
+        "critique_history": [],
+        "revision_count": 0,
     }
     assert should_continue(state_write) == "writer"
 

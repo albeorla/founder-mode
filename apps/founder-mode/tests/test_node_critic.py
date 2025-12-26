@@ -16,6 +16,7 @@ def test_critic_node_mock_rejection() -> None:
         "critique_history": [],
         "revision_count": 0,
         "research_topic": None,
+        "search_history": [],
     }
 
     # Execute node (no API key patched, uses mock logic)
@@ -38,6 +39,7 @@ def test_critic_node_mock_approval() -> None:
         "critique_history": [],
         "revision_count": 0,
         "research_topic": None,
+        "search_history": [],
     }
 
     with patch("foundermode.graph.nodes.critic.get_critic_chain", return_value=None):
@@ -58,6 +60,7 @@ def test_critic_node_live_rejection() -> None:
         "critique_history": [],
         "revision_count": 0,
         "research_topic": None,
+        "search_history": [],
     }
 
     # Mock the LLM chain to return a REJECT verdict

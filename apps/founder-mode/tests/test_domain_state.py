@@ -13,6 +13,7 @@ def test_founder_state_structure() -> None:
         "messages": [],
         "next_step": "init",
         "research_topic": None,
+        "search_history": [],
         "critique_history": [],
         "revision_count": 0,
     }
@@ -47,6 +48,7 @@ def test_founder_state_reducer() -> None:
         "messages": [HumanMessage(content="Hi")],
         "next_step": "research",
         "research_topic": None,
+        "search_history": [],
         "critique_history": ["Weak research"],
         "revision_count": 1,
     }
