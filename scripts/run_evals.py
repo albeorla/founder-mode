@@ -48,6 +48,10 @@ def run_evals() -> None:
         evaluators=evaluators,
         experiment_prefix="foundermode-v2-enhanced",
         max_concurrency=2,
+        metadata={
+            "version": "1.0.0",
+            "type": "gold-standard",
+        },
     )
 
     print(results)
