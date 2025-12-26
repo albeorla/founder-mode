@@ -4,9 +4,6 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-## [~] Track: Phase 2: Strategic Pivot - Documentation & Vision Alignment
-*Link: [./conductor/tracks/pivot_documentation/](./conductor/tracks/pivot_documentation/)*
-
 ## [ ] Track: Phase 3: AgentKit Expansion - Data Room Connectors & PDF Support
 *Link: [./conductor/tracks/agentkit_dataroom/](./conductor/tracks/agentkit_dataroom/)*
 
@@ -17,6 +14,7 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ## Completed / Archived Tracks
 
+*   **[x] pivot_documentation**: [./conductor/archive/pivot_documentation/](./conductor/archive/pivot_documentation/)
 *   **[x] app_migration_20251226**: [./conductor/archive/app_migration_20251226/](./conductor/archive/app_migration_20251226/)
 *   **[x] agentkit_library_build_20251225**: [./conductor/archive/agentkit_library_build_20251225/](./conductor/archive/agentkit_library_build_20251225/)
 *   **[x] deep_research_scraper_20251225**: [./conductor/archive/deep_research_scraper_20251225/](./conductor/archive/deep_research_scraper_20251225/)
