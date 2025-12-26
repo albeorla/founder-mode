@@ -33,10 +33,10 @@ def run_evals() -> None:
     # Run evaluation
     results = evaluate(
         target,
-        data="FounderMode Benchmark v1",
+        data="FounderMode Benchmark v2",
         evaluators=evaluators,
-        experiment_prefix="foundermode-v1",
-        max_concurrency=4,
+        experiment_prefix="foundermode-v2-baseline",
+        max_concurrency=2,  # Reduced concurrency to avoid rate limits
     )
 
     print(results)
