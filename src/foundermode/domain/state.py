@@ -21,6 +21,9 @@ class FounderState(TypedDict):
     research_topic: str | None
     """The specific topic currently being researched."""
 
+    search_history: Annotated[list[str], operator.add]
+    """List of topics already researched to prevent duplication."""
+
     messages: Annotated[list[BaseMessage], operator.add]
     """Chat history for the planner/agent conversation."""
 

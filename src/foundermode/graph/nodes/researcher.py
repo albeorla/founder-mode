@@ -49,9 +49,16 @@ extractor_prompt = ChatPromptTemplate.from_messages(
     [
         (
             "system",
-            """You are a Research Assistant. Your job is to extract high-signal facts from the provided text.
-    Ignore generic fluff. We want numbers, dates, competitor names, and pricing info.
-    Extract the key facts and assign a relevance score (0.0 - 1.0).""",
+            """You are a High-Signal Data Extractor. Your job is to extract specific, quantitative facts
+    for business due diligence.
+
+    CRITICAL MANDATE:
+    - We NEED: Market sizes ($), growth rates (%), pricing ($), CAC/LTV numbers, specific competitor names,
+      launch dates, and key executive names.
+    - IGNORE: Adjectives, marketing fluff, generic mission statements, and vague "future potential".
+    - BE AGGRESSIVE: If a number is mentioned, extract it. If a competitor is named, extract it.
+
+    Assign a relevance score (0.0 - 1.0) based on how "hard" the data is (numbers = high score).""",
         ),
         ("human", "Text to analyze:\n{text}"),
     ]

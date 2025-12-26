@@ -26,6 +26,9 @@ planner_prompt = ChatPromptTemplate.from_messages(
 
     Current Investment Thesis/Idea: {research_question}
 
+    [RESEARCH HISTORY]
+    Already searched for: {search_history}
+
     Key Facts Collected So Far:
     {research_facts}
 
@@ -102,6 +105,11 @@ def planner_node(state: FounderState) -> dict[str, Any]:
                 else "No previous critiques."
             )
 
+            # Format search history
+            search_history_str = (
+                ", ".join(state.get("search_history", [])) if state.get("search_history") else "None yet."
+            )
+
             logger.debug(
                 f"Invoking Planner LLM with {len(state['research_facts'])} facts "
                 f"and {len(state.get('critique_history', []))} critiques."
@@ -111,12 +119,17 @@ def planner_node(state: FounderState) -> dict[str, Any]:
                     "research_question": state["research_question"],
                     "research_facts": facts_str,
                     "critique_history": critique_str,
+                    "search_history": search_history_str,
                 }
             )
             logger.info(f"Planner Decision: {result['action']} (Topic: {result.get('research_topic')})")
             logger.debug(f"Planner Reasoning: {result.get('reason')}")
 
-            return {"next_step": result["action"], "research_topic": result.get("research_topic")}
+            updates: dict[str, Any] = {"next_step": result["action"], "research_topic": result.get("research_topic")}
+            if result["action"] == "research" and result.get("research_topic"):
+                updates["search_history"] = [result["research_topic"]]
+
+            return updates
         except Exception as e:
             # Fallback on error
             logger.error(f"Planner LLM call failed, falling back to mock: {e}", exc_info=True)
@@ -131,7 +144,7 @@ def planner_node(state: FounderState) -> dict[str, Any]:
         topic_idx = len(state["research_facts"]) % len(mock_topics)
         topic = f"{mock_topics[topic_idx]} for {state['research_question']}"
         logger.info(f"Mock Planner: Decided 'research' on '{topic}'.")
-        return {"next_step": "research", "research_topic": topic}
+        return {"next_step": "research", "research_topic": topic, "search_history": [topic]}
 
     logger.info("Mock Planner: Decided 'write'.")
     return {"next_step": "write", "research_topic": None}

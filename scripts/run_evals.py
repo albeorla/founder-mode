@@ -25,6 +25,7 @@ def run_evals() -> None:
             "messages": [],
             "next_step": "init",
             "research_topic": None,
+            "search_history": [],
             "revision_count": 0,
             "critique_history": [],
         }
