@@ -1,63 +1,90 @@
-# FounderMode Documentation
+# Founder-Mode Documentation
 
-**Autonomous Due Diligence Agent**
+**A One-Person AI Venture Studio**
 
-FounderMode is an AI-powered market research system that validates business ideas with "Senior Analyst" level reasoning. Unlike simple AI wrappers, it employs a multi-agent architecture that simulates a human investment analyst workflow—reading data, forming hypotheses, and actively verifying facts via web search.
+This monorepo houses a portfolio of AI agent applications built on shared infrastructure. The goal: test multiple product hypotheses rapidly by standardizing plumbing and keeping business logic lean.
 
-## What is FounderMode?
+---
 
-FounderMode transforms a single-sentence business idea into a comprehensive investment memo. The system acts like having a dedicated research team that:
+## What is Founder-Mode?
+
+Founder-Mode is an **AI venture studio** approach—a monorepo containing:
+
+1. **Apps**: Independent AI agent experiments (~200 lines of domain code each)
+2. **Libs**: Shared toolkit (`agentkit`) for config, services, and testing
+3. **Infra**: Common CI/CD, Docker, and deployment templates
+
+Each app is a 1-2 week experiment targeting a specific market hypothesis. Apps share infrastructure but own their business logic.
+
+---
+
+## Current Apps
+
+| App | Description | Status |
+|-----|-------------|--------|
+| **founder-mode** | Investment memo generator for startup ideas | Active |
+| **vendor-validator** | Supply chain risk assessment | Planned |
+| **deal-screener** | PE/VC deal screening | Planned |
+
+### founder-mode (First App)
+
+The flagship app transforms a single-sentence business idea into a comprehensive investment memo. It acts like having a dedicated research team that:
 
 - **Researches** your market using real-time web search
 - **Analyzes** competitors, market size, and business model viability
 - **Writes** structured investment-grade reports
 - **Challenges** its own conclusions through adversarial review
 
-### Example
-
-**Input:**
-```
-foundermode run "A SaaS platform that helps restaurants reduce food waste using AI predictions"
+**Example:**
+```bash
+uv run foundermode run "A SaaS platform that helps restaurants reduce food waste"
 ```
 
-**Output:**
-A 10+ page Investment Memo covering:
-- Executive Summary with market opportunity assessment
-- Market Analysis with TAM/SAM/SOM sizing
-- Competitive Landscape with specific competitor analysis
+**Output:** A 10+ page Investment Memo covering executive summary, market analysis, and competitive landscape.
 
 ---
 
-## Who Is This For?
+## Architecture Vision
 
-| User | Use Case |
-|------|----------|
-| **Founders** | Validate pre-deck ideas before pitching |
-| **VC Associates** | Screen inbound startups efficiently |
-| **Corporate Strategy** | Rapid market sizing for new initiatives |
-| **Product Managers** | Research competitive landscape |
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                       FOUNDER-MODE MONOREPO                         │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                     │
+│  APPS LAYER        Each app = 1-2 week experiment, ~200 LOC domain  │
+│  ┌──────────────┐ ┌──────────────┐ ┌──────────────┐                 │
+│  │ founder-mode │ │   vendor-    │ │    deal-     │  ...more        │
+│  │              │ │  validator   │ │  screener    │                 │
+│  └──────┬───────┘ └──────┬───────┘ └──────┬───────┘                 │
+│         └────────────────┼────────────────┘                         │
+│                          ▼                                          │
+│  LIBS LAYER       ┌─────────────────────────────────────────┐       │
+│                   │              agentkit                    │       │
+│                   │  infra/ │ services/ │ testing/ │ patterns│       │
+│                   └─────────────────────────────────────────┘       │
+│                                                                     │
+│  INFRA LAYER      docker/ │ .github/ │ scripts/ │ docs/             │
+│                                                                     │
+└─────────────────────────────────────────────────────────────────────┘
+```
 
 ---
 
-## Key Features
+## Core Philosophy
 
-### Active Reasoning
-Unlike simple summarizers, FounderMode validates claims by actively searching the web. If it claims a competitor raised $50M, it verified that fact.
+**Toolkit, Not Framework**
+- Use decorators instead of base classes
+- Write LangGraph directly, no wrappers
+- Document patterns, don't encode them
 
-### Deep Reports
-Generates strategic investment memos (10+ pages) from a single prompt. Reports include citations to sources.
+**Standardize Plumbing, Keep Business Logic Raw**
+- `agentkit`: Config, logging, API wrappers, test fixtures
+- `apps/`: Workflow structure, prompts, domain schemas
 
-### Agentic Architecture
-Uses cyclic workflows with self-correction. If the system can't find pricing data, it autonomously searches again with refined queries.
-
-### Vector Memory
-Semantic deduplication prevents redundant searches and enables intelligent context retrieval across research sessions.
-
-### Red Team Review
-A built-in "Critic" agent acts as a skeptical Managing Partner, rejecting weak analysis until it meets institutional standards.
-
-### Human-in-the-Loop
-Pauses before executing research to get your approval, giving you control over the investigation process.
+**Extract When Repeated 3x**
+- First time: write in app
+- Second time: copy to new app
+- Third time: extract to libs/
 
 ---
 
@@ -65,10 +92,11 @@ Pauses before executing research to get your approval, giving you control over t
 
 | Document | Description |
 |----------|-------------|
-| [Getting Started](./getting-started.md) | Installation, configuration, and first run |
-| [User Guide](./user-guide.md) | Detailed usage instructions and options |
+| [Monorepo Plan](./monorepo-plan.md) | Architecture vision and phased roadmap |
+| [Getting Started](./getting-started.md) | Installation and first run |
+| [User Guide](./user-guide.md) | Usage instructions and examples |
 | [Architecture](./architecture.md) | Technical deep-dive into system design |
-| [Diagrams](./diagrams/) | PlantUML visualizations of the system |
+| [Diagrams](./diagrams/) | PlantUML visualizations |
 
 ---
 
@@ -77,12 +105,10 @@ Pauses before executing research to get your approval, giving you control over t
 ### Using Docker (Recommended)
 
 ```bash
-# Clone and configure
-git clone https://github.com/your-org/founder-mode.git
+git clone https://github.com/albeorla/founder-mode.git
 cd founder-mode
 cp .env.example .env  # Add your API keys
 
-# Build and run
 docker compose build
 docker compose run --rm app run "Your business idea here"
 ```
@@ -90,54 +116,27 @@ docker compose run --rm app run "Your business idea here"
 ### Using Local Installation
 
 ```bash
-# Install dependencies
 uv sync
 uv run playwright install chromium
 
-# Configure API keys
 export OPENAI_API_KEY="your-key"
 export TAVILY_API_KEY="your-key"
 
-# Run analysis
-foundermode run "Your business idea here"
+uv run foundermode run "Your business idea here"
 ```
 
 See [Getting Started](./getting-started.md) for detailed setup instructions.
 
 ---
 
-## How It Works (Overview)
+## Target Users
 
-```
-┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
-│   Planner   │───▶│  Researcher │───▶│   Writer    │───▶│   Critic    │
-│             │    │             │    │             │    │             │
-│ Decides what│    │ Gathers data│    │ Synthesizes │    │ Reviews and │
-│ to research │    │ from web    │    │ into memo   │    │ challenges  │
-└─────────────┘    └─────────────┘    └─────────────┘    └──────┬──────┘
-       ▲                                                        │
-       │                    Feedback Loop                       │
-       └────────────────────────────────────────────────────────┘
-                        (if rejected, refine)
-```
-
-The system iterates until the Critic approves the analysis or maximum iterations are reached.
-
-See [Architecture](./architecture.md) for the complete technical explanation.
-
----
-
-## Output Example
-
-FounderMode produces professional HTML reports suitable for:
-- Board presentations
-- Investment committee memos
-- Strategic planning documents
-
-Each section includes:
-- **Citations** linking claims to sources
-- **Quantitative metrics** (TAM, CAC, LTV where available)
-- **Risk assessment** with specific concerns identified
+| User | Use Case |
+|------|----------|
+| **Founders** | Validate pre-deck ideas before pitching |
+| **VC Associates** | Screen inbound startups efficiently |
+| **Corporate Strategy** | Rapid market sizing for new initiatives |
+| **Product Managers** | Research competitive landscape |
 
 ---
 
