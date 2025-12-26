@@ -4,22 +4,20 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-## [~] Track: Phase 1: First App Migration - Migrate founder-mode to apps/founder-mode/ and integrate agentkit.
-*Link: [./conductor/tracks/app_migration_20251226/](./conductor/tracks/app_migration_20251226/)*
+## [~] Track: Phase 2: Strategic Pivot - Documentation & Vision Alignment
+*Link: [./conductor/tracks/pivot_documentation/](./conductor/tracks/pivot_documentation/)*
 
-## [ ] Track: Phase 2: Second App (Vendor Validator) - Build the second experiment to prove rapid iteration.
-*Link: [./conductor/tracks/vendor_validator_20251226/](./conductor/tracks/vendor_validator_20251226/)*
+## [ ] Track: Phase 3: AgentKit Expansion - Data Room Connectors & PDF Support
+*Link: [./conductor/tracks/agentkit_dataroom/](./conductor/tracks/agentkit_dataroom/)*
 
-## [ ] Track: Phase 3: Evaluation Framework (eval-kit) - Systematic quality measurement.
-*Link: [./conductor/tracks/eval_kit_20251226/](./conductor/tracks/eval_kit_20251226/)*
-
-## [ ] Track: Phase 4: Deployment Standardization (deploy-kit) - One-command deployment.
-*Link: [./conductor/tracks/deploy_kit_20251226/](./conductor/tracks/deploy_kit_20251226/)*
+## [ ] Track: Phase 4: Deal-Screener MVP - The 24/7 PE Associate
+*Link: [./conductor/tracks/deal_screener_mvp/](./conductor/tracks/deal_screener_mvp/)*
 
 ---
 
 ## Completed / Archived Tracks
 
+*   **[x] app_migration_20251226**: [./conductor/archive/app_migration_20251226/](./conductor/archive/app_migration_20251226/)
 *   **[x] agentkit_library_build_20251225**: [./conductor/archive/agentkit_library_build_20251225/](./conductor/archive/agentkit_library_build_20251225/)
 *   **[x] deep_research_scraper_20251225**: [./conductor/archive/deep_research_scraper_20251225/](./conductor/archive/deep_research_scraper_20251225/)
 *   **[x] devops_docker_20251223**: [./conductor/archive/devops_docker_20251223/](./conductor/archive/devops_docker_20251223/)

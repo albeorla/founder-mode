@@ -5,7 +5,7 @@
 ```
 founder-mode/
 ├── libs/agentkit/       # Shared toolkit (standardized)
-├── apps/*/              # Individual apps (domain-specific)
+├── apps/*/              # Individual apps (e.g., deal-screener)
 └── infra/               # CI/CD, Docker, scripts
 ```
 
@@ -17,8 +17,8 @@ founder-mode/
 | `infra/logging` | Structured logging with context |
 | `infra/decorators` | `@logged`, `@with_fallback`, `@retry` |
 | `services/llm` | `create_llm()` factory for model instantiation |
-| `services/search` | Tavily wrapper with rate limiting |
-| `services/extraction` | Cascading scraper (Playwright → Readability → BS4) |
+| `services/search` | Tavily wrapper (Legacy/Public Data) |
+| `services/document` | **(Planned)** PDF/Excel parsers (Unstructured/LlamaParse) |
 | `services/vector_store` | ChromaDB + InMemory backends |
 | `testing/fixtures` | Pytest fixtures for mocking external services |
 | `patterns/` | Copy-paste LangGraph workflow templates |
@@ -56,9 +56,10 @@ Each app contains only:
 
 | Service | Technology | Purpose |
 |---------|------------|---------|
-| **Search** | Tavily API | AI-optimized web search |
+| **Data Rooms** | **(Planned)** Intralinks, Datasite API | Secure data ingestion |
+| **Doc Parsing** | **(Planned)** Unstructured.io / LlamaParse | Complex PDF/Table extraction |
+| **Search** | Tavily API | Public web search (legacy/supplemental) |
 | **Scraping** | Playwright | Dynamic JS rendering |
-| **Fallback** | Readability-lxml, BeautifulSoup4 | Clean text extraction |
 
 ## Interface
 
@@ -112,4 +113,3 @@ Each app contains only:
 ### Dynamic Fallback
 - Handle missing API keys gracefully
 - Mock data for local development and CI
-- Cascading extraction (Playwright → Readability → BS4)

@@ -43,10 +43,10 @@ Goal: Replace redundant app code with library calls.
 ## Phase 4: Final Verification & Cleanup
 Goal: Ensure everything works and remove the old monolith structure.
 
-- [ ] **Task: Run all tests**
+- [x] **Task: Run all tests**
   - Execute `uv run pytest` from the root to verify both `agentkit` and `founder-mode`.
-- [ ] **Task: Docker build check**
+- [x] **Task: Docker build check**
   - Update `Dockerfile` to support the new monorepo structure and ensure it builds.
-- [ ] **Task: Cleanup**
+- [x] **Task: Cleanup**
   - Remove the old `src/` directory at the root.
-- [ ] Task: Conductor - User Manual Verification 'Final Verification & Cleanup' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Final Verification & Cleanup' (Protocol in workflow.md)
