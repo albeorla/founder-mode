@@ -22,11 +22,11 @@ def test_search_as_memory_hit_skips_tavily(mock_chroma: MagicMock, search_tool: 
     fact = ResearchFact(content="Known fact from memory", source="http://old", title="Old")
     mock_chroma.query_similar.return_value = [fact]
 
-    with patch("foundermode.tools.search.TavilyClient") as mock_tavily:
+    with patch("foundermode.tools.search.TavilySearchService") as mock_service:
         results = search_tool._run("Existing topic")
 
         # Verify: Tavily was NOT called
-        mock_tavily.assert_not_called()
+        mock_service.assert_not_called()
         assert len(results) == 1
         assert results[0]["content"] == "Known fact from memory"
 
@@ -35,22 +35,21 @@ def test_search_as_memory_miss_calls_tavily(mock_chroma: MagicMock, search_tool:
     # Setup: ChromaDB is empty
     mock_chroma.query_similar.return_value = []
 
-    with patch("foundermode.tools.search.TavilyClient") as mock_tavily:
-        mock_client = mock_tavily.return_value
-        mock_client.search.return_value = {
-            "results": [
-                {
-                    "content": "This is a long enough content to pass the filter of twenty characters.",
-                    "url": "https://example.com",
-                    "title": "Web result",
-                }
-            ]
-        }
+    with patch("foundermode.tools.search.TavilySearchService") as mock_service_cls:
+        mock_service = mock_service_cls.return_value
+        mock_service.search.return_value = [
+            {
+                "content": "This is a long enough content to pass the filter of twenty characters.",
+                "url": "https://example.com",
+                "title": "Web result",
+                "score": 0.9,
+            }
+        ]
 
         results = search_tool._run("New topic")
 
         # Verify: Tavily WAS called
-        mock_client.search.assert_called_once()
+        mock_service.search.assert_called_once()
         assert len(results) == 1
         assert "long enough" in results[0]["content"]
 
@@ -62,9 +61,9 @@ def test_search_as_memory_disabled_without_chroma() -> None:
     # Tool without chroma manager
     tool = TavilySearch(api_key="test-key", chroma=None)
 
-    with patch("foundermode.tools.search.TavilyClient") as mock_tavily:
-        mock_client = mock_tavily.return_value
-        mock_client.search.return_value = {"results": []}
+    with patch("foundermode.tools.search.TavilySearchService") as mock_service_cls:
+        mock_service = mock_service_cls.return_value
+        mock_service.search.return_value = []
 
         tool._run("Any topic")
-        mock_client.search.assert_called_once()
+        mock_service.search.assert_called_once()

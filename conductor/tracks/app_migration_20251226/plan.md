@@ -21,22 +21,22 @@ Goal: Set up the monorepo workspace and directories.
 ## Phase 2: Code Migration
 Goal: Move the existing logic to its new home.
 
-- [ ] **Task: Move source code**
+- [x] **Task: Move source code**
   - Move `src/foundermode` to `apps/founder-mode/src/foundermode`.
-- [ ] **Task: Update imports**
+- [x] **Task: Update imports**
   - Fix any relative or absolute imports within `apps/founder-mode` that broke during the move.
-- [ ] **Task: Move tests**
+- [x] **Task: Move tests**
   - Move `tests/` content relevant to `founder-mode` to `apps/founder-mode/tests/`.
-- [ ] Task: Conductor - User Manual Verification 'Code Migration' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Code Migration' (Protocol in workflow.md)
 
 ## Phase 3: Agentkit Integration
 Goal: Replace redundant app code with library calls.
 
-- [ ] **Task: Refactor LLM service**
+- [x] **Task: Refactor LLM service**
   - Replace `apps/founder-mode/src/foundermode/services/llm.py` logic with `agentkit.services.llm`.
-- [ ] **Task: Refactor Search service**
+- [x] **Task: Refactor Search service**
   - Replace `apps/founder-mode/src/foundermode/services/search.py` logic with `agentkit.services.search`.
-- [ ] **Task: Refactor Vector Store service**
+- [x] **Task: Refactor Vector Store service**
   - Replace `apps/founder-mode/src/foundermode/services/vector_store.py` logic with `agentkit.services.vector_store`.
 - [ ] Task: Conductor - User Manual Verification 'Agentkit Integration' (Protocol in workflow.md)
 

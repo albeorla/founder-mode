@@ -1,3 +1,4 @@
+from typing import cast
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -8,18 +9,16 @@ from foundermode.memory.vector_store import ChromaManager
 
 @pytest.fixture
 def chroma_manager() -> ChromaManager:
-    # Use a temporary directory for the vector store during tests
-    with patch("foundermode.memory.vector_store.chromadb.PersistentClient") as mock_client:
-        # Mock the collection
-        mock_collection = MagicMock()
-        mock_client.return_value.get_or_create_collection.return_value = mock_collection
+    # Patch ChromaVectorStore class to return a mock instance
+    with patch("foundermode.memory.vector_store.ChromaVectorStore"):
         manager = ChromaManager(persist_directory=".tmp_chroma")
+        # manager.store is now a MagicMock (instance of MockStore)
         return manager
 
 
 def test_initialization(chroma_manager: ChromaManager) -> None:
     assert chroma_manager is not None
-    assert chroma_manager.collection is not None
+    assert chroma_manager.store is not None
 
 
 def test_add_facts(chroma_manager: ChromaManager) -> None:
@@ -28,31 +27,26 @@ def test_add_facts(chroma_manager: ChromaManager) -> None:
         ResearchFact(content="Competitor X raised $5M.", source="VentureBeat", relevance_score=0.8),
     ]
 
-    # We mock the actual adding to avoid needing a real OpenAI key for embeddings during this unit test
-    # However, since we are using ChromaManager which likely initializes embeddings, we might need to mock that.
-
-    # For this test, let's assume we can mock the collection methods
-    chroma_manager.collection = MagicMock()
-
     success = chroma_manager.add_facts(facts)
     assert success is True
-    assert chroma_manager.collection.upsert.called
+
+    store_mock = cast(MagicMock, chroma_manager.store)
+    assert store_mock.add_texts.called
 
     # Verify call arguments
-    call_args = chroma_manager.collection.upsert.call_args
-    assert len(call_args.kwargs["documents"]) == 2
+    call_args = store_mock.add_texts.call_args
+    assert len(call_args.kwargs["texts"]) == 2
     assert len(call_args.kwargs["metadatas"]) == 2
     assert len(call_args.kwargs["ids"]) == 2
 
 
 def test_query_similar(chroma_manager: ChromaManager) -> None:
-    # Mock collection query
-    chroma_manager.collection.query.return_value = {
-        "documents": [["Fact 1", "Fact 2"]],
-        "metadatas": [[{"source": "S1", "relevance_score": 0.9}, {"source": "S2", "relevance_score": 0.8}]],
-        "ids": [["id1", "id2"]],
-        "distances": [[0.1, 0.2]],
-    }
+    # Mock store query
+    store_mock = cast(MagicMock, chroma_manager.store)
+    store_mock.query.return_value = [
+        {"content": "Fact 1", "metadata": {"source": "S1", "relevance_score": 0.9}},
+        {"content": "Fact 2", "metadata": {"source": "S2", "relevance_score": 0.8}},
+    ]
 
     results = chroma_manager.query_similar("test query", k=2)
 
@@ -62,43 +56,38 @@ def test_query_similar(chroma_manager: ChromaManager) -> None:
 
 
 def test_vector_store_integration() -> None:
-    # Integration test with real (but local) ChromaDB if possible
-    # For now, we mock the PersistentClient but test the manager logic
-    with patch("foundermode.memory.vector_store.chromadb.PersistentClient") as mock_client:
-        mock_coll = MagicMock()
-        mock_client.return_value.get_or_create_collection.return_value = mock_coll
-
+    # Test interaction with the store mock
+    with patch("foundermode.memory.vector_store.ChromaVectorStore"):
         manager = ChromaManager(persist_directory=".tmp_integration")
         fact = ResearchFact(content="Integration test", source="pytest")
 
         manager.add_facts([fact])
-        assert mock_coll.upsert.called
+        store_mock = cast(MagicMock, manager.store)
+        assert store_mock.add_texts.called
 
         manager.query_similar("search")
-        assert mock_coll.query.called
+        assert store_mock.query.called
 
 
 def test_add_scraped_text(chroma_manager: ChromaManager) -> None:
-    # Setup
-    chroma_manager.collection = MagicMock()
-
     url = "https://example.com/long"
-    long_text = "Word " * 500  # 500 words ~ 2500 chars. Should result in multiple chunks (chunk_size=1000).
+    long_text = "Word " * 500  # Should result in multiple chunks
 
     success = chroma_manager.add_scraped_text(url, long_text)
 
     assert success is True
-    assert chroma_manager.collection.upsert.called
+    store_mock = cast(MagicMock, chroma_manager.store)
+    assert store_mock.add_texts.called
 
-    call_args = chroma_manager.collection.upsert.call_args
-    documents = call_args.kwargs["documents"]
+    call_args = store_mock.add_texts.call_args
+    texts = call_args.kwargs["texts"]
     metadatas = call_args.kwargs["metadatas"]
     ids = call_args.kwargs["ids"]
 
     # Verify chunks
-    assert len(documents) > 1
-    assert len(metadatas) == len(documents)
-    assert len(ids) == len(documents)
+    assert len(texts) > 1
+    assert len(metadatas) == len(texts)
+    assert len(ids) == len(texts)
 
     # Verify metadata contains source and chunk index
     assert metadatas[0]["source"] == url

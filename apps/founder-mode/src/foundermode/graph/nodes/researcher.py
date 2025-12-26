@@ -2,8 +2,8 @@ import asyncio
 import logging
 from typing import Any
 
+from agentkit.services.llm import create_llm
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_openai import ChatOpenAI
 from pydantic import BaseModel, Field
 
 from foundermode.config import settings
@@ -72,14 +72,14 @@ class FactList(BaseModel):
 def get_selector_chain() -> Any:
     if not settings.openai_api_key:
         return None
-    llm = ChatOpenAI(model=settings.model_name, temperature=0, openai_api_key=settings.openai_api_key)
+    llm = create_llm(model=settings.model_name)
     return selector_prompt | llm.with_structured_output(URLSelection)
 
 
 def get_extractor_chain() -> Any:
     if not settings.openai_api_key:
         return None
-    llm = ChatOpenAI(model=settings.model_name, temperature=0, openai_api_key=settings.openai_api_key)
+    llm = create_llm(model=settings.model_name)
     return extractor_prompt | llm.with_structured_output(FactList)
 
 

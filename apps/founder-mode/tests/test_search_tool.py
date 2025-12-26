@@ -23,16 +23,15 @@ def test_tavily_search_input_schema() -> None:
         assert "query" in tool.args_schema.model_fields
 
 
-@patch("foundermode.tools.search.TavilyClient")
-def test_tavily_search_run(mock_client_class: MagicMock) -> None:
-    mock_client = MagicMock()
-    mock_client_class.return_value = mock_client
-    mock_client.search.return_value = {
-        "results": [
-            {"title": "Result 1", "url": "https://example.com/1", "content": "Content 1"},
-            {"title": "Result 2", "url": "https://example.com/2", "content": "Content 2"},
-        ]
-    }
+@patch("foundermode.tools.search.TavilySearchService")
+def test_tavily_search_run(mock_service_class: MagicMock) -> None:
+    mock_service = MagicMock()
+    mock_service_class.return_value = mock_service
+    # Service returns list of results directly
+    mock_service.search.return_value = [
+        {"title": "Result 1", "url": "https://example.com/1", "content": "Content 1"},
+        {"title": "Result 2", "url": "https://example.com/2", "content": "Content 2"},
+    ]
 
     # Explicitly pass a mock chroma to avoid any __init__ issues
     mock_c = MagicMock()
@@ -43,7 +42,7 @@ def test_tavily_search_run(mock_client_class: MagicMock) -> None:
 
     assert len(results) == 2
     assert results[0]["title"] == "Result 1"
-    mock_client.search.assert_called_once_with(query="test query", search_depth="advanced")
+    mock_service.search.assert_called_once_with(query="test query", search_depth="advanced")
 
 
 def test_tavily_search_missing_api_key() -> None:
@@ -59,11 +58,11 @@ def test_tavily_search_missing_api_key() -> None:
 
 
 @pytest.mark.asyncio  # type: ignore
-@patch("foundermode.tools.search.TavilyClient")
-async def test_tavily_search_arun(mock_client_class: MagicMock) -> None:
-    mock_client = MagicMock()
-    mock_client_class.return_value = mock_client
-    mock_client.search.return_value = {"results": [{"title": "Async Result"}]}
+@patch("foundermode.tools.search.TavilySearchService")
+async def test_tavily_search_arun(mock_service_class: MagicMock) -> None:
+    mock_service = MagicMock()
+    mock_service_class.return_value = mock_service
+    mock_service.search.return_value = [{"title": "Async Result"}]
 
     mock_c = MagicMock()
     mock_c.query_similar.return_value = []

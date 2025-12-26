@@ -1,7 +1,7 @@
 from typing import Any
 
+from agentkit.services.llm import create_llm
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_openai import ChatOpenAI
 from langsmith.evaluation import EvaluationResult, RunEvaluator
 from langsmith.schemas import Example, Run
 
@@ -15,7 +15,7 @@ class InvestorRubricEvaluator(RunEvaluator):  # type: ignore
 
     def __init__(self, model_name: str | None = None):
         self.model_name = model_name or settings.model_name
-        self.eval_llm = ChatOpenAI(model=self.model_name, temperature=0, openai_api_key=settings.openai_api_key)
+        self.eval_llm = create_llm(model=self.model_name)
 
         self.prompt = ChatPromptTemplate.from_messages(
             [
@@ -98,7 +98,7 @@ class PlannerEvaluator(RunEvaluator):  # type: ignore
 
     def __init__(self, model_name: str | None = None):
         self.model_name = model_name or settings.model_name
-        self.eval_llm = ChatOpenAI(model=self.model_name, temperature=0, openai_api_key=settings.openai_api_key)
+        self.eval_llm = create_llm(model=self.model_name)
 
         self.prompt = ChatPromptTemplate.from_messages(
             [
@@ -239,7 +239,7 @@ class RevisionDeltaEvaluator(RunEvaluator):  # type: ignore
 
     def __init__(self, model_name: str | None = None):
         self.model_name = model_name or settings.model_name
-        self.eval_llm = ChatOpenAI(model=self.model_name, temperature=0, openai_api_key=settings.openai_api_key)
+        self.eval_llm = create_llm(model=self.model_name)
 
         self.prompt = ChatPromptTemplate.from_messages(
             [
@@ -317,7 +317,7 @@ class HallucinationEvaluator(RunEvaluator):  # type: ignore
 
     def __init__(self, model_name: str | None = None):
         self.model_name = model_name or settings.model_name
-        self.eval_llm = ChatOpenAI(model=self.model_name, temperature=0, openai_api_key=settings.openai_api_key)
+        self.eval_llm = create_llm(model=self.model_name)
 
         self.prompt = ChatPromptTemplate.from_messages(
             [

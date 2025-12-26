@@ -45,9 +45,15 @@ class InMemoryVectorStore:
 class ChromaVectorStore:
     """Vector store implementation using ChromaDB (Lazy Import)."""
 
-    def __init__(self, persist_directory: str, collection_name: str = "agentkit"):
+    def __init__(
+        self,
+        persist_directory: str,
+        collection_name: str = "agentkit",
+        embedding_function: Any | None = None,
+    ):
         self.persist_directory = persist_directory
         self.collection_name = collection_name
+        self.embedding_function = embedding_function
         self._collection: Any = None
 
     def _get_collection(self) -> Any:
@@ -55,8 +61,9 @@ class ChromaVectorStore:
             import chromadb
 
             client = chromadb.PersistentClient(path=self.persist_directory)
-            # Default embedding function for now
-            self._collection = client.get_or_create_collection(name=self.collection_name)
+            self._collection = client.get_or_create_collection(
+                name=self.collection_name, embedding_function=self.embedding_function
+            )
         return self._collection
 
     def add_texts(

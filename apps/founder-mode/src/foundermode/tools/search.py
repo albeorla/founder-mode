@@ -1,8 +1,8 @@
 from typing import Any
 
+from agentkit.services.search import TavilySearchService
 from langchain_core.tools import BaseTool
 from pydantic import BaseModel, Field
-from tavily import TavilyClient
 
 from foundermode.config import settings
 from foundermode.domain.schema import ResearchFact
@@ -42,9 +42,8 @@ class TavilySearch(BaseTool):  # type: ignore
         if not self.api_key:
             raise ValueError("TAVILY_API_KEY must be set in environment or passed to the tool.")
 
-        client = TavilyClient(api_key=self.api_key)
-        response = client.search(query=query, search_depth="advanced")
-        results = response.get("results", [])
+        service = TavilySearchService(api_key=self.api_key)
+        results = service.search(query=query, search_depth="advanced")
 
         # 3. Automatic Upsert: Add new results to ChromaDB
         if self.chroma and results:

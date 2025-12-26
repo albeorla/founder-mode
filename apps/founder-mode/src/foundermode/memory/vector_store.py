@@ -2,7 +2,7 @@ import hashlib
 import logging
 from typing import Any, cast
 
-import chromadb
+from agentkit.services.vector_store import ChromaVectorStore
 from chromadb.api.types import Documents, EmbeddingFunction, Embeddings
 from chromadb.utils import embedding_functions
 from langchain_openai import OpenAIEmbeddings
@@ -30,7 +30,6 @@ class ChromaManager:
         embedding_function: EmbeddingFunction[Any] | None = None,
     ) -> None:
         path = persist_directory or settings.chroma_db_path
-        self.client = chromadb.PersistentClient(path=path)
 
         if embedding_function:
             self.embedding_fn = embedding_function
@@ -44,8 +43,8 @@ class ChromaManager:
                 # Fallback for tests if no key is present or it's a dummy key
                 self.embedding_fn = cast(EmbeddingFunction[Any], embedding_functions.DefaultEmbeddingFunction())
 
-        self.collection = self.client.get_or_create_collection(
-            name=collection_name, embedding_function=cast(Any, self.embedding_fn)
+        self.store = ChromaVectorStore(
+            persist_directory=path, collection_name=collection_name, embedding_function=self.embedding_fn
         )
 
     def _generate_id(self, fact: ResearchFact) -> str:
@@ -81,7 +80,7 @@ class ChromaManager:
 
         try:
             # Use upsert to handle existing IDs gracefully
-            self.collection.upsert(documents=documents, metadatas=cast(Any, metadatas), ids=ids)
+            self.store.add_texts(texts=documents, metadatas=cast(Any, metadatas), ids=ids)
             return True
         except Exception as e:
             try:
@@ -111,39 +110,28 @@ class ChromaManager:
         ids = [f"{base_id}_{i}" for i in range(len(chunks))]
 
         try:
-            self.collection.upsert(documents=documents, metadatas=cast(Any, metadatas), ids=ids)
+            self.store.add_texts(texts=documents, metadatas=cast(Any, metadatas), ids=ids)
             return True
         except Exception as e:
             logger.error(f"Error adding scraped text: {e}")
             return False
 
     def query_similar(self, query: str, k: int = 3) -> list[ResearchFact]:
-        # Optimization: Only query if collection has items
-        if self.collection.count() == 0:
-            return []
-
-        results = self.collection.query(query_texts=[query], n_results=k)
+        results = self.store.query(query, k=k)
 
         facts = []
-        if results["documents"]:
-            # results is a dict of lists of lists (batch queries)
-            # We queried one text, so we take index 0
-            docs = results["documents"][0]
-            metas = results["metadatas"][0] if results["metadatas"] else None
-
-            if docs and metas:
-                for i in range(len(docs)):
-                    content = docs[i]
-                    meta = metas[i]
-                    facts.append(
-                        ResearchFact(
-                            content=content,
-                            source=str(meta.get("source", "")),
-                            title=str(meta.get("title")) if meta.get("title") else None,
-                            relevance_score=float(cast(Any, meta.get("relevance_score")))
-                            if meta.get("relevance_score")
-                            else None,
-                        )
-                    )
+        for item in results:
+            content = item["content"]
+            meta = item.get("metadata", {})
+            facts.append(
+                ResearchFact(
+                    content=content,
+                    source=str(meta.get("source", "")),
+                    title=str(meta.get("title")) if meta.get("title") else None,
+                    relevance_score=float(cast(Any, meta.get("relevance_score")))
+                    if meta.get("relevance_score")
+                    else None,
+                )
+            )
 
         return facts

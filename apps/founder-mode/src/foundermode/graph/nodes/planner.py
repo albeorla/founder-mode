@@ -1,8 +1,8 @@
 import logging
 from typing import Any, Literal, TypedDict
 
+from agentkit.services.llm import create_llm
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_openai import ChatOpenAI
 
 from foundermode.config import settings
 from foundermode.domain.state import FounderState
@@ -60,7 +60,7 @@ def get_planner_chain() -> Any:
     if not settings.openai_api_key:
         return None
 
-    llm = ChatOpenAI(model=settings.model_name, temperature=0, openai_api_key=settings.openai_api_key)
+    llm = create_llm(model=settings.model_name)
     return planner_prompt | llm.with_structured_output(PlannerOutput)
 
 
