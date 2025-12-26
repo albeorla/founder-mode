@@ -136,37 +136,30 @@ This is the "Happy Path" that ensures all dependencies (browsers, OS libraries) 
     ```
     API docs available at: `http://localhost:8000/docs`
 
-## Project Structure (Target State)
+## Project Structure
 
 ```
 founder-mode/                      # Monorepo root
-├── libs/                          # Shared libraries
-│   └── agentkit/                  # Core toolkit
-│       ├── infra/                 # config, logging, decorators
-│       ├── services/              # llm, search, extraction, vector_store
-│       ├── testing/               # pytest fixtures
-│       └── patterns/              # WORKFLOWS.md — copy-paste LangGraph patterns
+├── src/foundermode/               # Main application
+│   ├── api/                       # CLI (Typer) and REST API (FastAPI)
+│   ├── domain/                    # State and schema definitions
+│   ├── graph/                     # LangGraph workflow
+│   │   └── nodes/                 # Agent nodes (planner, researcher, writer, critic)
+│   ├── tools/                     # Search, scraping, reporting
+│   ├── memory/                    # ChromaDB vector storage
+│   └── evaluation/                # LLM-as-Judge evaluators
 │
-├── apps/                          # Applications (experiments)
-│   ├── founder-mode/              # Investment memo generator
-│   │   ├── nodes/                 # LangGraph nodes (plain functions)
-│   │   ├── prompts/               # Domain prompts
-│   │   ├── schemas/               # Pydantic models
-│   │   └── workflow.py            # Graph definition
-│   ├── vendor-validator/          # Supply chain risk assessment
-│   ├── deal-screener/             # PE/VC deal screening
-│   └── _template/                 # Cookiecutter for new apps
+├── libs/agentkit/                 # Shared toolkit library
+│   ├── infra/                     # config, logging, decorators
+│   ├── services/                  # llm, search, extraction, vector_store
+│   ├── testing/                   # pytest fixtures
+│   └── patterns/                  # WORKFLOWS.md — copy-paste LangGraph patterns
 │
-├── infra/                         # Shared infrastructure
-│   ├── docker/                    # Dockerfile.base, compose.yml
-│   └── scripts/                   # setup-dev.sh, new-app.sh, release.sh
-│
+├── tests/                         # Test suite
+├── docs/                          # Documentation
 ├── .github/workflows/             # CI/CD pipelines
-├── docs/                          # ADRs, runbooks
-└── conductor/                     # Project management (Conductor framework)
+└── conductor/                     # Project management
 ```
-
-> **Note:** The codebase is currently transitioning from the original monolithic structure (`src/foundermode/`) to this target state. See [docs/monorepo-plan.md](docs/monorepo-plan.md) for the migration roadmap.
 
 ---
 

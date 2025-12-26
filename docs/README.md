@@ -2,144 +2,127 @@
 
 **A One-Person AI Venture Studio**
 
-This monorepo houses a portfolio of AI agent applications built on shared infrastructure. The goal: test multiple product hypotheses rapidly by standardizing plumbing and keeping business logic lean.
+Build AI agent applications fast. Share infrastructure, keep business logic lean.
+
+---
+
+## Quick Links
+
+| I want to... | Go to |
+|--------------|-------|
+| Understand what this is | [Value Proposition](./VALUE_PROPOSITION.md) |
+| Set up and run | [Getting Started](./getting-started.md) |
+| Learn how to use it | [User Guide](./user-guide.md) |
+| Understand the architecture | [Architecture](./architecture.md) |
+| See the roadmap | [Monorepo Plan](./monorepo-plan.md) |
+| View diagrams | [Diagrams](./diagrams/) |
 
 ---
 
 ## What is Founder-Mode?
 
-Founder-Mode is an **AI venture studio** approach—a monorepo containing:
+**The Problem**: Building AI agent apps takes too long. Every new project means setting up configs, logging, API wrappers, testing infrastructure from scratch.
 
-1. **Apps**: Independent AI agent experiments (~200 lines of domain code each)
-2. **Libs**: Shared toolkit (`agentkit`) for config, services, and testing
-3. **Infra**: Common CI/CD, Docker, and deployment templates
+**The Solution**: A monorepo that shares 80% infrastructure (agentkit) so each new app only needs ~200 lines of domain code. Test ideas in 1-2 weeks, not months.
 
-Each app is a 1-2 week experiment targeting a specific market hypothesis. Apps share infrastructure but own their business logic.
+---
+
+## How It Works
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  YOUR IDEA  →  AI Agents  →  Research + Analysis  →  OUTPUT    │
+│                                                                 │
+│  "Uber for dog walking"  →  Planner → Researcher → Writer →    │
+│                             Critic → 10-page Investment Memo   │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+The first app (founder-mode) generates investment memos:
+1. **Planner** decides what to research
+2. **Researcher** searches the web and extracts facts
+3. **Writer** synthesizes a structured memo
+4. **Critic** reviews for quality (loops back if weak)
 
 ---
 
 ## Current Apps
 
-| App | Description | Status |
-|-----|-------------|--------|
-| **founder-mode** | Investment memo generator for startup ideas | Active |
+| App | What it does | Status |
+|-----|--------------|--------|
+| **founder-mode** | Investment memos for startup ideas | Active |
 | **vendor-validator** | Supply chain risk assessment | Planned |
 | **deal-screener** | PE/VC deal screening | Planned |
 
-### founder-mode (First App)
+---
 
-The flagship app transforms a single-sentence business idea into a comprehensive investment memo. It acts like having a dedicated research team that:
+## The Stack
 
-- **Researches** your market using real-time web search
-- **Analyzes** competitors, market size, and business model viability
-- **Writes** structured investment-grade reports
-- **Challenges** its own conclusions through adversarial review
+| Component | Technology |
+|-----------|------------|
+| Orchestration | LangGraph (stateful, cyclic workflows) |
+| LLM | OpenAI GPT-4o |
+| Search | Tavily API |
+| Memory | ChromaDB (vector storage) |
+| API | FastAPI + Typer CLI |
 
-**Example:**
+---
+
+## 5-Minute Start
+
 ```bash
-uv run foundermode run "A SaaS platform that helps restaurants reduce food waste"
+# Clone
+git clone https://github.com/albeorla/founder-mode.git
+cd founder-mode
+
+# Configure
+cp .env.example .env  # Add your API keys
+
+# Run
+docker compose build
+docker compose run --rm app run "Your business idea here"
 ```
 
-**Output:** A 10+ page Investment Memo covering executive summary, market analysis, and competitive landscape.
+See [Getting Started](./getting-started.md) for detailed instructions.
 
 ---
 
-## Architecture Vision
+## Project Structure
 
 ```
-┌─────────────────────────────────────────────────────────────────────┐
-│                       FOUNDER-MODE MONOREPO                         │
-├─────────────────────────────────────────────────────────────────────┤
-│                                                                     │
-│  APPS LAYER        Each app = 1-2 week experiment, ~200 LOC domain  │
-│  ┌──────────────┐ ┌──────────────┐ ┌──────────────┐                 │
-│  │ founder-mode │ │   vendor-    │ │    deal-     │  ...more        │
-│  │              │ │  validator   │ │  screener    │                 │
-│  └──────┬───────┘ └──────┬───────┘ └──────┬───────┘                 │
-│         └────────────────┼────────────────┘                         │
-│                          ▼                                          │
-│  LIBS LAYER       ┌─────────────────────────────────────────┐       │
-│                   │              agentkit                    │       │
-│                   │  infra/ │ services/ │ testing/ │ patterns│       │
-│                   └─────────────────────────────────────────┘       │
-│                                                                     │
-│  INFRA LAYER      docker/ │ .github/ │ scripts/ │ docs/             │
-│                                                                     │
-└─────────────────────────────────────────────────────────────────────┘
+founder-mode/
+├── src/foundermode/    # Main application code
+├── libs/agentkit/      # Shared toolkit library
+├── tests/              # Test suite
+├── docs/               # You are here
+└── conductor/          # Project management
 ```
-
----
-
-## Core Philosophy
-
-**Toolkit, Not Framework**
-- Use decorators instead of base classes
-- Write LangGraph directly, no wrappers
-- Document patterns, don't encode them
-
-**Standardize Plumbing, Keep Business Logic Raw**
-- `agentkit`: Config, logging, API wrappers, test fixtures
-- `apps/`: Workflow structure, prompts, domain schemas
-
-**Extract When Repeated 3x**
-- First time: write in app
-- Second time: copy to new app
-- Third time: extract to libs/
 
 ---
 
 ## Documentation Index
 
-| Document | Description |
-|----------|-------------|
-| [Monorepo Plan](./monorepo-plan.md) | Architecture vision and phased roadmap |
-| [Getting Started](./getting-started.md) | Installation and first run |
-| [User Guide](./user-guide.md) | Usage instructions and examples |
-| [Architecture](./architecture.md) | Technical deep-dive into system design |
-| [Diagrams](./diagrams/) | PlantUML visualizations |
+### For Users
+- **[Getting Started](./getting-started.md)** - Install, configure, run your first analysis
+- **[User Guide](./user-guide.md)** - CLI options, API usage, best practices
+
+### For Developers
+- **[Architecture](./architecture.md)** - System design, agents, memory, tools
+- **[Monorepo Plan](./monorepo-plan.md)** - Vision, roadmap, architecture principles
+- **[AgentKit](../libs/agentkit/README.md)** - Shared library documentation
+
+### Visual Guides
+- **[Diagrams](./diagrams/)** - PlantUML visualizations of system components
 
 ---
 
-## Quick Start
+## Contributing
 
-### Using Docker (Recommended)
-
-```bash
-git clone https://github.com/albeorla/founder-mode.git
-cd founder-mode
-cp .env.example .env  # Add your API keys
-
-docker compose build
-docker compose run --rm app run "Your business idea here"
-```
-
-### Using Local Installation
-
-```bash
-uv sync
-uv run playwright install chromium
-
-export OPENAI_API_KEY="your-key"
-export TAVILY_API_KEY="your-key"
-
-uv run foundermode run "Your business idea here"
-```
-
-See [Getting Started](./getting-started.md) for detailed setup instructions.
+1. Read the [Architecture](./architecture.md) to understand the system
+2. Check [Monorepo Plan](./monorepo-plan.md) for current priorities
+3. Follow TDD - write tests first
+4. Run `uv run pytest && uv run ruff check` before submitting
 
 ---
 
-## Target Users
-
-| User | Use Case |
-|------|----------|
-| **Founders** | Validate pre-deck ideas before pitching |
-| **VC Associates** | Screen inbound startups efficiently |
-| **Corporate Strategy** | Rapid market sizing for new initiatives |
-| **Product Managers** | Research competitive landscape |
-
----
-
-## License
-
-See the project root for license information.
+[← Back to Repository](../README.md)
