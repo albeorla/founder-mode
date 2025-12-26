@@ -632,7 +632,7 @@ requires-dist = [{ name = "agentkit", editable = "libs/agentkit" }]
 [[package]]
 name = "foundermode"
 version = "0.1.0"
-source = { editable = "." }
+source = { virtual = "." }
 dependencies = [
     { name = "beautifulsoup4" },
     { name = "chromadb" },
@@ -658,6 +658,8 @@ dependencies = [
 
 [package.dev-dependencies]
 dev = [
+    { name = "agentkit" },
+    { name = "founder-mode" },
     { name = "mypy" },
     { name = "pre-commit" },
     { name = "pytest" },
@@ -696,6 +698,8 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
+    { name = "agentkit", editable = "libs/agentkit" },
+    { name = "founder-mode", editable = "apps/founder-mode" },
     { name = "mypy", specifier = ">=1.9.0" },
     { name = "pre-commit", specifier = ">=3.6.0" },
     { name = "pytest", specifier = ">=8.0.0" },

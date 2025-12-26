@@ -4,11 +4,11 @@ import os
 
 def test_directories_exist() -> None:
     dirs = [
-        "src/foundermode/domain",
-        "src/foundermode/graph",
-        "src/foundermode/memory",
-        "src/foundermode/tools",
-        "src/foundermode/api",
+        "apps/founder-mode/src/foundermode/domain",
+        "apps/founder-mode/src/foundermode/graph",
+        "apps/founder-mode/src/foundermode/memory",
+        "apps/founder-mode/src/foundermode/tools",
+        "apps/founder-mode/src/foundermode/api",
     ]
     for d in dirs:
         assert os.path.isdir(d), f"Directory {d} does not exist"

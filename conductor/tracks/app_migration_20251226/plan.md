@@ -8,15 +8,15 @@ Goal: Set up the monorepo workspace and directories.
 - [x] **Task: Create directory structure**
   - Create `apps/founder-mode` and `apps/founder-mode/src`.
   - Ensure `.gitkeep` or initial structure is in place.
-- [ ] **Task: Configure uv workspaces**
+- [x] **Task: Configure uv workspaces**
   - Update root `pyproject.toml` to include:
     ```toml
     [tool.uv]
     workspaces = ["libs/*", "apps/*"]
     ```
-- [ ] **Task: Create app-specific pyproject.toml**
+- [x] **Task: Create app-specific pyproject.toml**
   - Initialize `apps/founder-mode/pyproject.toml` with basic metadata and dependency on `agentkit`.
-- [ ] Task: Conductor - User Manual Verification 'Structure & Configuration' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Structure & Configuration' (Protocol in workflow.md)
 
 ## Phase 2: Code Migration
 Goal: Move the existing logic to its new home.

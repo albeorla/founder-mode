@@ -17,3 +17,6 @@ packages = ["src/foundermode"]
 
 [tool.uv.sources]
 agentkit = { workspace = true }
+
+[project.scripts]
+foundermode = "foundermode.api.cli:app"
