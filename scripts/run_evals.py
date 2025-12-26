@@ -4,7 +4,13 @@ from typing import Any
 from langsmith import evaluate
 
 from foundermode.domain.schema import InvestmentMemo
-from foundermode.evaluation.evaluators import InvestorRubricEvaluator
+from foundermode.evaluation.evaluators import (
+    HallucinationEvaluator,
+    InvestorRubricEvaluator,
+    PlannerEvaluator,
+    ResearcherEvaluator,
+    RevisionDeltaEvaluator,
+)
 from foundermode.graph.workflow import create_workflow
 
 
@@ -19,6 +25,8 @@ def run_evals() -> None:
             "messages": [],
             "next_step": "init",
             "research_topic": None,
+            "revision_count": 0,
+            "critique_history": [],
         }
         # Run graph
         final_state = app.invoke(initial_state)
@@ -27,7 +35,10 @@ def run_evals() -> None:
     # Define evaluators
     evaluators = [
         InvestorRubricEvaluator(),
-        # Add more standard evaluators if needed
+        PlannerEvaluator(),
+        ResearcherEvaluator(),
+        RevisionDeltaEvaluator(),
+        HallucinationEvaluator(),
     ]
 
     # Run evaluation
@@ -35,8 +46,8 @@ def run_evals() -> None:
         target,
         data="FounderMode Benchmark v2",
         evaluators=evaluators,
-        experiment_prefix="foundermode-v2-baseline",
-        max_concurrency=2,  # Reduced concurrency to avoid rate limits
+        experiment_prefix="foundermode-v2-enhanced",
+        max_concurrency=2,
     )
 
     print(results)
