@@ -8,6 +8,8 @@ from foundermode.graph.nodes.researcher import researcher_node
 from foundermode.memory.vector_store import ChromaManager
 
 
+@pytest.mark.integration
+@pytest.mark.slow
 def test_researcher_node_execution_in_container() -> None:
     """Verify that the researcher node can execute search and scrape inside the container."""
     state: FounderState = {
@@ -17,6 +19,7 @@ def test_researcher_node_execution_in_container() -> None:
         "messages": [],
         "next_step": "init",
         "research_topic": "Stripe pricing model",
+        "search_history": [],
         "critique_history": [],
         "revision_count": 0,
     }
@@ -29,6 +32,8 @@ def test_researcher_node_execution_in_container() -> None:
         pytest.fail(f"Researcher node failed in container: {e}")
 
 
+@pytest.mark.integration
+@pytest.mark.slow
 def test_chromadb_persistence_in_container() -> None:
     """Verify that ChromaDB can write to the persistent volume."""
     import shutil

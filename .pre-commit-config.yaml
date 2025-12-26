@@ -20,3 +20,14 @@ repos:
     hooks:
       - id: mypy
         additional_dependencies: [pydantic>=2.0, pydantic-settings, pytest]
+
+  # Fast test check - runs only affected tests (testmon tracks dependencies)
+  - repo: local
+    hooks:
+      - id: pytest-fast
+        name: pytest (affected tests only)
+        entry: uv run pytest --testmon -x -q
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-commit]

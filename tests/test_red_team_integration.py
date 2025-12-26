@@ -1,10 +1,14 @@
 from unittest.mock import MagicMock, patch
 
+import pytest
+
 from foundermode.domain.schema import CriticVerdict, InvestmentMemo
 from foundermode.domain.state import FounderState
 from foundermode.graph.workflow import create_workflow
 
 
+@pytest.mark.integration
+@pytest.mark.slow
 def test_red_team_loop_termination() -> None:
     """
     Verifies that the graph terminates after exactly 3 rejections
@@ -54,6 +58,7 @@ def test_red_team_loop_termination() -> None:
                         "messages": [],
                         "next_step": "init",
                         "research_topic": None,
+                        "search_history": [],
                         "critique_history": [],
                         "revision_count": 0,
                     }

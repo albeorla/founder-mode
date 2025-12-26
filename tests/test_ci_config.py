@@ -13,6 +13,7 @@ def test_ci_workflow_content() -> None:
     assert "name: CI" in content
     assert "jobs:" in content
     assert "quality:" in content
-    assert "test:" in content
+    assert "test-fast:" in content
+    assert "test-full:" in content
     assert "uv run ruff check" in content
     assert "uv run pytest" in content

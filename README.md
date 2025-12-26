@@ -120,30 +120,87 @@ founder-mode/
 
 ## 🧪 Development & Testing
 
-We follow a strictly **Test-Driven Development (TDD)** workflow.
+We follow a strictly **Test-Driven Development (TDD)** workflow with optimized test execution.
 
-*   **Run Tests:**
-    ```bash
-    uv run pytest
-    ```
-*   **Run Tests with Coverage:**
-    ```bash
-    uv run pytest --cov=foundermode --cov-report=term-missing
-    uv run pytest --cov=foundermode --cov-report=html  # Generates htmlcov/
-    ```
-*   **Run Container Integration Tests:**
-    ```bash
-    docker compose run --rm app pytest tests/container/
-    ```
-*   **Linting & Formatting:**
-    ```bash
-    uv run ruff check .
-    uv run ruff format .
-    ```
-*   **Type Checking:**
-    ```bash
-    uv run mypy src/
-    ```
+### Running Tests
+
+```bash
+# Standard test run
+uv run pytest
+
+# Fast development loop - only run tests affected by your changes
+uv run pytest --testmon
+
+# Parallel execution (uses all CPU cores)
+uv run pytest -n auto
+
+# Combine both for maximum speed
+uv run pytest --testmon -n auto
+
+# Skip slow tests during rapid iteration
+uv run pytest -m "not slow"
+
+# Re-run failed tests first
+uv run pytest --ff
+```
+
+### Test Markers
+
+Tests are organized with markers for selective execution:
+
+| Marker | Description | Example |
+|--------|-------------|---------|
+| `@pytest.mark.unit` | Fast isolated unit tests | `pytest -m "unit"` |
+| `@pytest.mark.integration` | Tests with mocked external services | `pytest -m "integration"` |
+| `@pytest.mark.e2e` | Full end-to-end workflow tests | `pytest -m "e2e"` |
+| `@pytest.mark.slow` | Long-running tests | `pytest -m "not slow"` |
+
+### Coverage & Quality
+
+```bash
+# Run with coverage report
+uv run pytest --cov=foundermode --cov-report=term-missing
+
+# Generate HTML coverage report
+uv run pytest --cov=foundermode --cov-report=html  # Opens htmlcov/index.html
+
+# Full CI-style run (parallel + coverage)
+uv run pytest -n auto --cov=foundermode
+```
+
+### Container & Integration Tests
+
+```bash
+# Run container integration tests
+docker compose run --rm app pytest tests/container/
+
+# Run only integration tests
+uv run pytest -m "integration"
+```
+
+### Code Quality
+
+```bash
+# Linting & Formatting
+uv run ruff check .
+uv run ruff format .
+
+# Type Checking
+uv run mypy src/
+```
+
+### Shared Test Fixtures
+
+The `tests/conftest.py` provides reusable fixtures to reduce boilerplate:
+
+```python
+def test_example(base_state, mock_chroma_manager):
+    """Example using shared fixtures."""
+    base_state["research_question"] = "My test question"
+    # mock_chroma_manager is pre-configured
+```
+
+Available fixtures: `base_state`, `research_state`, `state_with_facts`, `sample_facts`, `mock_llm`, `mock_chroma_manager`, `mock_tavily_search`, `mock_deep_scrape`, `patch_chroma`, `patch_tavily`
 
 ### Evaluations (LangSmith)
 

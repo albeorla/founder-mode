@@ -28,7 +28,7 @@ def test_settings_default_values() -> None:
         },
         clear=True,
     ):
-        settings = Settings()
+        settings = Settings(_env_file=None)
         assert settings.log_level == "INFO"
         assert settings.model_name == "gpt-5.2"  # Default
 

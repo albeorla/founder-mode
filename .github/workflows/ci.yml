@@ -34,10 +34,10 @@ jobs:
       - name: Type Check (Mypy)
         run: uv run mypy src/
 
-  test:
-    name: Tests
+  test-fast:
+    name: Fast Tests
     runs-on: ubuntu-latest
-    needs: quality
+    # Run in parallel with quality for faster feedback
     steps:
       - uses: actions/checkout@v4
 
@@ -53,16 +53,48 @@ jobs:
       - name: Install dependencies
         run: uv sync --all-extras --dev
 
-      - name: Run Tests with Coverage
+      - name: Run Fast Tests (parallel)
         env:
           OPENAI_API_KEY: sk-dummy-key-for-tests
         run: |
-          uv run pytest --cov=foundermode --cov-report=xml
+          uv run pytest -m "not slow" -n auto -x -q
+
+  test-full:
+    name: Full Tests + Coverage
+    runs-on: ubuntu-latest
+    needs: [quality, test-fast]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      - name: Install dependencies
+        run: uv sync --all-extras --dev
+
+      - name: Run All Tests with Coverage (parallel)
+        env:
+          OPENAI_API_KEY: sk-dummy-key-for-tests
+        run: |
+          uv run pytest -n auto --cov=foundermode --cov-report=xml --cov-report=term-missing
+
+      - name: Upload Coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./coverage.xml
+          fail_ci_if_error: false
+        continue-on-error: true
 
   docker:
     name: Build Docker Image
     runs-on: ubuntu-latest
-    needs: test
+    needs: test-full
     steps:
       - uses: actions/checkout@v4
 

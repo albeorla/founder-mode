@@ -39,6 +39,8 @@ dev = [
     "pytest>=8.0.0",
     "pytest-asyncio>=0.23.0",
     "pytest-cov>=4.1.0",
+    "pytest-xdist>=3.5.0",  # Parallel test execution
+    "pytest-testmon>=2.1.0",  # Run only affected tests
     "ruff>=0.3.0",
     "mypy>=1.9.0",
     "pre-commit>=3.6.0",
@@ -76,6 +78,17 @@ known-first-party = ["foundermode"]
 asyncio_mode = "auto"
 testpaths = ["tests"]
 pythonpath = ["src"]
+addopts = "-v --tb=short"
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "e2e: end-to-end tests",
+    "integration: integration tests requiring mocked external services",
+    "unit: fast isolated unit tests",
+]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::PendingDeprecationWarning",
+]
 
 [tool.mypy]
 python_version = "3.12"

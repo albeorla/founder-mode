@@ -1,5 +1,7 @@
 from unittest.mock import AsyncMock, MagicMock, patch
 
+import pytest
+
 from foundermode.domain.schema import InvestmentMemo
 from foundermode.domain.state import FounderState
 from foundermode.graph.nodes.researcher import EvaluatedFact, FactList, researcher_node
@@ -30,6 +32,8 @@ STRIPE_PRICING_MOCK = """
 """
 
 
+@pytest.mark.e2e
+@pytest.mark.slow
 def test_e2e_deep_research_hard_target_simulation() -> None:
     """
     Simulates a full run of the researcher node against a 'hard' target (mocked).
@@ -42,6 +46,7 @@ def test_e2e_deep_research_hard_target_simulation() -> None:
         "messages": [],
         "next_step": "init",
         "research_topic": "Stripe pricing model",
+        "search_history": [],
         "critique_history": [],
         "revision_count": 0,
     }

@@ -1,10 +1,14 @@
 from unittest.mock import MagicMock, patch
 
+import pytest
+
 from foundermode.domain.schema import CriticVerdict, InvestmentMemo
 from foundermode.domain.state import FounderState
 from foundermode.graph.workflow import create_workflow
 
 
+@pytest.mark.e2e
+@pytest.mark.slow
 def test_e2e_graceful_fallback() -> None:
     """
     Verifies that the graph can run from start to finish using mock fallbacks
@@ -34,6 +38,7 @@ def test_e2e_graceful_fallback() -> None:
                 "messages": [],
                 "next_step": "init",
                 "research_topic": None,
+                "search_history": [],
                 "critique_history": [],
                 "revision_count": 0,
             }
@@ -51,6 +56,8 @@ def test_e2e_graceful_fallback() -> None:
             assert final_state["next_step"] == "reject"
 
 
+@pytest.mark.e2e
+@pytest.mark.slow
 def test_e2e_live_smoke() -> None:
     """
     Verifies the code path for live mode when API keys are present,
@@ -105,6 +112,7 @@ def test_e2e_live_smoke() -> None:
                     "messages": [],
                     "next_step": "init",
                     "research_topic": None,
+                    "search_history": [],
                     "critique_history": [],
                     "revision_count": 0,
                 }

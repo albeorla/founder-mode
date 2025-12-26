@@ -1,10 +1,13 @@
 from unittest.mock import AsyncMock, MagicMock, patch
 
+import pytest
+
 from foundermode.domain.schema import InvestmentMemo
 from foundermode.domain.state import FounderState
 from foundermode.graph.nodes.researcher import researcher_node
 
 
+@pytest.mark.integration
 def test_researcher_node_deep_scrape_flow() -> None:
     # 1. Setup initial state
     state: FounderState = {
@@ -14,6 +17,7 @@ def test_researcher_node_deep_scrape_flow() -> None:
         "messages": [],
         "next_step": "init",
         "research_topic": "Airbnb pricing model",
+        "search_history": [],
         "critique_history": [],
         "revision_count": 0,
     }

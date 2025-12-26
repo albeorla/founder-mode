@@ -13,6 +13,7 @@ def test_researcher_fallback_when_search_fails() -> None:
         "messages": [],
         "next_step": "research",
         "research_topic": "Airbnb business model",
+        "search_history": [],
         "critique_history": [],
         "revision_count": 0,
     }
@@ -42,6 +43,7 @@ def test_researcher_success() -> None:
         "messages": [],
         "next_step": "research",
         "research_topic": "Airbnb business model",
+        "search_history": [],
         "critique_history": [],
         "revision_count": 0,
     }
@@ -51,15 +53,19 @@ def test_researcher_success() -> None:
         mock_tool_instance.invoke.return_value = [{"content": "Live result", "url": "http", "score": 0.9}]
 
         with patch("foundermode.graph.nodes.researcher.ChromaManager") as _:
-            # Mock the extractor chain
-            with patch("foundermode.graph.nodes.researcher.get_extractor_chain") as mock_get_chain:
-                mock_chain = mock_get_chain.return_value
-                # Make it return a valid FactList
-                mock_chain.invoke.return_value = FactList(
-                    facts=[EvaluatedFact(content="Extracted Fact", source_url="http", relevance_score=0.9)]
-                )
+            # Mock the selector chain to avoid deep scraping
+            with patch("foundermode.graph.nodes.researcher.get_selector_chain") as mock_get_selector:
+                mock_get_selector.return_value = None
 
-                result = researcher_node(state)
+                # Mock the extractor chain
+                with patch("foundermode.graph.nodes.researcher.get_extractor_chain") as mock_get_chain:
+                    mock_chain = mock_get_chain.return_value
+                    # Make it return a valid FactList
+                    mock_chain.invoke.return_value = FactList(
+                        facts=[EvaluatedFact(content="Extracted Fact", source_url="http", relevance_score=0.9)]
+                    )
 
-                assert len(result["research_facts"]) == 1
-                assert "Extracted Fact" in result["research_facts"][0].content
+                    result = researcher_node(state)
+
+                    assert len(result["research_facts"]) == 1
+                    assert "Extracted Fact" in result["research_facts"][0].content
