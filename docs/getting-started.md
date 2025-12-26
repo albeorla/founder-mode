@@ -17,7 +17,7 @@ Docker is the **"Happy Path"** that ensures all dependencies (Playwright browser
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-org/founder-mode.git
+git clone https://github.com/albeorla/founder-mode.git
 cd founder-mode
 
 # Build the container
@@ -30,7 +30,7 @@ For contributors or those who prefer running natively:
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-org/founder-mode.git
+git clone https://github.com/albeorla/founder-mode.git
 cd founder-mode
 
 # Install Python dependencies with uv

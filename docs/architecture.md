@@ -219,7 +219,7 @@ FounderMode uses a vector database for semantic memory:
 │          ▼                                                   │
 │  ┌────────────────┐     ┌────────────────┐                  │
 │  │   Chunking     │────▶│   Embedding    │                  │
-│  │ (1000 chars)   │     │ (OpenAI ada)   │                  │
+│  │ (1000 chars)   │     │ (text-embed-3) │                  │
 │  └────────────────┘     └───────┬────────┘                  │
 │                                 │                            │
 │                                 ▼                            │

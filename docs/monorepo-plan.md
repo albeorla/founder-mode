@@ -139,32 +139,32 @@ founder-mode/                      # Monorepo root
 
 ## Phased Roadmap
 
-### Phase 0: Foundation (Current Sprint)
+### Phase 0: Foundation ✅ COMPLETE
 **Goal:** Build agentkit, prove the toolkit approach works
 
 | Task | Status |
 |------|--------|
 | Define toolkit philosophy (decorators > inheritance) | ✅ Done |
-| Implement agentkit infra (config, logging, decorators) | 🔄 In Progress |
-| Implement agentkit services (llm, search, extraction, vector_store) | 🔄 In Progress |
-| Implement testing fixtures | 🔄 In Progress |
-| Document workflow patterns | 🔄 In Progress |
+| Implement agentkit infra (config, logging, decorators) | ✅ Done |
+| Implement agentkit services (llm, search, extraction, vector_store) | ✅ Done |
+| Implement testing fixtures | ✅ Done |
+| Document workflow patterns | ✅ Done |
 
-**Exit Criteria:** Can build a new agent app in <1 day using agentkit
+**Exit Criteria:** Can build a new agent app in <1 day using agentkit ✅
 
 ---
 
-### Phase 1: First App Migration
+### Phase 1: First App Migration (Current)
 **Goal:** Migrate founder-mode to use agentkit, validate the approach
 
-| Task | Est |
-|------|-----|
-| Create `apps/founder-mode/` structure | 2h |
-| Extract nodes as plain functions + decorators | 4h |
-| Extract prompts to separate files | 2h |
-| Wire LangGraph workflow directly (no abstractions) | 2h |
-| Update CLI to use new structure | 2h |
-| Verify feature parity with old version | 4h |
+| Task | Status |
+|------|--------|
+| Create `apps/founder-mode/` structure | 📋 Planned |
+| Extract nodes as plain functions + decorators | 📋 Planned |
+| Extract prompts to separate files | 📋 Planned |
+| Wire LangGraph workflow directly (no abstractions) | 📋 Planned |
+| Update CLI to use new structure | 📋 Planned |
+| Verify feature parity with old version | 📋 Planned |
 
 **Exit Criteria:** founder-mode works identically, but uses agentkit
 
@@ -425,4 +425,4 @@ Deployment automated            Landing page, billing           Hire or stay sol
 ---
 
 *Last updated: December 2024*
-*Next review: After Phase 2 completion*
+*Status: Phase 0 Complete, Phase 1 in planning*
