@@ -4,7 +4,7 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-## [ ] Track: Phase 1: First App Migration - Migrate founder-mode to apps/founder-mode/ and integrate agentkit.
+## [~] Track: Phase 1: First App Migration - Migrate founder-mode to apps/founder-mode/ and integrate agentkit.
 *Link: [./conductor/tracks/app_migration_20251226/](./conductor/tracks/app_migration_20251226/)*
 
 ## [ ] Track: Phase 2: Second App (Vendor Validator) - Build the second experiment to prove rapid iteration.

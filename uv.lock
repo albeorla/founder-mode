@@ -5,6 +5,38 @@ resolution-markers = [
     "python_full_version < '3.13'",
 ]
 
+[manifest]
+members = [
+    "agentkit",
+    "founder-mode",
+    "foundermode",
+]
+
+[[package]]
+name = "agentkit"
+version = "0.1.0"
+source = { editable = "libs/agentkit" }
+dependencies = [
+    { name = "httpx" },
+    { name = "langchain-core" },
+    { name = "langchain-openai" },
+    { name = "pydantic" },
+    { name = "pydantic-settings" },
+    { name = "python-dotenv" },
+    { name = "tenacity" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "httpx", specifier = ">=0.26.0" },
+    { name = "langchain-core", specifier = ">=0.1.0" },
+    { name = "langchain-openai", specifier = ">=0.0.5" },
+    { name = "pydantic", specifier = ">=2.6.0" },
+    { name = "pydantic-settings", specifier = ">=2.1.0" },
+    { name = "python-dotenv", specifier = ">=1.2.1" },
+    { name = "tenacity", specifier = ">=8.2.0" },
+]
+
 [[package]]
 name = "aiohappyeyeballs"
 version = "2.6.1"
@@ -587,6 +619,17 @@ wheels = [
 ]
 
 [[package]]
+name = "founder-mode"
+version = "0.1.0"
+source = { editable = "apps/founder-mode" }
+dependencies = [
+    { name = "agentkit" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "agentkit", editable = "libs/agentkit" }]
+
+[[package]]
 name = "foundermode"
 version = "0.1.0"
 source = { editable = "." }
@@ -613,7 +656,7 @@ dependencies = [
     { name = "uvicorn" },
 ]
 
-[package.optional-dependencies]
+[package.dev-dependencies]
 dev = [
     { name = "mypy" },
     { name = "pre-commit" },
@@ -622,13 +665,9 @@ dev = [
     { name = "pytest-cov" },
     { name = "pytest-testmon" },
     { name = "pytest-xdist" },
+    { name = "respx" },
     { name = "ruff" },
     { name = "types-beautifulsoup4" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "respx" },
 ]
 
 [package.metadata]
@@ -643,29 +682,31 @@ requires-dist = [
     { name = "langchain-openai", specifier = ">=0.0.5" },
     { name = "langgraph", specifier = ">=0.0.20" },
     { name = "langsmith", specifier = ">=0.5.0" },
-    { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.9.0" },
     { name = "playwright", specifier = ">=1.42.0" },
-    { name = "pre-commit", marker = "extra == 'dev'", specifier = ">=3.6.0" },
     { name = "pydantic", specifier = ">=2.6.0" },
     { name = "pydantic-settings", specifier = ">=2.1.0" },
-    { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.0.0" },
-    { name = "pytest-asyncio", marker = "extra == 'dev'", specifier = ">=0.23.0" },
-    { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=4.1.0" },
-    { name = "pytest-testmon", marker = "extra == 'dev'", specifier = ">=2.1.0" },
-    { name = "pytest-xdist", marker = "extra == 'dev'", specifier = ">=3.5.0" },
     { name = "python-dotenv", specifier = ">=1.2.1" },
     { name = "readability-lxml", specifier = ">=0.8.1" },
-    { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.3.0" },
     { name = "tavily-python", specifier = ">=0.7.17" },
     { name = "tenacity", specifier = ">=8.2.0" },
     { name = "tiktoken", specifier = ">=0.5.0" },
     { name = "typer", specifier = ">=0.9.0" },
-    { name = "types-beautifulsoup4", marker = "extra == 'dev'" },
     { name = "uvicorn", specifier = ">=0.27.0" },
 ]
 
 [package.metadata.requires-dev]
-dev = [{ name = "respx", specifier = ">=0.22.0" }]
+dev = [
+    { name = "mypy", specifier = ">=1.9.0" },
+    { name = "pre-commit", specifier = ">=3.6.0" },
+    { name = "pytest", specifier = ">=8.0.0" },
+    { name = "pytest-asyncio", specifier = ">=0.23.0" },
+    { name = "pytest-cov", specifier = ">=4.1.0" },
+    { name = "pytest-testmon", specifier = ">=2.1.0" },
+    { name = "pytest-xdist", specifier = ">=3.5.0" },
+    { name = "respx", specifier = ">=0.22.0" },
+    { name = "ruff", specifier = ">=0.3.0" },
+    { name = "types-beautifulsoup4" },
+]
 
 [[package]]
 name = "frozenlist"

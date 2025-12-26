@@ -5,7 +5,7 @@ This plan covers the migration of `founder-mode` to the `apps/` directory and it
 ## Phase 1: Structure & Configuration
 Goal: Set up the monorepo workspace and directories.
 
-- [ ] **Task: Create directory structure**
+- [x] **Task: Create directory structure**
   - Create `apps/founder-mode` and `apps/founder-mode/src`.
   - Ensure `.gitkeep` or initial structure is in place.
 - [ ] **Task: Configure uv workspaces**
