@@ -79,7 +79,10 @@ This monorepo is a **one-person AI venture studio** built for rapid experimentat
 
 | App | Description | Status |
 |-----|-------------|--------|
-| **founder-mode** | Example app: Multi-agent research workflow with adversarial critique | Proof-of-concept |
+| **founder-mode** | Multi-agent research workflow with adversarial critique | Proof-of-concept |
+| **dd-arbiter** | Adversarial multi-model research for investment thesis stress-testing | Pre-MVP |
+
+> **Note:** dd-arbiter is excluded from main CI due to heavy ML dependencies (PyTorch, CUDA libraries ~4GB). It has its own dedicated development environment.
 
 ---
 
@@ -142,25 +145,41 @@ This is the "Happy Path" that ensures all dependencies (browsers, OS libraries) 
 
 ```
 founder-mode/                      # Monorepo root
-├── src/foundermode/               # Main application
-│   ├── api/                       # CLI (Typer) and REST API (FastAPI)
-│   ├── domain/                    # State and schema definitions
-│   ├── graph/                     # LangGraph workflow
-│   │   └── nodes/                 # Agent nodes (planner, researcher, writer, critic)
-│   ├── tools/                     # Search, scraping, reporting
-│   ├── memory/                    # ChromaDB vector storage
-│   └── evaluation/                # LLM-as-Judge evaluators
 │
-├── libs/agentkit/                 # Shared toolkit library
-│   ├── infra/                     # config, logging, decorators
-│   ├── services/                  # llm, search, extraction, vector_store
-│   ├── testing/                   # pytest fixtures
-│   └── patterns/                  # WORKFLOWS.md — copy-paste LangGraph patterns
+├── apps/                          # Applications (each a 1-2 week experiment)
+│   ├── founder-mode/              # Multi-agent research workflow
+│   │   ├── src/foundermode/
+│   │   │   ├── api/               # CLI (Typer) and REST API (FastAPI)
+│   │   │   ├── domain/            # State and schema definitions
+│   │   │   ├── graph/             # LangGraph workflow
+│   │   │   │   └── nodes/         # Agent nodes (planner, researcher, writer, critic)
+│   │   │   ├── tools/             # Search, scraping, reporting
+│   │   │   ├── memory/            # ChromaDB vector storage
+│   │   │   └── evaluation/        # LLM-as-Judge evaluators
+│   │   └── tests/                 # App-specific tests
+│   │
+│   └── dd-arbiter/                # Investment thesis stress-testing (Pre-MVP)
+│       ├── src/ddarbiter/
+│       │   ├── cli.py
+│       │   ├── domain/            # Schemas for claims, disagreements, reports
+│       │   ├── graph/             # Multi-model adversarial workflow
+│       │   └── services/          # Model routing, caching, uncertainty quantification
+│       ├── docs/                  # Market research, technical architecture
+│       └── tests/
 │
-├── tests/                         # Test suite
-├── docs/                          # Documentation
+├── libs/                          # Shared libraries
+│   └── agentkit/                  # Functional toolkit for LangGraph agents
+│       ├── src/agentkit/
+│       │   ├── infra/             # config, logging, decorators
+│       │   ├── services/          # llm, search, extraction, vector_store
+│       │   ├── testing/           # pytest fixtures
+│       │   └── patterns/          # WORKFLOWS.md — copy-paste patterns
+│       └── tests/                 # Library tests
+│
 ├── .github/workflows/             # CI/CD pipelines
-└── conductor/                     # Project management
+├── docs/                          # Monorepo documentation
+├── conductor/                     # Project management
+└── pyproject.toml                 # Workspace configuration
 ```
 
 ---
@@ -172,23 +191,26 @@ Test-driven development with optimized execution.
 ### Running Tests
 
 ```bash
-# Standard test run
-uv run pytest
+# Standard test run (excludes dd-arbiter due to heavy ML deps)
+uv run pytest --ignore=apps/dd-arbiter
 
 # Fast development loop - only run tests affected by your changes
-uv run pytest --testmon
+uv run pytest --testmon --ignore=apps/dd-arbiter
 
 # Parallel execution (uses all CPU cores)
-uv run pytest -n auto
+uv run pytest -n auto --ignore=apps/dd-arbiter
 
 # Combine both for maximum speed
-uv run pytest --testmon -n auto
+uv run pytest --testmon -n auto --ignore=apps/dd-arbiter
 
 # Skip slow tests during rapid iteration
-uv run pytest -m "not slow"
+uv run pytest -m "not slow" --ignore=apps/dd-arbiter
 
 # Re-run failed tests first
-uv run pytest --ff
+uv run pytest --ff --ignore=apps/dd-arbiter
+
+# Run dd-arbiter tests separately (requires ML dependencies)
+uv run pytest apps/dd-arbiter/
 ```
 
 ### Test Markers
@@ -205,14 +227,14 @@ Tests are organized with markers for selective execution:
 ### Coverage & Quality
 
 ```bash
-# Run with coverage report
-uv run pytest --cov=foundermode --cov-report=term-missing
+# Run with coverage report (libs and apps)
+uv run pytest --cov=libs --cov=apps --cov-report=term-missing --ignore=apps/dd-arbiter
 
 # Generate HTML coverage report
-uv run pytest --cov=foundermode --cov-report=html  # Opens htmlcov/index.html
+uv run pytest --cov=libs --cov=apps --cov-report=html --ignore=apps/dd-arbiter
 
 # Full CI-style run (parallel + coverage)
-uv run pytest -n auto --cov=foundermode
+uv run pytest -n auto --cov=libs --cov=apps --ignore=apps/dd-arbiter
 ```
 
 ### Container & Integration Tests
@@ -228,12 +250,12 @@ uv run pytest -m "integration"
 ### Code Quality
 
 ```bash
-# Linting & Formatting
-uv run ruff check .
-uv run ruff format .
+# Linting & Formatting (excludes dd-arbiter)
+uv run ruff check . --exclude apps/dd-arbiter
+uv run ruff format . --exclude apps/dd-arbiter
 
 # Type Checking
-uv run mypy src/
+uv run mypy libs/ apps/founder-mode/
 ```
 
 ### Shared Test Fixtures
