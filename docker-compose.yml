@@ -17,6 +17,10 @@ services:
       - "8000:8000"
 
   dd-arbiter:
+    # Use pre-built image from GHCR (fast!) or build locally if needed
+    # To pull: docker compose pull dd-arbiter
+    # To build: docker compose build dd-arbiter
+    image: ghcr.io/albeorla/founder-mode/dd-arbiter:latest
     build:
       context: .
       dockerfile: apps/dd-arbiter/Dockerfile

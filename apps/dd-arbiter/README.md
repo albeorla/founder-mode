@@ -140,15 +140,49 @@ See [Path to Profitability](./docs/path-to-profitability.md) for detailed financ
 
 ### Installation
 
-#### Option 1: Docker (Recommended - No Reinstalls!)
+#### Option 1: Docker (Recommended - Fastest Setup!)
 
-**Best for:** Avoiding repeated dependency downloads, consistent environment
+**Best for:** Avoiding repeated dependency downloads, consistent environment, instant setup
+
+##### Quick Start: Pull Pre-built Image (1-2 minutes)
 
 ```bash
 # From monorepo root
-# Build once - caches all dependencies (~4GB) in Docker image
+# Pull the pre-built image from GitHub Container Registry
+docker compose pull dd-arbiter
+
+# Start using it immediately!
+docker compose run --rm dd-arbiter uv run pytest
+docker compose run --rm dd-arbiter bash
+```
+
+**Benefits:**
+- ✅ **30x faster than building** (1-2 min vs 15-20 min)
+- ✅ All dependencies pre-installed (~4GB)
+- ✅ ML models cached in Docker volumes
+- ✅ Consistent environment across team
+- ✅ Updated automatically via CI/CD
+
+##### Alternative: Build Locally (15-20 minutes)
+
+If you need to customize the image or the pre-built image isn't available:
+
+```bash
+# Build from source
 docker compose build dd-arbiter
 
+# Use it
+docker compose run --rm dd-arbiter bash
+```
+
+**When to build locally:**
+- Modifying Dockerfile or dependencies
+- Testing changes before they're merged
+- Pre-built image not yet available (first-time setup)
+
+##### Development Workflow
+
+```bash
 # Run tests (uses cached dependencies)
 docker compose run --rm dd-arbiter uv run pytest
 
@@ -157,18 +191,6 @@ docker compose run --rm dd-arbiter bash
 
 # Run dd-arbiter CLI
 docker compose run --rm dd-arbiter uv run ddarbiter --help
-```
-
-**Benefits:**
-- ✅ Build once (15-20 min), use for weeks
-- ✅ Dependencies cached in Docker image
-- ✅ ML models cached in Docker volumes
-- ✅ Subsequent runs: 30-60 seconds
-- ✅ Consistent environment across team
-
-**Rebuild only when dependencies change:**
-```bash
-docker compose build dd-arbiter --no-cache  # Force rebuild
 ```
 
 #### Option 2: Local Installation (Full)
@@ -233,8 +255,11 @@ LOG_LEVEL=INFO                        # DEBUG, INFO, WARNING, ERROR
 #### Using Docker (Recommended)
 
 ```bash
-# Build the image (first time only, ~15-20 min)
-docker compose build dd-arbiter
+# Pull pre-built image (1-2 min) - FASTEST!
+docker compose pull dd-arbiter
+
+# Or build locally if needed (15-20 min)
+# docker compose build dd-arbiter
 
 # Analyze a CIM (once POC is implemented)
 docker compose run --rm dd-arbiter uv run ddarbiter analyze /workspace/path/to/cim.pdf

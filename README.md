@@ -83,6 +83,12 @@ This monorepo is a **one-person AI venture studio** built for rapid experimentat
 | **dd-arbiter** | Adversarial multi-model research for investment thesis stress-testing | Pre-MVP |
 
 > **Note:** dd-arbiter is excluded from main CI due to heavy ML dependencies (PyTorch, CUDA libraries ~4GB). It has its own dedicated development environment.
+>
+> **Quick Setup:** Pre-built Docker images available via GitHub Container Registry:
+> ```bash
+> docker compose pull dd-arbiter  # 1-2 min setup instead of 15-20 min build
+> docker compose run --rm dd-arbiter bash
+> ```
 
 ---
 
