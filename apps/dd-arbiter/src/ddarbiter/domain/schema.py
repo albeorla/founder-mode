@@ -1,7 +1,7 @@
 """Pydantic schemas for DD-Arbiter domain models."""
 
-from typing import Annotated
 import operator
+from typing import Annotated
 
 from pydantic import BaseModel, Field
 from typing_extensions import TypedDict
@@ -82,12 +82,8 @@ class DiligenceReport(BaseModel):
     )
 
     # Meta
-    needs_human_review: bool = Field(
-        description="True if high uncertainty or major disagreements"
-    )
-    review_reason: str | None = Field(
-        default=None, description="Why human review is recommended"
-    )
+    needs_human_review: bool = Field(description="True if high uncertainty or major disagreements")
+    review_reason: str | None = Field(default=None, description="Why human review is recommended")
 
 
 class ResearchState(TypedDict):

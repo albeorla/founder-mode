@@ -1,3 +1,6 @@
+import os
+from unittest.mock import patch
+
 from agentkit.services.llm import create_llm
 from langchain_openai import ChatOpenAI
 from pydantic import SecretStr
@@ -13,5 +16,6 @@ def test_create_llm_openai() -> None:
 
 def test_create_llm_default() -> None:
     # Should use settings default
-    llm = create_llm()
-    assert isinstance(llm, ChatOpenAI)
+    with patch.dict(os.environ, {"OPENAI_API_KEY": "test-key"}):
+        llm = create_llm()
+        assert isinstance(llm, ChatOpenAI)

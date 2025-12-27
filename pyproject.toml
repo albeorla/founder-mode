@@ -96,6 +96,7 @@ dev = [
     "respx>=0.22.0",
     "founder-mode",
     "agentkit",
+    # dd-arbiter excluded due to heavy ML dependencies (PyTorch, CUDA)
 ]
 
 [tool.uv.workspace]

@@ -26,13 +26,13 @@ jobs:
         run: uv sync --all-extras --dev
 
       - name: Lint (Ruff)
-        run: uv run ruff check .
+        run: uv run ruff check . --exclude apps/dd-arbiter
 
       - name: Format Check (Ruff)
-        run: uv run ruff format --check .
+        run: uv run ruff format --check . --exclude apps/dd-arbiter
 
       - name: Type Check (Mypy)
-        run: uv run mypy libs/ apps/
+        run: uv run mypy libs/ apps/founder-mode/
 
   test-fast:
     name: Fast Tests
@@ -57,7 +57,7 @@ jobs:
         env:
           OPENAI_API_KEY: sk-dummy-key-for-tests
         run: |
-          uv run pytest -m "not slow" -n auto -x -q
+          uv run pytest -m "not slow" -n auto -x -q --ignore=apps/dd-arbiter
 
   test-full:
     name: Full Tests + Coverage
@@ -82,7 +82,7 @@ jobs:
         env:
           OPENAI_API_KEY: sk-dummy-key-for-tests
         run: |
-          uv run pytest -n auto --cov=libs --cov=apps --cov-report=xml --cov-report=term-missing
+          uv run pytest -n auto --cov=libs --cov=apps --cov-report=xml --cov-report=term-missing --ignore=apps/dd-arbiter
 
       - name: Upload Coverage to Codecov
         uses: codecov/codecov-action@v4
