@@ -15,7 +15,7 @@ collections "Tavily/Web" as Web
 
 == Initialization ==
 
-User -> CLI: foundermode run "business idea"
+User -> CLI: foundermode run "research question"
 activate CLI
 CLI -> Planner: Initialize workflow\n(research_question)
 
@@ -58,8 +58,8 @@ activate Writer
 Writer -> Memory: Retrieve all facts
 Memory --> Writer: Fact collection
 
-Writer -> Writer: Synthesize Investment Memo
-Writer --> Critic: memo_draft
+Writer -> Writer: Synthesize Analysis Report
+Writer --> Critic: draft_output
 deactivate Writer
 
 == Critique Loop ==
@@ -90,14 +90,14 @@ loop Until approved (max 3 iterations)
 
         ' ... research cycle repeats ...
         Researcher --> Writer: Updated facts
-        Writer --> Critic: Revised memo
+        Writer --> Critic: Revised analysis
     end
 end
 
 == Output ==
 
-CLI -> CLI: Render HTML memo
-CLI -> User: memo_output.html
+CLI -> CLI: Render HTML output
+CLI -> User: analysis_output.html
 deactivate CLI
 
 @enduml

@@ -7,7 +7,7 @@
 [![LangGraph](https://img.shields.io/badge/Orchestration-LangGraph-orange.svg)](https://langchain-ai.github.io/langgraph/)
 [![Code Style: Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
-This monorepo houses a **portfolio of AI agent applications** built on shared infrastructure. The goal: test multiple product hypotheses rapidly by standardizing plumbing and keeping business logic lean.
+This monorepo is a **one-person AI venture studio** built for rapid experimentation. The goal: test multiple AI agent product hypotheses quickly using shared infrastructure (agentkit) until we find one worth scaling.
 
 ---
 
@@ -20,10 +20,10 @@ This monorepo houses a **portfolio of AI agent applications** built on shared in
 │                                                                     │
 │  APPS LAYER        Each app = 1-2 week experiment, ~200 LOC domain  │
 │  ┌──────────────┐ ┌──────────────┐ ┌──────────────┐                 │
-│  │ founder-mode │ │   vendor-    │ │    deal-     │  ...more        │
-│  │              │ │  validator   │ │  screener    │                 │
-│  │ Investment   │ │ Supply chain │ │ PE/VC deal   │                 │
-│  │ memos        │ │ risk assess  │ │  screening   │                 │
+│  │ founder-mode │ │   vendor-    │ │   research-  │  ...more        │
+│  │              │ │  validator   │ │   assistant  │                 │
+│  │ Deep research│ │ Supply chain │ │   Domain     │                 │
+│  │ analysis     │ │ risk assess  │ │   expert Q&A │                 │
 │  └──────┬───────┘ └──────┬───────┘ └──────┬───────┘                 │
 │         └────────────────┼────────────────┘                         │
 │                          ▼                                          │
@@ -71,11 +71,15 @@ This monorepo houses a **portfolio of AI agent applications** built on shared in
 
 ---
 
-## Current Apps
+## Current Phase
+
+**Research & Exploration** — Actively identifying the right AI agent opportunity for VC-scale growth.
+
+## Apps
 
 | App | Description | Status |
 |-----|-------------|--------|
-| **founder-mode** | Investment memo generator for startup ideas | Active |
+| **founder-mode** | Example app: Multi-agent research workflow with adversarial critique | Proof-of-concept |
 
 ---
 
@@ -108,7 +112,7 @@ This is the "Happy Path" that ensures all dependencies (browsers, OS libraries) 
 3.  **Run the Agent:**
     ```bash
     docker compose build
-    docker compose run --rm app run "Uber for Dog Walking"
+    docker compose run --rm app run "What are the key trends in renewable energy storage?"
     ```
 
 ### Local Development
@@ -125,7 +129,7 @@ This is the "Happy Path" that ensures all dependencies (browsers, OS libraries) 
 
 3.  **Run the Agent:**
     ```bash
-    uv run foundermode run "Uber for Dog Walking"
+    uv run foundermode run "What are the key trends in renewable energy storage?"
     ```
 
 4.  **Start the API Server:**

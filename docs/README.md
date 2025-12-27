@@ -2,7 +2,7 @@
 
 **A One-Person AI Venture Studio**
 
-Build AI agent applications fast. Share infrastructure, keep business logic lean.
+Rapidly test AI agent product ideas using shared infrastructure. Currently in research phase, seeking the right opportunity for VC-scale growth.
 
 ---
 
@@ -10,7 +10,7 @@ Build AI agent applications fast. Share infrastructure, keep business logic lean
 
 | I want to... | Go to |
 |--------------|-------|
-| Understand what this is | [Value Proposition](./VALUE_PROPOSITION.md) |
+| Understand what this is | [Value Proposition](./value-proposition.md) |
 | Set up and run | [Getting Started](./getting-started.md) |
 | Learn how to use it | [User Guide](./user-guide.md) |
 | Understand the architecture | [Architecture](./architecture.md) |
@@ -21,9 +21,9 @@ Build AI agent applications fast. Share infrastructure, keep business logic lean
 
 ## What is Founder-Mode?
 
-**The Problem**: Building AI agent apps takes too long. Every new project means setting up configs, logging, API wrappers, testing infrastructure from scratch.
+**The Problem**: Finding product-market fit takes too long. Most startups spend months building something nobody wants.
 
-**The Solution**: A monorepo that shares 80% infrastructure (agentkit) so each new app only needs ~200 lines of domain code. Test ideas in 1-2 weeks, not months.
+**The Solution**: A monorepo with shared infrastructure (agentkit) that lets us build new AI agent apps in 1-2 weeks. We test ideas rapidly until we find one worth scaling.
 
 ---
 
@@ -31,14 +31,14 @@ Build AI agent applications fast. Share infrastructure, keep business logic lean
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│  YOUR IDEA  →  AI Agents  →  Research + Analysis  →  OUTPUT    │
+│  YOUR QUESTION  →  AI Agents  →  Research + Analysis  →  OUTPUT │
 │                                                                 │
-│  "Uber for dog walking"  →  Planner → Researcher → Writer →    │
-│                             Critic → 10-page Investment Memo   │
+│  "Key trends in energy storage?"  →  Planner → Researcher →    │
+│                         Writer → Critic → Structured Analysis   │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-The first app (founder-mode) generates investment memos:
+The example app (founder-mode) demonstrates multi-agent workflows:
 1. **Planner** decides what to research
 2. **Researcher** searches the web and extracts facts
 3. **Writer** synthesizes a structured memo
@@ -46,11 +46,15 @@ The first app (founder-mode) generates investment memos:
 
 ---
 
-## Current Apps
+## Current Phase
+
+**Research & Exploration** — Identifying the right AI agent opportunity.
+
+## Apps
 
 | App | What it does | Status |
 |-----|--------------|--------|
-| **founder-mode** | Investment memos for startup ideas | Active |
+| **founder-mode** | Example: Multi-agent research with adversarial critique | Proof-of-concept |
 
 ---
 

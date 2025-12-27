@@ -55,7 +55,7 @@ package "src/foundermode" {
           Pydantic Models
           - ResearchFact
           - ResearchPlan
-          - InvestmentMemo
+          - AnalysisOutput
           - CriticVerdict
         end note
     }
