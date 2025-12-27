@@ -1,0 +1,95 @@
+name: DD-Arbiter CI
+
+# Run on schedule (nightly) and when dd-arbiter changes
+on:
+  schedule:
+    # Run at 2 AM UTC daily
+    - cron: '0 2 * * *'
+  push:
+    branches: [ main ]
+    paths:
+      - 'apps/dd-arbiter/**'
+      - 'libs/agentkit/**'
+      - '.github/workflows/dd-arbiter-ci.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'apps/dd-arbiter/**'
+      - 'libs/agentkit/**'
+      - '.github/workflows/dd-arbiter-ci.yml'
+  workflow_dispatch: # Allow manual triggers
+
+jobs:
+  test-dd-arbiter:
+    name: DD-Arbiter Tests
+    runs-on: ubuntu-latest
+    # Use more time for heavy ML dependencies
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      - name: Install dependencies (including ML deps)
+        run: |
+          uv sync --all-extras --dev
+          # Note: This includes PyTorch, CUDA libraries (~4GB)
+          # Consider using CPU-only PyTorch for CI to reduce install time
+
+      - name: Lint DD-Arbiter (Ruff)
+        run: uv run ruff check apps/dd-arbiter/
+
+      - name: Format Check DD-Arbiter (Ruff)
+        run: uv run ruff format --check apps/dd-arbiter/
+
+      - name: Type Check DD-Arbiter (Mypy)
+        run: uv run mypy apps/dd-arbiter/
+
+      - name: Run DD-Arbiter Tests
+        env:
+          OPENAI_API_KEY: sk-dummy-key-for-tests
+        run: |
+          uv run pytest apps/dd-arbiter/ -v --cov=apps/dd-arbiter --cov-report=term-missing
+
+      - name: Upload Coverage
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./coverage.xml
+          flags: dd-arbiter
+          fail_ci_if_error: false
+        continue-on-error: true
+
+  # Optional: Add a job to check if dd-arbiter can import without errors
+  smoke-test:
+    name: DD-Arbiter Smoke Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      - name: Install dependencies
+        run: uv sync --all-extras --dev
+
+      - name: Smoke Test - Import Check
+        run: |
+          uv run python -c "from ddarbiter import __version__; print(f'DD-Arbiter v{__version__} imported successfully')"
+          uv run python -c "from ddarbiter.domain.schema import ClaimAnalysis; print('Schemas imported successfully')"
+          uv run python -c "from ddarbiter.graph.workflow import create_workflow; print('Workflow imported successfully')"

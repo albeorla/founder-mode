@@ -294,6 +294,7 @@ Results are tracked in LangSmith for experiment comparison. See [User Guide](./d
 | [Getting Started](./docs/getting-started.md) | Installation and first run |
 | [User Guide](./docs/user-guide.md) | Usage instructions and examples |
 | [Architecture](./docs/architecture.md) | Technical deep-dive |
+| [Testing Strategy](./docs/testing-strategy.md) | Test organization, CI/CD strategy, handling heavy dependencies |
 
 ---
 

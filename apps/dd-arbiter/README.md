@@ -129,18 +129,158 @@ See [Path to Profitability](./docs/path-to-profitability.md) for detailed financ
 
 ---
 
-## Quick Start
+## Development Environment Setup
+
+### Prerequisites
+
+- Python 3.12+
+- [uv](https://github.com/astral-sh/uv) package manager
+- ~5GB disk space (for ML dependencies)
+- CUDA-compatible GPU (optional, for faster inference)
+
+### Installation
+
+#### Option 1: Full Installation (Recommended for Development)
 
 ```bash
 # From monorepo root
 cd apps/dd-arbiter
 
-# Install dependencies
-uv sync
+# Install all dependencies including PyTorch, transformers, etc.
+uv sync --all-extras --dev
 
-# Run the demo (once built)
-uv run ddarbiter analyze path/to/cim.pdf
+# Verify installation
+uv run python -c "from ddarbiter import __version__; print(f'DD-Arbiter v{__version__}')"
 ```
+
+**Note:** This installs ~4GB of dependencies including:
+- PyTorch (CPU or CUDA builds)
+- Transformers (for DeBERTa-Large-MNLI)
+- LangGraph, Instructor, Pydantic
+
+#### Option 2: CPU-Only Installation (Faster, No GPU)
+
+```bash
+# Install with CPU-only PyTorch (reduces download size)
+uv sync --all-extras --dev --override torch==2.1.0+cpu
+
+# This is sufficient for development and testing
+```
+
+#### Option 3: Minimal Installation (Testing Only)
+
+```bash
+# Install only core dependencies (excludes heavy ML models)
+uv sync --dev
+
+# Note: Some features will not work without full dependencies
+```
+
+### Configuration
+
+Create a `.env` file in `apps/dd-arbiter/`:
+
+```bash
+# Required API Keys
+OPENAI_API_KEY=sk-...
+ANTHROPIC_API_KEY=sk-ant-...
+GOOGLE_API_KEY=...
+
+# Optional Configuration
+MODEL_CACHE_DIR=~/.cache/dd-arbiter  # Cache for model weights
+SEMANTIC_CACHE_TTL=3600              # Cache TTL in seconds
+LOG_LEVEL=INFO                        # DEBUG, INFO, WARNING, ERROR
+```
+
+### Quick Start
+
+```bash
+# Run the demo (once POC is implemented)
+uv run ddarbiter analyze path/to/cim.pdf
+
+# Run with custom models
+uv run ddarbiter analyze path/to/cim.pdf --bull-model gpt-4o --bear-model claude-3-5-sonnet
+
+# Run in interactive mode
+uv run ddarbiter interactive
+```
+
+### Running Tests
+
+```bash
+# Run all dd-arbiter tests
+uv run pytest apps/dd-arbiter/ -v
+
+# Run with coverage
+uv run pytest apps/dd-arbiter/ --cov=apps/dd-arbiter --cov-report=term-missing
+
+# Run only fast tests (excludes model downloads)
+uv run pytest apps/dd-arbiter/ -m "not slow"
+```
+
+### Development Workflow
+
+```bash
+# Run linting
+uv run ruff check apps/dd-arbiter/
+
+# Auto-format code
+uv run ruff format apps/dd-arbiter/
+
+# Type checking
+uv run mypy apps/dd-arbiter/
+
+# All quality checks
+uv run ruff check apps/dd-arbiter/ && \
+uv run ruff format apps/dd-arbiter/ && \
+uv run mypy apps/dd-arbiter/ && \
+uv run pytest apps/dd-arbiter/
+```
+
+### Troubleshooting
+
+#### Import Errors
+
+```bash
+# Verify Python can find the package
+uv run python -c "import sys; print(sys.path)"
+uv run python -c "import ddarbiter; print(ddarbiter.__file__)"
+
+# Reinstall if needed
+uv sync --reinstall
+```
+
+#### CUDA/GPU Issues
+
+```bash
+# Check CUDA availability
+uv run python -c "import torch; print(f'CUDA: {torch.cuda.is_available()}')"
+
+# Force CPU-only mode
+export CUDA_VISIBLE_DEVICES=""
+```
+
+#### Model Download Failures
+
+```bash
+# Set cache directory with more space
+export HF_HOME=/path/to/large/disk/.cache/huggingface
+
+# Download models manually
+uv run python -c "from transformers import AutoModel; AutoModel.from_pretrained('microsoft/deberta-large-mnli')"
+```
+
+### CI/CD
+
+DD-Arbiter has a **separate CI pipeline** (`.github/workflows/dd-arbiter-ci.yml`) that runs:
+
+- **Nightly:** At 2 AM UTC
+- **On changes:** To `apps/dd-arbiter/**` or `libs/agentkit/**`
+- **Manual:** Via workflow_dispatch
+
+This isolation prevents blocking the main CI pipeline with heavy dependency installation.
+
+See [Testing Strategy](../../docs/testing-strategy.md) for details on handling heavy dependencies.
 
 ---
 
