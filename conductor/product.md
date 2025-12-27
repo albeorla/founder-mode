@@ -1,61 +1,56 @@
-# Product Guide: Deal-Screener (Powered by Founder-Mode Engine)
+# Product Guide: Founder-Mode Engine
 
 ## Vision
-**"The 24/7 Private Equity Associate"**
+**"AI Agents for Knowledge Work"**
 
-Deal-Screener is an autonomous diligence agent that pre-screens data rooms before a human investor ever opens a file. It is the flagship product built on the **Founder-Mode Engine** (a monorepo venture studio platform).
-
-Unlike generic AI wrappers that chat with PDFs, Deal-Screener uses a purpose-built **Cyclic Multi-Agent Graph** to read, cross-reference, and adversarially critique the private data in an M&A data room.
+Founder-Mode is an AI agent platform that generates deep, structured analysis by orchestrating multiple specialized agents. Unlike single-shot LLM wrappers, it uses a **Cyclic Multi-Agent Graph** to research, synthesize, and adversarially critique complex topics.
 
 ## Core Value Proposition
 
-### 1. The "Red Flag" Filter
-PE Associates spend 80% of their time scrubbing data rooms for basic discrepancies and only 20% on strategic thinking. Deal-Screener inverts this.
-- **Input:** Data Room URL (PDFs, Excel models, contracts) + Investment Thesis (e.g., "B2B SaaS, <5% churn, >$5M ARR").
-- **Action:** Reads every document, calculates metrics from raw data, and cross-checks them.
-- **Output:** A "Red Flag Report" and a Draft Investment Committee (IC) Memo.
+### 1. The "Cyclic Agent" Architecture
+A multi-pass approach where agents build on each other's work:
+- **Planner:** Breaks down complex questions into research tasks
+- **Researcher:** Gathers evidence from web search and document extraction
+- **Writer:** Synthesizes findings into structured output
+- **Critic:** Reviews for quality and logical gaps (loops back if weak)
 
-### 2. The Data Moat
-- **Private Data > Public Search:** We process proprietary data (financials, contracts) that Google/Perplexity cannot access.
-- **High Switching Costs:** Once a firm integrates their data room provider (Intralinks, Datasite) with us, the friction to switch is massive.
+### 2. The "Critic" Advantage
+The architecture leverages an **Adversarial Critic Node**. Quality comes from iteration.
+- *Standard AI:* Single-pass response, no self-review
+- *Founder-Mode:* Multi-pass with adversarial critique, catches gaps and inconsistencies
 
-### 3. The "Critic" Advantage
-The architecture leverages an **Adversarial Critic Node**. In Private Equity, you *want* a skeptic.
-- *Standard AI:* "Revenue grew 20% YoY."
-- *Deal-Screener:* "Reject. The Excel model shows 20% growth, but the bank statements in PDF only support 12%. Flagging for potential fraud."
+### 3. Toolkit, Not Framework
+- **Decorators over inheritance:** Use `@logged`, `@with_retry`, not base classes
+- **LangGraph directly:** No abstraction wrappers, full control
+- **Pattern documentation:** Copy-paste workflows, not encoded constraints
 
 ## Architecture Layers
 
-### Product Layer (Deal-Screener)
-The specialized logic for M&A diligence:
-- **Scanner Agent:** Extracts numbers from unstructured PDFs and structured CSVs.
-- **Analyst Agent:** Calculates key metrics (CAC, LTV, EBITDA adjustments).
-- **Critic Agent:** Checks for inconsistencies between documents.
+### Application Layer (apps/)
+Specialized domain logic per use case:
+- **Domain schemas:** What data to extract
+- **Custom prompts:** Industry-specific language
+- **Output formats:** Memos, reports, assessments
 
-### Platform Layer (Founder-Mode Engine / AgentKit)
-The shared infrastructure enabling rapid agent development:
-- **libs/agentkit:** Reusable components for LLM management, structured logging, and retry logic.
-- **State Management:** LangGraph-based state machines.
-- **Vector Memory:** Semantic search for deduping claims.
+### Platform Layer (libs/agentkit)
+Shared infrastructure for rapid development:
+- **infra/:** Config, logging, decorators
+- **services/:** LLM, search, extraction, vector store
+- **testing/:** Mock fixtures for fast tests
+- **patterns/:** Copy-paste LangGraph templates
 
 ## Success Metrics
 
-### Product Performance
+### Quality
 | Metric | Target |
 |--------|--------|
-| **Recall** | >95% of "Red Flags" identified by human associates |
-| **Precision** | <10% false positive rate on discrepancies |
-| **Time-to-Memo** | <15 minutes per deal (vs. 4-8 hours human time) |
+| **Output Coherence** | Structured, cited, actionable |
+| **Critique Effectiveness** | >50% of outputs improve after critic pass |
+| **Test Coverage** | >80% across all packages |
 
-### Business Traction
+### Velocity
 | Metric | Target |
 |--------|--------|
-| **Pilots** | 5 PE Firms piloted in Q1 |
-| **Integrations** | 1 Data Room Provider (e.g., Intralinks) |
-| **Defensibility** | "Critic" model fine-tuned on 100+ historical fraud cases |
-
-## Roadmap
-- **Phase 1 (Complete):** Engine Migration & AgentKit.
-- **Phase 2 (Current):** Strategic Pivot & Documentation.
-- **Phase 3:** AgentKit Expansion (Data Room Connectors).
-- **Phase 4:** Deal-Screener MVP.
+| **New App Bootstrap** | <1 day using agentkit |
+| **Shared Code Ratio** | >80% infrastructure in libs/ |
+| **Iteration Speed** | Changes deploy in minutes |

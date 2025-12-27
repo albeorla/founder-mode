@@ -2,16 +2,6 @@
 
 This file tracks all major tracks for the project. Each track has its own detailed plan in its respective folder.
 
----
-
-## [ ] Track: Phase 3: AgentKit Expansion - Data Room Connectors & PDF Support
-*Link: [./conductor/tracks/agentkit_dataroom/](./conductor/tracks/agentkit_dataroom/)*
-
-## [ ] Track: Phase 4: Deal-Screener MVP - The 24/7 PE Associate
-*Link: [./conductor/tracks/deal_screener_mvp/](./conductor/tracks/deal_screener_mvp/)*
-
----
-
 ## Completed / Archived Tracks
 
 *   **[x] pivot_documentation**: [./conductor/archive/pivot_documentation/](./conductor/archive/pivot_documentation/)

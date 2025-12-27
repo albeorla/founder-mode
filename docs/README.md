@@ -51,8 +51,6 @@ The first app (founder-mode) generates investment memos:
 | App | What it does | Status |
 |-----|--------------|--------|
 | **founder-mode** | Investment memos for startup ideas | Active |
-| **vendor-validator** | Supply chain risk assessment | Planned |
-| **deal-screener** | PE/VC deal screening | Planned |
 
 ---
 

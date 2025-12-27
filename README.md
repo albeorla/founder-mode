@@ -76,8 +76,6 @@ This monorepo houses a **portfolio of AI agent applications** built on shared in
 | App | Description | Status |
 |-----|-------------|--------|
 | **founder-mode** | Investment memo generator for startup ideas | Active |
-| **vendor-validator** | Supply chain risk assessment | Planned |
-| **deal-screener** | PE/VC deal screening | Planned |
 
 ---
 
