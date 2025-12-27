@@ -38,11 +38,33 @@ jobs:
       - name: Set up Python
         run: uv python install 3.12
 
+      # Cache HuggingFace models to avoid re-downloading
+      - name: Cache HuggingFace Models
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/huggingface
+            ~/.cache/transformers
+          key: ${{ runner.os }}-huggingface-${{ hashFiles('apps/dd-arbiter/pyproject.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-huggingface-
+
+      # Cache pip/wheel builds for faster dependency installation
+      - name: Cache Python Dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/pip
+            ~/.cache/uv
+          key: ${{ runner.os }}-python-deps-${{ hashFiles('uv.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-python-deps-
+
       - name: Install dependencies (including ML deps)
         run: |
           uv sync --all-extras --dev
           # Note: This includes PyTorch, CUDA libraries (~4GB)
-          # Consider using CPU-only PyTorch for CI to reduce install time
+          # Caching reduces install time from ~15min to ~2min on cache hit
 
       - name: Lint DD-Arbiter (Ruff)
         run: uv run ruff check apps/dd-arbiter/
@@ -84,6 +106,27 @@ jobs:
 
       - name: Set up Python
         run: uv python install 3.12
+
+      # Reuse same caches
+      - name: Cache HuggingFace Models
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/huggingface
+            ~/.cache/transformers
+          key: ${{ runner.os }}-huggingface-${{ hashFiles('apps/dd-arbiter/pyproject.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-huggingface-
+
+      - name: Cache Python Dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/pip
+            ~/.cache/uv
+          key: ${{ runner.os }}-python-deps-${{ hashFiles('uv.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-python-deps-
 
       - name: Install dependencies
         run: uv sync --all-extras --dev

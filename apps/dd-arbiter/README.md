@@ -140,7 +140,40 @@ See [Path to Profitability](./docs/path-to-profitability.md) for detailed financ
 
 ### Installation
 
-#### Option 1: Full Installation (Recommended for Development)
+#### Option 1: Docker (Recommended - No Reinstalls!)
+
+**Best for:** Avoiding repeated dependency downloads, consistent environment
+
+```bash
+# From monorepo root
+# Build once - caches all dependencies (~4GB) in Docker image
+docker compose build dd-arbiter
+
+# Run tests (uses cached dependencies)
+docker compose run --rm dd-arbiter uv run pytest
+
+# Interactive shell for development
+docker compose run --rm dd-arbiter bash
+
+# Run dd-arbiter CLI
+docker compose run --rm dd-arbiter uv run ddarbiter --help
+```
+
+**Benefits:**
+- ✅ Build once (15-20 min), use for weeks
+- ✅ Dependencies cached in Docker image
+- ✅ ML models cached in Docker volumes
+- ✅ Subsequent runs: 30-60 seconds
+- ✅ Consistent environment across team
+
+**Rebuild only when dependencies change:**
+```bash
+docker compose build dd-arbiter --no-cache  # Force rebuild
+```
+
+#### Option 2: Local Installation (Full)
+
+**Best for:** IDE integration, direct Python development
 
 ```bash
 # From monorepo root
@@ -158,7 +191,10 @@ uv run python -c "from ddarbiter import __version__; print(f'DD-Arbiter v{__vers
 - Transformers (for DeBERTa-Large-MNLI)
 - LangGraph, Instructor, Pydantic
 
-#### Option 2: CPU-Only Installation (Faster, No GPU)
+**First install:** ~15 minutes
+**Subsequent installs:** ~30 seconds (uv caches packages in `~/.cache/uv/`)
+
+#### Option 3: CPU-Only Installation (Faster, No GPU)
 
 ```bash
 # Install with CPU-only PyTorch (reduces download size)
@@ -167,7 +203,7 @@ uv sync --all-extras --dev --override torch==2.1.0+cpu
 # This is sufficient for development and testing
 ```
 
-#### Option 3: Minimal Installation (Testing Only)
+#### Option 4: Minimal Installation (Testing Only)
 
 ```bash
 # Install only core dependencies (excludes heavy ML models)
@@ -194,6 +230,24 @@ LOG_LEVEL=INFO                        # DEBUG, INFO, WARNING, ERROR
 
 ### Quick Start
 
+#### Using Docker (Recommended)
+
+```bash
+# Build the image (first time only, ~15-20 min)
+docker compose build dd-arbiter
+
+# Analyze a CIM (once POC is implemented)
+docker compose run --rm dd-arbiter uv run ddarbiter analyze /workspace/path/to/cim.pdf
+
+# Interactive mode
+docker compose run --rm dd-arbiter uv run ddarbiter interactive
+
+# Development shell
+docker compose run --rm dd-arbiter bash
+```
+
+#### Using Local Installation
+
 ```bash
 # Run the demo (once POC is implemented)
 uv run ddarbiter analyze path/to/cim.pdf
@@ -207,6 +261,24 @@ uv run ddarbiter interactive
 
 ### Running Tests
 
+#### Using Docker
+
+```bash
+# Run all tests (uses cached dependencies)
+docker compose run --rm dd-arbiter uv run pytest -v
+
+# Run with coverage
+docker compose run --rm dd-arbiter uv run pytest --cov=apps/dd-arbiter --cov-report=term-missing
+
+# Run only fast tests
+docker compose run --rm dd-arbiter uv run pytest -m "not slow"
+
+# Watch mode during development
+docker compose run --rm dd-arbiter uv run pytest --testmon -f
+```
+
+#### Using Local Installation
+
 ```bash
 # Run all dd-arbiter tests
 uv run pytest apps/dd-arbiter/ -v
@@ -219,6 +291,27 @@ uv run pytest apps/dd-arbiter/ -m "not slow"
 ```
 
 ### Development Workflow
+
+#### Using Docker
+
+```bash
+# Start interactive development shell
+docker compose run --rm dd-arbiter bash
+
+# Inside the container, run quality checks:
+uv run ruff check .
+uv run ruff format .
+uv run mypy .
+uv run pytest -v
+
+# Or run from host:
+docker compose run --rm dd-arbiter uv run ruff check .
+docker compose run --rm dd-arbiter uv run ruff format .
+docker compose run --rm dd-arbiter uv run mypy .
+docker compose run --rm dd-arbiter uv run pytest
+```
+
+#### Using Local Installation
 
 ```bash
 # Run linting

@@ -15,3 +15,29 @@ services:
     command: api
     ports:
       - "8000:8000"
+
+  dd-arbiter:
+    build:
+      context: .
+      dockerfile: apps/dd-arbiter/Dockerfile
+    platform: linux/amd64
+    env_file:
+      - .env
+    volumes:
+      - .:/workspace
+      # Persist caches to avoid re-downloading models
+      - uv-cache:/root/.cache/uv
+      - huggingface-cache:/root/.cache/huggingface
+      - transformers-cache:/root/.cache/transformers
+      # Exclude local venv
+      - /workspace/.venv
+    working_dir: /workspace/apps/dd-arbiter
+    command: ["uv", "run", "python", "-m", "ddarbiter", "--help"]
+
+volumes:
+  uv-cache:
+    driver: local
+  huggingface-cache:
+    driver: local
+  transformers-cache:
+    driver: local

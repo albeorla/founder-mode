@@ -222,6 +222,124 @@ def mock_api_keys(monkeypatch):
 2. Check Python path: `uv run python -c "import sys; print(sys.path)"`
 3. Verify package structure: `uv run python -c "import ddarbiter; print(ddarbiter.__file__)"`
 
+## Dependency Caching Strategies
+
+Heavy ML dependencies can take 10-30 minutes to install. Here's how to cache them effectively:
+
+### Local Development (Docker)
+
+#### Build Once, Use Everywhere
+
+```bash
+# Build the dd-arbiter image (includes all dependencies)
+docker compose build dd-arbiter
+
+# Run tests without reinstalling dependencies
+docker compose run --rm dd-arbiter uv run pytest
+
+# Interactive development
+docker compose run --rm dd-arbiter bash
+```
+
+**Key Benefits:**
+- Dependencies cached in Docker image (~4GB)
+- HuggingFace models cached in Docker volumes
+- Build once, use for weeks
+- Consistent environment across team
+
+#### Docker Volume Caching
+
+The `docker-compose.yml` uses named volumes to persist:
+- `uv-cache` - Python packages (~2GB)
+- `huggingface-cache` - Model weights (~1.5GB)
+- `transformers-cache` - Tokenizers and configs (~500MB)
+
+**First run:** 15-20 minutes
+**Subsequent runs:** 30-60 seconds
+
+### CI/CD Caching
+
+The dd-arbiter CI workflow uses GitHub Actions cache to avoid reinstalling:
+
+```yaml
+- name: Cache HuggingFace Models
+  uses: actions/cache@v4
+  with:
+    path: |
+      ~/.cache/huggingface
+      ~/.cache/transformers
+    key: ${{ runner.os }}-huggingface-${{ hashFiles('apps/dd-arbiter/pyproject.toml') }}
+
+- name: Cache Python Dependencies
+  uses: actions/cache@v4
+  with:
+    path: |
+      ~/.cache/pip
+      ~/.cache/uv
+    key: ${{ runner.os }}-python-deps-${{ hashFiles('uv.lock') }}
+```
+
+**Cache hit:** ~2 minutes install time
+**Cache miss:** ~15 minutes install time
+
+### Local Development (uv)
+
+#### Using uv Cache
+
+uv automatically caches packages in `~/.cache/uv/`:
+
+```bash
+# First install - downloads everything
+uv sync --all-extras --dev  # ~15 min
+
+# Subsequent installs - uses cache
+uv sync --all-extras --dev  # ~30 sec
+```
+
+**To share cache across projects:**
+
+```bash
+# Set global cache directory
+export UV_CACHE_DIR=/path/to/shared/cache
+
+# Or in your shell profile
+echo 'export UV_CACHE_DIR=/path/to/shared/cache' >> ~/.bashrc
+```
+
+#### Pre-downloading Models
+
+Download models once, use them everywhere:
+
+```bash
+# Set cache directory with lots of space
+export HF_HOME=/mnt/large-disk/.cache/huggingface
+
+# Download models manually
+uv run python -c "
+from transformers import AutoModel, AutoTokenizer
+AutoTokenizer.from_pretrained('microsoft/deberta-large-mnli')
+AutoModel.from_pretrained('microsoft/deberta-large-mnli')
+"
+
+# Models are now cached and won't be re-downloaded
+```
+
+### Cleaning Caches
+
+When caches get stale or too large:
+
+```bash
+# Clear uv cache
+uv cache clean
+
+# Clear HuggingFace cache
+rm -rf ~/.cache/huggingface
+
+# Clear Docker caches
+docker compose down -v  # Removes volumes
+docker system prune -a  # Removes unused images
+```
+
 ## Future Improvements
 
 - [ ] Set up GPU runners for ML-heavy tests
@@ -229,6 +347,7 @@ def mock_api_keys(monkeypatch):
 - [ ] Add mutation testing for critical paths
 - [ ] Create performance benchmarking suite
 - [ ] Set up visual regression testing for UI components
+- [ ] Create pre-built Docker images in GitHub Container Registry for instant pulls
 
 ## References
 
